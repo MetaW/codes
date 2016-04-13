@@ -414,7 +414,9 @@ Qed.
 *)
 
 
-(*exercise*)
+
+
+(*-------------------------exercise----------------------*)
 Theorem andb_true_elim2 : 
 	forall b c:bool, (andb b c) = true -> c = true.
 
@@ -451,6 +453,21 @@ Proof.
 Qed.
 
 
+Theorem andb_equ_orb :
+	forall b c:bool, (andb b c = orb b c) -> b = c.
+
+Proof.
+  intros b c.
+  destruct b.
+    -simpl.
+     intros H1.
+     rewrite H1.
+     reflexivity.
+    -simpl.
+     intros H2.
+     rewrite H2.
+     reflexivity.
+Qed.
 
 
 
