@@ -82,8 +82,41 @@ Theorem plus_commu :
      reflexivity.
 Qed.
 
+(*another proof*)
+Theorem plus_assoc :
+  forall n m p:nat, n + (m + p) = (n + m) + p.
 
-//// to page 45.
+  intros n m p.
+  induction n as [|n'].
+    -simpl.
+     reflexivity.
+    -simpl.
+     rewrite IHn'.
+     reflexivity.
+Qed.
+
+(*one more*)
+Fixpoint double (n:nat) :nat :=
+  match n with
+  | O => O
+  | S n' => S (S (double n'))
+  end.
+
+Theorem double_plus :
+  forall n:nat, double n = n + n.
+
+  intros n.
+  induction n.
+  -simpl.
+   reflexivity.
+  -simpl.
+   rewrite IHn.
+   rewrite plus_n_Sm.
+   reflexivity.
+Qed.
+
+
+
 
 
 
