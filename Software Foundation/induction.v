@@ -1,11 +1,12 @@
 (*
 	包含：
-	1.
-	2.
+	1.induction归纳证明
+	2.使用已经证明过的定理
+  3.assert的使用
 *)
 
 
-(*###################################################*)
+(*#####################################################*)
 Require Export basic.
 
 (*先看一个例子*)
@@ -67,7 +68,9 @@ Theorem plus_n_Sm :
      reflexivity.
 Qed.
 
-(*下面这个例子展示了如何利用以证明过的定理!!!*)
+
+
+(*---------------------------下面这个例子展示了如何利用以证明过的定理!!!*)
 Theorem plus_commu : 
   forall n m:nat, n+m = m+n.
 
@@ -114,6 +117,110 @@ Theorem double_plus :
    rewrite plus_n_Sm.
    reflexivity.
 Qed.
+
+
+Theorem bigeer_than :
+  forall n:nat, n + 1 > O.
+
+  intros n.
+  induction n.
+  -auto.
+  -simpl.
+   auto.
+Qed.
+
+
+(*assert*)
+(*-----------------------------------------------------------*)
+(*首先看一个例子*)
+
+Theorem plus_rearrange_fst : 
+	forall n m p q:nat, (n+m)+(p+q) = (m+n)+(p+q).
+
+(*
+  intros n m p q.		此时subgoal为：n + m + (p + q) = m + n + (p + q)
+  rewrite plus_commu.	此时subgoal为：p + q + (n + m) = m + n + (p + q)
+  Abort.				Coq不知道如何正确利用plus——commu,plus_commu中有forall所以
+  						上面的subgoal有多处可以匹配plus_commu.
+*)
+(*这时就可以用assert*)
+Proof. 
+	intros n m p q.
+	assert(H:n+m = m+n).
+    	{rewrite plus_commu. reflexivity. }
+    rewrite H.
+    reflexivity.
+Qed.
+(*
+	assert 将原问题中的子问题提取出来,将原目标分为两个目标，其中一个为assert中的
+	在{}中单独证明它，证明之后就会变成已知H。之后又回到原目标，可以在原目标中用rewrite
+	使用已证的H来完成证明。这样就避免了证明目标过大时直接利用rewrite导致的问题。
+*)
+
+(*exercise*)
+(*不要使用induction*)
+Theorem plus_swap : 
+  forall n m p:nat, n + (m + p) = m + (n + p).
+
+  intros n m p.
+  assert(H: n+(m+p) = (n+m)+p).
+    {rewrite plus_assoc. reflexivity. }
+  rewrite H.
+  assert(H1: m+(n+p) = (m+n)+p).
+    {rewrite plus_assoc. reflexivity. }
+  rewrite H1.
+  assert(H2: n + m = m + n).
+    {rewrite plus_commu. reflexivity. }
+  rewrite H2.
+  reflexivity.
+Qed.
+
+
+(*exercise*)
+
+(*辅助后面的证明*)
+Theorem mult_comm_help : 
+  forall n m:nat, m + m*n = m*(S n).
+  
+  intros n m.
+  induction m.
+    -simpl.
+     reflexivity.
+    -simpl.
+     rewrite <- IHm.
+     rewrite plus_swap.
+     reflexivity.
+Qed.
+
+
+Theorem mult_comm : 
+  forall n m:nat, n * m = m * n.
+
+  intros n m.
+  induction n as [|n'].
+    -simpl.
+     rewrite multy_O_n.
+     reflexivity.
+    -simpl.
+     rewrite <- mult_comm_help.
+     rewrite IHn'.
+     reflexivity.
+Qed.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
