@@ -7,6 +7,7 @@
       的名字中包含xxx的定理，在证明时查找已经证明过的定理时很有用.
   4.  type定义补充!!!.
   5.  Coq中的if-else
+  6.  map的定义及相关函数和证明
 *)
 
 (*######################################################*)
@@ -578,7 +579,7 @@ Fixpoint nth_error (n:nat) (l:natlist) :natoption :=
   end.
 
 
-Definition option_elim (default:nat) (op natoption):nat :=
+Definition option_elim (default:nat) (op:natoption):nat :=
   match op with
   | none => default
   | some x => x 
@@ -610,9 +611,69 @@ End NatList.
 
 
 
+(*------map-------*)
+(*####################################################*)
+(*
+  我们在这一部分定义一个map，但用的是类似于list的结构，因为它可以有重复，
+  所以是个multimap，这里map由于是线性结构的所以操作效率较低，只是作为例子。
+*)
+
+(*先定义id作为key的类型*)
+Inductive id : Type :=
+  | Id : nat -> id.
+
+Definition beq_id (x1 x2:id):bool :=
+  match x1,x2 with
+  | Id x,Id y => NatList.eq x y
+  end.
 
 
 
+(*开始定义map了*)
+Module MyMap.
+Import NatList.
+
+Inductive my_map : Type :=
+  | empty : my_map
+  | record : id -> nat -> my_map -> my_map.
+
+(*定义插入函数*)
+
+Definition insert (key:id) (val:nat) (m:my_map):my_map :=
+  record key val m.
+
+Fixpoint find (key:id) (m:my_map):natoption :=
+  match m with
+  | empty => none
+  | record k v m' => if beq_id key k then some v else find key m'
+  end.
+
+Theorem insert_eq : 
+  forall (m:my_map) (k:id) (v:nat), find k (insert k v m) = some v.
+
+  intros m k v.
+  simpl.
+  assert(H: beq_id k k = true).
+    { induction k. simpl. 
+      induction n.
+        -simpl. auto.
+        -simpl. rewrite IHn. auto.
+    }
+  rewrite H.
+  reflexivity.
+Qed.
+
+Theorem insert_neg : 
+  forall (m:my_map) (x y :id) (v:nat), (beq_id x y = false) -> (find x (insert y v m)) = find x m.
+
+  intros m x y v.
+  simpl.
+  intros H.
+  rewrite H.
+  reflexivity.
+Qed.
+
+End MyMap.
 
 
 
