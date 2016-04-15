@@ -1,10 +1,12 @@
 
 (*
 	包含：
-	1.
-	2.
-	3.
-
+	1.	pair 的定义及相关函数的实现
+	2.	natlist的定义及相关函数与证明
+	3.	非常有用的命令 SearchAbout xxx. 能够查找出目前已经证明过
+      的名字中包含xxx的定理，在证明时查找已经证明过的定理时很有用.
+  4.  type定义补充!!!.
+  5.  Coq中的if-else
 *)
 
 (*######################################################*)
@@ -70,7 +72,7 @@ Qed.
 
 
 (*定义nat的list类型*)
-(*------------------------------------------------------*)
+(*####################################################################*)
 Inductive natlist : Type :=
   | nil :natlist
   | cons :nat -> natlist -> natlist.
@@ -252,7 +254,7 @@ Example test_alternate4:
 Qed.
 
 
-(*------------下面定义一种多重集合bag，他与natlist是同一种东西*)
+(*------------下面定义一种多重集合bag，他与natlist是同一种东西---*)
 Definition bag := natlist.
 
 
@@ -336,7 +338,271 @@ Example test_member2:
 Qed.
 
 
-///// to page 61.
+
+(*  Reasoning about list  *)
+(*####################################################################*)
+Theorem nil_app : 
+	forall l:natlist, [] ++ l = l.
+
+  reflexivity.
+Qed.
+
+
+Theorem tl_length_pred : 
+	forall l:natlist, pred (length l) = length (tl l).
+
+  intros l.
+  destruct l.
+    -simpl.
+     reflexivity.
+    -simpl.
+     reflexivity.
+Qed.
+
+
+Theorem app_assoc:
+	forall l1 l2 l3:natlist, (l1 ++ l2) ++ l3 = l1 ++ (l2 ++ l3).
+  
+  intros l1 l2 l3.
+  induction l1.
+    -simpl.
+     reflexivity.
+    -simpl.
+     rewrite IHl1.
+     reflexivity.
+Qed.
+
+(*定义反转list的函数*)
+
+Fixpoint rev (l:natlist): natlist :=
+  match l with
+  | nil => nil
+  | x:l' => (rev l') ++ [x]
+  end.
+
+Example test_rev1: 
+	rev [1,2,3] = [3,2,1].
+
+  simpl.
+  reflexivity.
+Qed.
+
+Example test_rev2: 
+	rev nil =nil.
+
+  simpl.
+  reflexivity.
+  Qed.
+
+
+Theorem app_length : 
+	forall l1 l2:natlist, length (l1 ++ l2) = (length l1) + (length l2).
+
+  intros l1 l2.
+  induction l1.
+    -simpl.
+     reflexivity.
+    -simpl.
+     rewrite IHl1.
+     reflexivity.
+Qed.
+
+
+
+
+Theorem rev_length :
+	forall l:natlist, length (rev l) = length l.
+
+  intros l.
+  induction l.
+    -simpl.
+     reflexivity.
+    -simpl.
+     rewrite app_length.
+     rewrite IHl.
+     simpl.
+     rewrite plus_commu.	(*plus_commu来自induction.v,由于前面引入了*)
+     simpl.					(*所以在这里可以直接使用！！！*)
+     reflexivity.
+Qed.
+
+
+(*
+	SearchAbout xxx. 能够查询的东西仅包括证明，不能查询函数等东西，
+	它能查所有类型的证明，包含Example,Theorem,Lemma等。
+	eg:
+	SearchAbout rev.
+	可以得到：
+		test_rev1
+		test_rev2
+		rev_length
+	及对应的具体内容。
+*)
+
+
+(*----------- a lot of exercise ---------*)
+
+Theorem app_nil_r : 
+	forall l:natlist, l ++ [] = l.
+
+  intros l.
+  induction l.
+    -simpl.
+     reflexivity.
+    -simpl.
+     rewrite -> IHl.
+     reflexivity.
+Qed.
+
+Theorem rev_tail_app :
+  forall (l:natlist) (n:nat), rev (l ++ [n]) = n:rev l.
+
+  intros l n.
+  induction l.
+    -simpl.
+     reflexivity.
+    -simpl.
+     rewrite IHl.
+     simpl.
+     reflexivity.
+Qed.
+
+Theorem rev_involutive : 
+  forall l:natlist, rev (rev l) = l.
+
+  intros l.
+  induction l.
+    -simpl.
+     reflexivity.
+    -simpl.
+     assert(H: n:rev (rev l) = n:l).
+      { rewrite IHl. reflexivity. }
+     rewrite <- H.
+     rewrite rev_tail_app.
+     reflexivity.
+Qed.
+
+Theorem app_assoc4 : 
+  forall l1 l2 l3 l4:natlist, 
+    l1 ++ (l2 ++ (l3 ++ l4)) = ((l1 ++ l2) ++ l3) ++ l4.
+
+  intros l1 l2 l3 l4.
+  assert(H: ((l1 ++ l2) ++ l3) ++ l4 = (l1 ++ l2) ++ (l3 ++ l4)).
+    { rewrite app_assoc. reflexivity. }
+  rewrite H.
+  rewrite app_assoc.
+  auto.
+Qed.
+
+Theorem noneZero_app : 
+  forall l1 l2:natlist, noneZero (l1 ++ l2) = (noneZero l1) ++ (noneZero l2).
+
+  intros l1 l2.
+  induction l1.
+    -simpl.
+     auto.
+    -simpl.
+     induction n.
+      +rewrite IHl1.
+       auto.
+      +simpl.
+       rewrite IHl1.
+       auto.
+Qed.
+
+
+
+Fixpoint beq_natlist (l1 l2:natlist) :bool :=
+  match l1,l2 with
+  | [],[] => true
+  | [],_:_ => false
+  | _:_,[] => false
+  | x:xl,y:yl => match (eq x y) with
+                | true => beq_natlist xl yl
+                | false => false
+                end
+  end.
+
+
+Theorem beq_natlist_refl : 
+  forall l:natlist, true = beq_natlist l l.
+
+  intros l.
+  induction l.
+    -simpl.
+     auto.
+    -simpl.
+     induction n.
+      +simpl.
+       rewrite IHl.
+       auto.
+      +simpl.
+       rewrite IHn.
+       reflexivity.
+Qed.
+
+Theorem rev_injective : 
+  forall l1 l2:natlist, rev l1 = rev l2 -> l1 = l2.
+
+  Admitted.
+(*这个证明需要用到false -> anything,目前不会这个tactic*)
+
+
+
+(*---------type定义补充----------*)
+(*####################################################*)
+(*
+  type的定义我们一般用Inductive做归纳定义，得到一个递归集作为一个
+  type，然而有时我们需要在一个type中再添加一些不属于这个集合的元素
+  这就需要新定义一个类型，这个类型将这个type和这外来些元素并在一起。
+  方法为：
+*)
+(*
+  eg: 如果我们的函数在一般情况下返回nat,但在某些情况下返回别的类型，这
+      种情况是无法实现的，除非新定义一个类型包含他们。
+      再定义一个函数将新类型转化为nat，如果不能转的话就返回默认值(虽然这种做法很不好)。
+*)
+
+Inductive natoption : Type :=
+  | some : nat -> natoption   (*!!!不能用 "x:nat" 这样直接将nat类型并入*)
+  | none : natoption.          (*因为Inductive要求所有情况的类型必须与定义的一致*)
+
+(*这样就可以定义下面这个函数了，它根据下标返回natlist的对应值*)
+
+
+Fixpoint nth_error (n:nat) (l:natlist) :natoption :=
+  match n,l with
+  | _, nil => none
+  | O, x:xl => some x
+  | S n', x:xl => nth_error n' xl
+  end.
+
+
+Definition option_elim (default:nat) (op natoption):nat :=
+  match op with
+  | none => default
+  | some x => x 
+  end.
+
+
+(* if-else *)
+(*####################################################*)
+(*
+  Coq中的if-else语法上与Haskell一样,但由于Coq的bool并不其他语言
+  中用的那么多，所以Coq的if-else不止能判断bool类型，还能判断其他类型,
+  事实上，他能判断任何仅有两个归纳项定义的类型，如果条件与第一个匹配就执行
+  if后面的语句，如果与第二个匹配就执行else后面的语句。
+
+  事实上if-else不是必须的，用match完全可以代替它。
+*)
+(*eg: *)
+
+Fixpoint nth_error2 (n:nat) (l:natlist) :natoption :=
+  match l with
+  | nil => none
+  | x:xl => if (eq n O) then some x else nth_error2 (n-1) xl
+  end.
+
 
 End NatList.
 
