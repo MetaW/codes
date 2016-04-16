@@ -225,23 +225,78 @@ Theorem rev_involutive :
      reflexivity.
 Qed.
 
+Inductive prod (X Y:Type) : Type :=
+  | pair : X -> Y -> prod X Y.
+
+Arguments pair {X} {Y} _ _.
+
+Notation "( x , y )" := (pair x y).
+
+
+(*下面定义函数*)
+Fixpoint fst {X Y:Type} (p: prod X Y):X :=
+  match p with
+  | (x,y) => x
+  end.
+
+Fixpoint snd {X Y:Type} (p: prod X Y):Y :=
+  match p with
+  | (x,y) => y
+  end.
+
+
+Fixpoint combine {X Y:Type} (l1 :list X) (l2 :list Y):list (prod X Y) :=
+  match l1,l2 with
+  | [],_ => []
+  | _,[] => []
+  | x:xl,y:yl => (x,y):(combine xl yl)
+  end.
+
+
+Check @combine.
+Compute (combine [1,2] [false,false,true,true]).
+
+
+
+ Fixpoint unzip {X Y:Type} (l:list (prod X Y)):prod (list X) (list Y) :=
+   match l with
+   | [] => ([],[])
+   | x:xl => ((fst x):fst (unzip xl), (snd x):snd (unzip xl))
+   end.
 
 
 
 
+Inductive option (X:Type) : Type :=
+  | none : option X
+  | some : X -> option X.
+
+Arguments none {X}.
+Arguments some {X} _.
+
+(*下面我们实现list的nth_error函数*)
+Fixpoint nth_error {X:Type} (l:list X) (n:nat):option X :=
+  match n,l with
+  | _,[] => none
+  | O,x:xl => some x
+  | S n',x:xl => nth_error xl n'
+  end.
+
+Compute (nth_error (@nil nat) 0).
 
 
 
 
+Definition hd_error {X:Type} (l:list X):option X :=
+  match l with
+  | [] => none
+  | x:xl => some x
+  end.
 
 
+Check @hd_error.
 
-
-
-
-
-
-
+Compute hd_error (@nil nat).
 
 
 
