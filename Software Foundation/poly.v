@@ -1,18 +1,18 @@
 (*
 	包含：
-	1.
-	2.
-	3.
+	1. 使用多态来归纳定义数据类型,eg:list
+	2. 多态的数据类型的使用及函数的定义
+	3. 利用自动类型推导来化简多态下参数冗长的问题
+  4. 多态的pair
+  5. 多态的option类型
+  6.
+  7.
 *)
 
 Require Export lists.
 
 (*polymorphism 多态*)
 (*#####################################################*)
-(*
-
-*)
-
 (*上一节我们建立了nat的list，然而我们需要更多种list*)
 (* boollist *)
 Inductive boollist : Type :=
@@ -20,6 +20,7 @@ Inductive boollist : Type :=
   | bool_cons : bool -> boollist -> boollist.
 
 (*但这样很麻烦，我们不仅需要定义每个类型的list还要为其分别定义相应函数*)
+
 
 (*下面定义一个多态的list解决这个问题*)
 Inductive list (X:Type) : Type :=
@@ -324,7 +325,223 @@ Definition hd_error {X:Type} (l:list X):option X :=
   | x:xl => some x
   end.
 
-//// to page 81.
+
+
+
+
+(*高阶函数*)
+(*####################################################################*)
+(*能够返回函数或以函数为参数的函数称为高阶函数*)
+Definition doit3times {X:Type} (f:X -> X) (x:X) :X :=
+  f (f (f x)).
+
+Example test_doit3times: 
+  doit3times minustwo 9 = 3.
+
+  auto.
+Qed.
+
+(*用高阶函数实现一下filter函数*)
+Fixpoint filter {X:Type} (f:X -> bool) (l:list X):list X :=
+  match l with
+  | [] => []
+  | x:xl => match f x with
+            | true => x:(filter f xl)
+            | false => filter f xl
+            end
+  end.
+
+Example test_filter: 
+  filter evenb [1,2,3,4,5,6] = [2,4,6].
+
+  auto.
+Qed.
+
+
+
+(* 匿名函数 *)
+(*-----------------------------------------------------*)
+(*
+  使用高阶函数时，我们会经常遇到一种情况：我们需要某个函数做参数，但
+  该函数只在这里用一次，这同样需要在外面定义它，然后把它传给这个高阶函数，
+  但这样做不仅麻烦，而且会污染命名空间。这是就可以使用匿名函数，也就是没有
+  名称的一次性的函数。
+*)
+
+Example test_doit3times2:
+  doit3times (fun x => x * x) 2 = 256.
+
+  reflexivity.
+Qed.
+(* 上面例子中的(fun x => x*x)就是匿名函数。 *)
+
+(*some example*)
+Fixpoint natltb (x y:nat) :bool :=
+  match x,y with
+  | O,O => false
+  | O,S y' => false
+  | S x',O => true
+  | S x',S y' => natltb x' y'
+  end.
+
+
+
+Definition filter_even_gt7 (l:list nat): list nat :=
+  filter (fun x => andb (evenb x) (natltb x 7)) l.
+
+Example test_filter_even_gt7: 
+  filter_even_gt7 [2,3,4,7,8,9,12] = [8,12].
+  
+  reflexivity.
+Qed.
+
+Fixpoint partition {X:Type} (f:X -> bool) (l:list X): prod (list X) (list X) :=
+  match l with
+  | [] => ([],[])
+  | x:xl => if f x then (x:fst (partition f xl), snd (partition f xl))
+                   else (fst (partition f xl), x:snd (partition f xl))
+  end.
+
+
+Example test_partition: 
+  partition evenb [1,2,3,4,5] = ([2,4],[1,3,5]).
+
+  reflexivity.
+Qed.
+
+Example test_partition2: 
+  partition (fun x => false) [5,9,0] = ([],[5,9,0]).
+
+  reflexivity.
+Qed.
+
+
+
+(*----下面我们再实现一下map函数----*)
+
+Fixpoint map {X Y:Type} (f: X -> Y) (l:list X): list Y :=
+  match l with
+  | [] => []
+  | x:xl => (f x):(map f xl)
+  end.
+
+Example test_map1: 
+  map (fun x => plus 3 x) [2,0,2] = [5,3,5]. 
+Proof. reflexivity. Qed.
+
+Example test_map2: 
+  map evenb [1,2,3,4,5] = [false,true,false,true,false].
+Proof. reflexivity. Qed.
+
+Example test_map3: 
+  map (fun x => [evenb x, evenb (S x)]) [2,3] = [[true,false],[false,true]].
+Proof. reflexivity. Qed.
+
+(* 一个难题 *)
+
+Lemma map_distr :
+  forall (X Y:Type) (f:X -> Y) (x:X) (l:list X), map f (l ++ [x]) = (map f l) ++ map f [x].
+
+  intros.
+  simpl.
+  induction l.
+    -simpl. auto.
+    -simpl.
+     rewrite IHl.
+     auto.
+Qed.
+
+Theorem map_rev : 
+  forall (X Y:Type) (f:X -> Y) (l:list X), map f (rev l) = rev (map f l).
+
+  intros.
+  induction l.
+    -simpl. auto.
+    -simpl.
+     rewrite map_distr.
+     simpl.
+     rewrite IHl.
+     auto.
+Qed.
+
+
+(*--------fold函数--------*)
+
+Fixpoint fold {X Y:Type} (f:X -> Y -> Y) (l:list X) (e:Y): Y :=
+  match l with
+  | [] => e
+  | x:xl => f x (fold f xl e)
+  end.
+
+(*
+  fold f [a1,a2,a3,a4] e
+  = f a1 (f a2 (f a3 (f a4 e)))
+  当XY为同种类型时，e是f的单位元，即 f a e = a.
+    eg: f: mult   e:1
+        f: app    e:[]
+        f: add    e:0
+        f: andb   e:true
+*)
+
+Example fold_test1: 
+  fold mult [1,2,3,4] 1 = 24.
+Proof. reflexivity. Qed.
+
+Example fold_test2: 
+  fold andb [true,false,true,true] true = false.
+Proof. reflexivity. Qed.
+
+Example fold_test3: 
+  fold app [[1,2],[],[3,4,5]] [] = [1,2,3,4,5].
+Proof. reflexivity. Qed.
+
+
+(*-----返回一个函数的高阶函数-----*)
+
+(*Way1: 用匿名函数实现 *)
+Definition plusx (x:nat): nat -> nat :=
+  fun t:nat => t + x.
+
+(*Way2: 通过只给出部分参数实现 *)
+Definition plusx2 (x:nat): nat -> nat := 
+  plus x.
+
+Definition plusx3 := plus 5.
+
+
+
+(*--- a lot of exercise ---*)
+
+Module Exercise.
+
+Definition fold_length {X:Type} (l:X):nat :=
+  fold (fun _ n => n + 1) l 0.          (*匿名函数的模式匹配*)
+
+Theorem fold_length_correct : 
+  forall (X:Type) (l:list X):, fold_length l = length l.
+
+
+Definition fold_map {X Y:Type} (f:X -> Y) (l:list X):list Y:=
+  fold (fun h t => (f h):t) l [].
+
+
+
+
+
+
+End Exercise.
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

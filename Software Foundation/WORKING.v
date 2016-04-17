@@ -299,6 +299,127 @@ Check @hd_error.
 Compute hd_error (@nil nat).
 
 
+Definition doit3times {X:Type} (f:X -> X) (x:X) :X :=
+  f (f (f x)).
+
+
+Example test_doit3times: 
+  doit3times minustwo 9 = 3.
+
+  auto.
+Qed.
+
+
+Fixpoint filter {X:Type} (f:X -> bool) (l:list X):list X :=
+  match l with
+  | [] => []
+  | x:xl => match f x with
+            | true => x:(filter f xl)
+            | false => filter f xl
+            end
+  end.
+
+Example test_filter: 
+  filter evenb [1,2,3,4,5,6] = [2,4,6].
+  
+  simpl.
+  auto.
+Qed.
+
+SearchAbout evenb.
+
+
+Example test_doit3times2:
+  doit3times (fun x:nat => x * x) 2 = 256.
+
+  reflexivity.
+Qed.
+
+SearchAbout nat.
+
+Fixpoint natltb (x y:nat) :bool :=
+  match x,y with
+  | O,O => false
+  | O,S y' => false
+  | S x',O => true
+  | S x',S y' => natltb x' y'
+  end.
+
+
+
+Definition filter_even_gt7 (l:list nat): list nat :=
+  filter (fun x => andb (evenb x) (natltb x 7)) l.
+
+Example test_filter_even_gt7: 
+  filter_even_gt7 [2,3,4,7,8,9,12] = [8,12].
+  
+  reflexivity.
+Qed.
+
+
+Fixpoint partition {X:Type} (f:X -> bool) (l:list X): prod (list X) (list X) :=
+  match l with
+  | [] => ([],[])
+  | x:xl => if f x then (x:fst (partition f xl), snd (partition f xl))
+                   else (fst (partition f xl), x:snd (partition f xl))
+  end.
+
+
+
+
+Example test_partition: 
+  partition evenb [1,2,3,4,5] = ([2,4],[1,3,5]).
+
+  reflexivity.
+Qed.
+
+Example test_partition2: 
+  partition (fun x => false) [5,9,0] = ([],[5,9,0]).
+
+  reflexivity.
+Qed.
+
+
+Fixpoint map {X Y:Type} (f: X -> Y) (l:list X): list Y :=
+  match l with
+  | [] => []
+  | x:xl => (f x):(map f xl)
+  end.
+
+
+Fixpoint fold {X Y:Type} (f:X -> Y -> Y) (l:list X) (e:Y): Y :=
+  match l with
+  | [] => e
+  | x:xl => f x (fold f xl e)
+  end.
+
+Check @fold.
+
+Compute fold mult [1,2,3,4] .
+
+Example fold_test1: 
+  fold mult [1,2,3,4] 1 = 24.
+Proof. reflexivity. Qed.
+
+Example fold_test2: 
+  fold andb [true,false,true,true] true = false.
+Proof. reflexivity. Qed.
+
+Example fold_test3: 
+  fold app [[1,2],[],[3,4,5]] [] = [1,2,3,4,5].
+Proof. reflexivity. Qed.
+
+
+Check plus 3.
+
+Fixpoint plusx (x:nat): nat -> nat :=
+  fun t:nat => t + x.
+Compute plusx 3 4.
+
+Definition plusx2 (x:nat): nat -> nat := 
+  plus x.
+
+Definition plusx3 := plus 5.
 
 
 
