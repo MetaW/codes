@@ -5,8 +5,8 @@
 	3. 利用自动类型推导来化简多态下参数冗长的问题
   4. 多态的pair
   5. 多态的option类型
-  6.
-  7.
+  6. 高阶函数
+  7. filter,map,fold函数的实现
 *)
 
 Require Export lists.
@@ -512,17 +512,79 @@ Definition plusx3 := plus 5.
 
 (*--- a lot of exercise ---*)
 
+
 Module Exercise.
 
-Definition fold_length {X:Type} (l:X):nat :=
+(*用fold实现length*)
+Definition fold_length {X:Type} (l:list X):nat :=
   fold (fun _ n => n + 1) l 0.          (*匿名函数的模式匹配*)
 
+Lemma fold_length_property :
+  forall (X:Type) (l:list X) (x:X), fold_length (x : l) = (fold_length l) + 1.
+
+  intros.
+  induction l.
+    -simpl. reflexivity.
+    -auto.
+Qed.
+
 Theorem fold_length_correct : 
-  forall (X:Type) (l:list X):, fold_length l = length l.
+  forall (X:Type) (l:list X), fold_length l = length l.
+
+  intros.
+  induction l.
+    -simpl. reflexivity.
+    -simpl. 
+     rewrite <- IHl.
+     rewrite fold_length_property.
+     rewrite IHl.
+     rewrite <- plus_n_Sm.
+     rewrite <- plus_n_O.
+     reflexivity.
+Qed.
 
 
+(*用fold实现map*)
 Definition fold_map {X Y:Type} (f:X -> Y) (l:list X):list Y:=
   fold (fun h t => (f h):t) l [].
+
+
+Theorem fold_map_correct : 
+  forall (X Y:Type) (f:X -> Y) (l:list X), 
+    fold_map f l = map f l.
+
+  intros.
+  induction l.
+    -simpl. reflexivity.
+    -simpl.
+     rewrite <-IHl.
+     reflexivity.
+Qed.
+
+
+(*柯里化*)
+Definition prod_curry {X Y K:Type} (f:(prod X Y) -> K) (x:X) (y:Y):K := f (x,y).
+
+(*去柯里化*)
+Definition prod_uncurry {X Y K:Type} (f:X -> Y -> K) (p:prod X Y):K :=
+  f (fst p) (snd p).
+
+Theorem uncurry_curry : 
+  forall (X Y K : Type) (f : X -> Y -> K) (x:X) (y:Y), prod_curry (prod_uncurry f ) x y = f x y.
+
+  intros.
+  reflexivity.
+Qed.
+
+
+Theorem curry_uncurry : 
+  forall (X Y K : Type) (f :prod X Y -> K) (p: prod X Y), prod_uncurry (prod_curry f ) p = f p.
+
+  intros.
+  destruct p.
+  reflexivity.
+Qed.
+
 
 
 
