@@ -4,7 +4,9 @@
 	2.	symmetry
 	3.	apply...with...
 	4.	inversion
-	5.
+	5.  对hypo进行操作
+  6.  前向推理与后向推理
+  7.  
 *)
 
 Require Export poly.
@@ -231,23 +233,237 @@ Qed.
 
 
 
+(* using tactics on hypotheses *)
+(*---------------------------------------------------------------*)
+(*
+  之前的大多数tactic都只讲了如何对goal进行操作，事实上它们也能对hypo进行操作，
+  只需要在tactic后面加上"in H"就行了，eg:
+    simpl in H.
+    apply L in H1.
+    symmetry in H
+    ...
+  induction由于同时作用于hypo与goal所以没必要加"in hypo"，另外inversion本身就是对
+  hypo进行操作的tactic所以也不用加"in hypo".
+
+  其中apply L in H比较重要，对goal进行处理时，如apply L，若L为A -> B的形式，
+  goal为B那么执行之后goal变为A. 这种证明方法称为后向推理(backword reasoning)；
+  当apply处理H时，仍令L为A -> B的形式，这是H一般要为A，执行之后将H转化为B，
+  这种证明方式称为前向推理(forward reasoning).
+  前向推理一般从hypo出发一步步得到goal，而后向推理则从goal出发向后寻找goal成立的条件
+  直到条件为已知的hypo为止。
+  
+  在Coq中一般后向推理用的比较多。
+*)
+(* exercise *)
+
+Theorem S_inj : 
+  forall (n m:nat) (b :bool), beq_nat (S n) (S m) = b -> beq_nat n m = b.
+
+  intros.
+  simpl in H.
+  apply H.
+Qed.
+
+Theorem silly_ex1 : 
+  forall n:nat, (beq_nat n 5 = true -> beq_nat (S (S n)) 7 = true) -> true = beq_nat n 5 -> true = beq_nat (S (S n)) 7.
+
+  intros.
+  symmetry in H0.
+  apply H in H0.
+  symmetry.
+  apply H0.
+Qed.
 
 
 
 
 
+(*
+  //TODO
+  -some thing about intros and induction
+  -generalize dependent
+*)
+
+Theorem plus_n_n_injective : 
+  forall (n m:nat), n+n = m+m -> n = m.
+
+  intros n.
+  induction n as [| n'].
+   -intros m eq.
+    induction m as [| m'].
+     +reflexivity.
+     +inversion eq.
+   -intros m eq.
+    induction m as [| m].
+     +inversion eq.
+     +apply f_equal.
+      rewrite <- plus_n_Sm in eq.
+      simpl in eq.
+      rewrite <- plus_n_Sm in eq.
+      inversion eq.
+      apply IHn' in H0.
+      apply H0.
+Qed.
 
 
 
+Theorem double_injective : 
+  forall (n m:nat), double n = double m -> n = m.
+
+  intros n.
+  induction n as [| n'].
+    -simpl. intros m eq. 
+     induction m as [|m'].
+      +reflexivity.
+      +inversion eq.
+    -simpl.
+     intros m eq.
+     induction m as [|m'].
+      +simpl in eq.  inversion eq.
+      +apply f_equal.
+       apply IHn'.
+       simpl in eq.
+       inversion eq.
+       reflexivity.
+Qed.
+
+
+Theorem beq_nat_true:
+  forall (n m:nat), beq_nat n m = true -> n = m.
+  
+  intros n.
+  induction n as [|n'].
+    -simpl. intros m eq.
+     induction m as [|m'].
+      +reflexivity.
+      +inversion eq.
+    -simpl. intros m eq.
+     induction m as [|m'].
+      +inversion eq.
+      +apply IHn' in eq.
+       apply f_equal.
+       apply eq.
+Qed.
+
+
+Theorem double_injective2 : 
+  forall (n m:nat), double n = double m -> n = m.
+
+  intros n m.
+  generalize dependent n.
+  induction m as [|m'].
+    -simpl. intros n eq.
+     induction n as [|n'].
+      +reflexivity.
+      +simpl in eq. inversion eq.
+    -simpl. intros n eq.
+     induction n as [|n'].
+      +inversion eq.
+      +simpl in eq.
+       inversion eq.
+       apply IHm' in H0.
+       apply f_equal.
+       apply H0.
+Qed.
+
+
+Theorem beq_id_true : 
+  forall x y, beq_id x y = true -> x = y.
+
+  intros x.
+  induction x.
+  intros y.
+  induction y.
+  intros eq.
+  apply beq_nat_true in eq.
+  apply f_equal.
+  apply eq.
+Qed.
 
 
 
+(* some exercise *)
+Theorem nth_error_after_last:
+  forall (n:nat) (X:Type) (l:list X), length l = n -> nth_error l n = none.
+
+  intros n X.
+  induction n.
+    -intros l eq.
+     induction l.
+      +simpl. reflexivity.
+      +simpl. inversion eq.
+    -intros l eq.
+     induction l.
+      +simpl. reflexivity.
+      +simpl. simpl in eq.
+       inversion eq.
+       rewrite H0.
+       apply IHn in H0.
+       apply H0.
+Qed.
 
 
+Theorem app_length_cons : 
+  forall (X:Type) (l1 l2:list X) (x:X) (n:nat), length (l1 ++ (x:l2)) = n -> S (length (l1 ++ l2)) = n.
 
+  intros X l1.
+  induction l1.
+    -intros l2 x n.
+      +simpl. intros eq. apply eq.
+    -intros l2 x0 n eq.
+     simpl. simpl in eq.
+     induction n.
+      +inversion eq.
+      +inversion eq.
+       rewrite H0.
+       apply IHl1 in H0.
+       apply f_equal.
+       apply H0.
+Qed.
 
+Theorem app_length_twice : 
+  forall (X:Type) (n:nat) (l:list X), length l = n -> length (l ++ l) = n + n.
 
+  intros X n.
+  induction n.
+    -intros l eq.
+     induction l.
+      +simpl. reflexivity.
+      +simpl in eq. inversion eq.
+    -intros l eq.
+     induction l.
+      +simpl in eq. inversion eq.
+      +simpl in eq. inversion eq.
+       simpl. apply f_equal.
+       rewrite H0.
+       rewrite app_length.
+       simpl. rewrite H0.
+       reflexivity.
+Qed.
 
+Theorem double_induction : 
+  forall (P:nat -> nat -> Prop), P O O -> (forall (m:nat), P m O -> P (S m) O)
+    -> (forall n:nat, P O n -> P O (S n)) -> (forall (m n:nat), P m n -> P (S m) (S n)) -> forall (m n:nat), P m n.
+
+  intros P.
+  intros P0.
+  intros H1.
+  intros H2.
+  intros H3.
+  intros m.
+  induction m.
+    -intros n.
+     induction n.
+      +apply P0.
+      +apply H2 in IHn.
+       apply IHn.
+    -intros n.
+     induction n.
+      +apply H1 in IHm. apply IHm.
+      +apply H3.
+       apply IHm.
+Qed.
+   
 
 
 
