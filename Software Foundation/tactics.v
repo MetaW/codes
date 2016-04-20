@@ -136,7 +136,7 @@ Example trans_eq_example:
 	forall (a b c d e f:nat), [a,b] = [c,d] -> [c,d] = [e,f] -> [a,b] = [e,f].
 
   intros.
-  apply trans_eq with [c,d].(*没有with时会警告m无法找到匹配的东西，此时我们告诉它用[c,d]匹配*)
+  apply trans_eq with [c,d].  (*没有with时会警告m无法找到匹配的东西，此时我们告诉它用[c,d]匹配*)
   apply H.
   apply H0.
 Qed.
@@ -146,7 +146,7 @@ Example trans_eq_exercise:
 	forall (n m o p:nat), m = (minustwo o) -> (n+p) = m -> (n+p) = (minustwo o).
 
   intros.
-  apply trans_eq with m.(*同上一个例子*)
+  apply trans_eq with m.  (*同上一个例子*)
   apply H0.
   apply H.
 Qed.
@@ -546,9 +546,9 @@ Theorem sillyfun_false :
 
   intros.
   unfold sillyfun.
-  destruct (beq_nat n 3). (*对"beq_nat n 3"的结果进行分类讨论*)
+  destruct (beq_nat n 3).     (*对"beq_nat n 3"的结果进行分类讨论*)
     -reflexivity.
-    -destruct (beq_nat n 5).(*同上*)
+    -destruct (beq_nat n 5).  (*同上*)
       +reflexivity.
       +reflexivity.
 Qed.
