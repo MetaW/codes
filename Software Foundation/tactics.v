@@ -6,7 +6,10 @@
 	4.	inversion
 	5.  对hypo进行操作
   6.  前向推理与后向推理
-  7.  
+  7.  fewer intros before an induction
+  8.  generalize dependent
+  9.  unfold a definition
+  10. destruct (experssion) eqn:H
 *)
 
 Require Export poly.
@@ -279,9 +282,19 @@ Qed.
 
 
 (*
-  //TODO
-  -some thing about intros and induction
-  -generalize dependent
+  intros要点总结：
+    intros引入hypo时，最好不要一次全引入，而是用一个引入一个，
+    一次全引入会导致某些hypo失去了forall，即匹配时失去了泛化能力
+    这有可能导致证明无法进行下去，下面几个例子就是这种情况，过早引入
+    一些hypo导致证明失败。
+    site："The strategy of doing fewer intros before an induction 
+        to obtain a more general H".
+
+    由于引入hypo时顺序是按照它们出现在定理中的顺序而确定的，而不是按照我们给他们
+  指定的名称，这就导致有时要先处理后面的hypo而保持前面的hypo依然有forall的情况
+  无法实现，此时可以先把前面的hypo也引入，然后用"generalize dependent n"来
+  将n恢复到未引入时的状态，即恢复泛化能力。也有一种做法即改写定理中变量出现的顺序
+  但不推荐这样。
 *)
 
 Theorem plus_n_n_injective : 
@@ -346,6 +359,7 @@ Theorem beq_nat_true:
 Qed.
 
 
+(* generalize dependent *)
 Theorem double_injective2 : 
   forall (n m:nat), double n = double m -> n = m.
 
@@ -464,6 +478,234 @@ Theorem double_induction :
        apply IHm.
 Qed.
    
+
+
+
+
+(* unfolding definitions *)
+(*-----------------------------------------------------------------*)
+(*
+  由于simpl或refiexivity的化简(代入)能力很保守，很多时候无法将一个函数进一步展开
+  导致证明很难进行下去，此时可以使用强大的"unfold func"操作，将一个函数func展开，
+  即用函数的具体定义的内容来代替它在证明中的调用。
+
+*)
+Lemma mult_assoc:
+  forall (n m p:nat), n*(m*p) = (n*m)*p.
+  
+  Admitted.
+
+Definition square m:nat := m*m.
+
+Lemma square_mult : 
+  forall (n m:nat), square (n*m) = square n * square m.
+
+  intros.
+  simpl.        (*这里simpl无法进一步化简，利用unford来代入*)
+  unfold square.
+  rewrite mult_assoc.
+  assert(H: n*m*n = n*n*m).
+    {rewrite mult_comm. rewrite mult_assoc. reflexivity. }
+  rewrite H.
+  rewrite mult_assoc.
+  reflexivity.
+Qed.
+
+Definition bar x:nat :=
+  match x with
+  | O => 5
+  | S _ => 5
+  end.
+
+Example silly_bar: 
+  forall m:nat, bar m + 1 = bar (m + 1) + 1.
+
+  unfold bar.
+  induction m.
+    -simpl. reflexivity.
+    -simpl. reflexivity.
+Qed.
+
+
+
+(* destruct on compound expression *)  
+(*----------------------------------------------------------*)
+(*
+  destruct不仅能够根据一个类型的定义进行分类讨论，事实上destruct可以
+  对任何一个表达式的整体结果进行分类讨论：如果e是一个表达式，他的最终值
+  的类型为T，那么对T的任一个constructor:c，destruct e 都能产生一个
+  子目标，其中所有的e都被c替代。
+*)
+Definition sillyfun (n : nat) : bool := 
+  if beq_nat n 3 then false 
+  else if beq_nat n 5 then false 
+  else false.
+
+Theorem sillyfun_false : 
+  forall n:nat, sillyfun n = false.
+
+  intros.
+  unfold sillyfun.
+  destruct (beq_nat n 3). (*对"beq_nat n 3"的结果进行分类讨论*)
+    -reflexivity.
+    -destruct (beq_nat n 5).(*同上*)
+      +reflexivity.
+      +reflexivity.
+Qed.
+
+(* 
+  这种对整个表达式的结果进行分类讨论的方式会失去很多细节上的信息
+  有时候会导致信息不足而无法继续证明下去。此时可以在 destruct后面
+  加上 "eqn:H" 来把该情况下的等式信息用H保留下来，作为已知来使用。
+  如下面例子：
+ *)
+
+Definition sillyfun1 (n : nat) : bool := 
+  if beq_nat n 3 then true 
+  else if beq_nat n 5 then true 
+  else false.
+
+Theorem sillyfun1_odd_fail : 
+  forall n:nat, sillyfun1 n = true -> oddb n = true.
+
+  intros.
+  unfold sillyfun1 in H.
+  destruct (beq_nat n 3) eqn:Hn3.   (*用Hn3保留分情况时的信息，否则后面无法进行证明*)
+    -apply beq_nat_true in Hn3.
+     rewrite Hn3. simpl.
+     reflexivity.
+    -destruct (beq_nat n 5) eqn:Hn5.  (*同理*)
+      +apply beq_nat_true in Hn5.
+       rewrite Hn5. simpl. reflexivity.
+      +inversion H.
+Qed.
+
+(* another example *)
+Theorem bool_fn_applied_thrice: 
+  forall (f:bool -> bool) (b:bool), f (f (f b)) = f b.
+
+  intros.
+  destruct b.
+    -destruct (f true) eqn:H.
+      +rewrite H. apply H.
+      +destruct (f false) eqn:H2.
+        *apply H.
+        *apply H2.
+    -destruct (f false) eqn:H.
+      +destruct (f true) eqn:H2.
+        *apply H2.
+        *apply H.
+      +rewrite H.
+       apply H.
+Qed.
+
+
+
+(* Additional Exercises *)
+
+Theorem beq_nat_sym : 
+  forall (n m:nat), beq_nat n m = beq_nat m n.
+
+  intros n.
+  induction n.
+    -intros m. simpl.
+     destruct m.
+      +simpl. reflexivity.
+      +simpl. reflexivity.
+    -intros m. simpl.
+     destruct m.
+      +simpl. reflexivity.
+      +simpl. apply IHn.
+Qed.
+
+
+Theorem beq_nat_trans : 
+  forall (n m p:nat), beq_nat n m = true -> beq_nat m p = true -> beq_nat n p = true.
+
+  intros.
+  apply beq_nat_true in H.
+  apply beq_nat_true in H0.
+  rewrite H. rewrite H0.
+  assert (Hp: forall p, beq_nat p p = true).
+    {induction p0.
+      -simpl. reflexivity.
+      -simpl. apply IHp0. }
+  apply Hp.
+Qed.
+
+
+
+Theorem filter_exercise : 
+  forall (X :Type) (test : X -> bool) (x:X) (l lf:list X), filter test l = x:lf -> test x = true.
+
+  intros.
+  destruct (filter test l) eqn:Hf.
+    -inversion H.
+    -inversion H.
+     induction l.
+      +inversion Hf.
+      +simpl in Hf.
+       destruct (test x1) eqn:Hx.
+        *rewrite H in Hf.
+         inversion Hf.
+         rewrite <- H3. apply Hx.
+        *apply IHl.
+         apply Hf.
+Qed.
+
+
+
+Fixpoint forallb {X:Type} (f:X -> bool) (l:list X):bool :=
+  match l with
+  | [] => true
+  | x:xl => andb (f x) (forallb f xl)
+  end.
+
+Fixpoint existb {X:Type} (f:X -> bool) (l:list X): bool :=
+  match l with
+  | [] => false
+  | x:xl => orb (f x) (existb f xl)
+  end.
+
+Definition existb' {X:Type} (f:X->bool) (l:list X):bool :=
+  negb (forallb (fun x => negb (f x)) l).
+
+
+Theorem existb_exidtb' : 
+  forall (X:Type) (f:X -> bool) (l:list X), existb f l = existb' f l.
+
+  intros.
+  induction l.
+    -simpl. reflexivity.
+    -simpl. unfold existb'.
+     simpl.
+     destruct (f x) eqn:Hf.
+      +reflexivity.
+      +simpl. rewrite IHl.
+       unfold existb'.
+       reflexivity.
+Qed.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
