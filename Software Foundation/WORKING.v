@@ -391,6 +391,180 @@ Qed.
 
 
 
+Lemma four_is_even : 
+  exists n:nat, 4 = n + n.
+Proof.
+  exists 2.
+  reflexivity.
+Qed.
+
+
+
+Theorem exists_example2 : 
+  forall n:nat, (exists m:nat, n = 4 + m) -> (exists o:nat, n = 4 + o).
+Proof.
+  intros.
+  destruct H.
+  exists x.
+  apply H.
+Qed.
+
+
+
+
+Theorem dist_not_exists : 
+  forall (X:Type) (P:X->Prop), (forall x:X, P x) -> ~(exists x:X, ~(P x)).
+Proof.
+  intros.
+  unfold not.
+  intros H1.
+  destruct H1.
+  apply H0.
+  apply H.
+Qed.
+
+
+Theorem dist_exists_or : 
+  forall (X:Type) (P Q: X -> Prop), (exists x:X, P x \/ Q x)<->(exists x:X, P x)\/(exists x:X, Q x).
+Proof.
+  intros.
+  split.
+    -intros H.
+     destruct H.
+     destruct H. 
+      +left. exists x. apply H.
+      +right. exists x. apply H.
+    -intros H.
+     destruct H.
+      +destruct H. exists x. left. apply H.
+      +destruct H. exists x. right. apply H.
+Qed.
+
+Fixpoint In {X:Type} (x:X) (l:list X) :=
+  match l with
+  | [] => False
+  | h:t => (x=h) \/ In x t
+  end.
+
+
+Example In_example_1: 
+  In 4 [3,4,5].
+Proof.
+  simpl.
+  right. left. reflexivity.
+Qed.
+
+Example In_example_2:
+  forall n:nat, In n [2,4] -> exists n':nat, n = 2*n'.
+Proof.
+  intros.
+  unfold In in H.
+  destruct H.
+    -exists 1. rewrite H. reflexivity.
+    -destruct H. 
+      +exists 2. rewrite H. reflexivity.
+      +inversion H.
+Qed.
+
+Lemma In_map : 
+  forall (A B:Type) (f:A -> B) (l:list A) (x:A), In x l -> In (f x) (map f l).
+Proof.
+  intros.
+  induction l.
+    -simpl in H. destruct H.
+    -simpl.
+     simpl in H. destruct H.
+      +left. rewrite H. reflexivity.
+      +right. apply IHl in H. apply H.
+Qed.
+
+
+
+
+
+Example In_map_iff: 
+  forall (A B:Type) (f:A->B) (l:list A) (y:B), In y (map f l) <-> exists x:A, f x = y /\ In x l.
+Proof.
+  intros.
+  split.
+    -intros. 
+     induction l.
+      +simpl in H. destruct H.
+      +simpl in H. destruct H.
+        *exists x. split. {symmetry. apply H. } {simpl. left. reflexivity. }
+        *apply IHl in H. destruct H. exists x0. simpl.
+         split. {apply H. } {right. apply H. }
+    -intros.
+     induction l.
+      +simpl in H. destruct H. destruct H. destruct H0.
+      +simpl. simpl in H. destruct H.
+         destruct H. destruct H0.
+          *left. rewrite H0 in H. symmetry. apply H.
+          *right. apply IHl. exists x0. split. {apply H. } {apply H0. }
+Qed.
+
+
+Lemma In_app_iff : 
+  forall (A:Type) (l l':list A) (a:A), In a (l++l') <-> In a l \/ In a l'.
+Proof.
+  intros.
+  split.
+    -intros.
+     induction l.
+      +simpl in H. right. apply H.
+      +simpl in H. simpl. apply or_assoc.
+       destruct H.
+        *left. apply H.
+        *right. apply IHl. apply H.
+    -intros.
+     induction l.
+      +simpl. destruct H. {simpl in H. destruct H. } {apply H. }
+      +simpl. simpl in H. apply or_assoc in H. destruct H.
+        *left. apply H.
+        *right. apply IHl. apply H.
+Qed.
+
+
+
+
+
+Fixpoint All {T:Type} (P:T -> Prop) (l:list T):Prop :=
+  match l with
+  | [] => True
+  | h:t => (P h) /\ All P t
+  end.
+
+Lemma All_In : 
+  forall (T:Type) (P:T -> Prop) (l:list T), (forall x:T, In x l -> P x) <-> All P l.
+Proof.
+  intros.
+  split.
+    -intros.
+     induction l.
+      +simpl. reflexivity.
+      +simpl. simpl in H. split.
+        *apply H. left. reflexivity.
+        *apply IHl. intros. apply H. right. apply H0.
+    -intros.
+     induction l.
+      +simpl in H0. destruct H0.
+      +simpl in H. simpl in H0. destruct H0.
+        *rewrite <- H0 in H. apply H.
+        *apply IHl. { apply H. } {apply H0. }
+Qed.
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

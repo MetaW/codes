@@ -1,9 +1,11 @@
 (*
 	包含:
-	1.
-	2.
-	3.
-	4.
+	1. /\ and/destruct/split
+	2. \/ or/destruct/left/right
+	3. ~  not/True/False/exfalso
+	4. <-> iff/destruct/split/(rewrite/reflexivity)
+  5. exists /destruct
+  6. 
 *)
 
 
@@ -256,7 +258,14 @@ Qed.
 
 
 (*logic equivalence: <-> / iff *)
+(*
+  逻辑等价用"P <-> Q"来表示，它是函数 iff P Q 的语法糖，函数iff
+  的定义为 (P -> Q) /\ (Q -> P)。当<->出现在hypo中时，可以
+  unfold iff in H. destruct H. 将其分解为两个hypo，或直接用
+  destruct H. 也能达到相同的效果。当<->出现在goal中时，可以先用
+  unfold将其展开，再用split将其分为两个subgoal，或者直接用split也行。
 
+*)
 (* <->的定义 *)
 Module MyIff.
 
@@ -344,7 +353,10 @@ Qed.
 
 
 (*
-  //TODO
+    与其它逻辑符号不同，由于<->是逻辑等价关系，因此它满足一些特殊的性质，
+    1.它能像"="表达式一样支持rewrite和reflexivity。
+    2.它能使用apply，并且apply能自动识别出使用<->的那一边(A->B,B->A)来被
+      apply使用。
 *)
 Require Import Coq.Setoids.Setoid.
 
@@ -371,15 +383,15 @@ Proof.
 Qed.
 
 
-(*使用reerite/reflexivity*)
 
+(*使用rewrite/reflexivity*)
 Lemma mult_O_3 : 
   forall (n m p:nat), n*m*p = 0 <-> n = 0 \/ m = 0 \/ p = 0.
 Proof.
   intros.
-  rewrite mult_O. rewrite mult_O.
-  rewrite or_assoc.
-  reflexivity.
+  rewrite mult_O. rewrite mult_O.   (*像使用"="一样对<->使用rewrite*)
+  rewrite or_assoc.                 
+  reflexivity.                      (*能用reflexivity证明"A<->A"形式的定理*)
 Qed.
 
 Lemma apply_iff_example : 
@@ -394,12 +406,185 @@ Qed.
 
 
 
-
 (*Existential Quantification*)
 (*---------------------------------------------------------------*)
 (*
-    //TODO
+    存在量词出现在hypo中时，还是用destruct，此时会将exists消掉，并引入一个
+    新的hypo，它是假设使原hypo成立的那个个体。
+    当它出现在goal中时，我们需要为它确定一个使goal成立的个体或表达式，然后使用
+    tactic："exists x" 或 "exists (expression)", 之后goal中的exist部分会消掉
+    对于的约束变量会用我们给的那个个体或表达式来代替。
 *)
+Lemma four_is_even : 
+  exists n:nat, 4 = n + n.
+Proof.
+  exists 2.   (*指明n为2*)
+  reflexivity.
+Qed.
+
+Theorem exists_example2 : 
+  forall n:nat, (exists m:nat, n = 4 + m) -> (exists o:nat, n = 4 + o).
+Proof.
+  intros.
+  destruct H. (*将hypo中的exists部分消去*)
+  exists x.   (*指明o为x*)
+  apply H.
+Qed.
+
+
+Theorem dist_not_exists : 
+  forall (X:Type) (P:X->Prop), (forall x:X, P x) -> ~(exists x:X, ~(P x)).
+Proof.
+  intros.
+  unfold not.
+  intros H1.
+  destruct H1.
+  apply H0.
+  apply H.
+Qed.
+
+
+Theorem dist_exists_or : 
+  forall (X:Type) (P Q: X -> Prop), (exists x:X, P x \/ Q x)<->(exists x:X, P x)\/(exists x:X, Q x).
+Proof.
+  intros.
+  split.
+    -intros H.
+     destruct H.
+     destruct H. 
+      +left. exists x. apply H.
+      +right. exists x. apply H.
+    -intros H.
+     destruct H.
+      +destruct H. exists x. left. apply H.
+      +destruct H. exists x. right. apply H.
+Qed.
+
+
+
+
+(*Programming with Type: Prop*)
+(*-------------------------------------------------------------------*)
+(*将Prop作为函数返回类型*)
+
+(*返回判断元素x是否在list l中的命题*)
+Fixpoint In {X:Type} (x:X) (l:list X) :=
+  match l with
+  | [] => False
+  | h:t => (x=h) \/ In x t
+  end.
+
+
+Example In_example_1: 
+  In 4 [3,4,5].
+Proof.
+  simpl.
+  right. left. reflexivity.
+Qed.
+
+Example In_example_2:
+  forall n:nat, In n [2,4] -> exists n':nat, n = 2*n'.
+Proof.
+  intros.
+  unfold In in H.
+  destruct H.
+    -exists 1. rewrite H. reflexivity.
+    -destruct H. 
+      +exists 2. rewrite H. reflexivity.
+      +inversion H.
+Qed.
+
+Lemma In_map : 
+  forall (A B:Type) (f:A -> B) (l:list A) (x:A), In x l -> In (f x) (map f l).
+Proof.
+  intros.
+  induction l.
+    -simpl in H. destruct H.
+    -simpl.
+     simpl in H. destruct H.
+      +left. rewrite H. reflexivity.
+      +right. apply IHl in H. apply H.
+Qed.
+
+
+(*exercises*)
+Example In_map_iff: 
+  forall (A B:Type) (f:A->B) (l:list A) (y:B), In y (map f l) <-> exists x:A, f x = y /\ In x l.
+Proof.
+  intros.
+  split.
+    -intros. 
+     induction l.
+      +simpl in H. destruct H.
+      +simpl in H. destruct H.
+        *exists x. split. {symmetry. apply H. } {simpl. left. reflexivity. }
+        *apply IHl in H. destruct H. exists x0. simpl.
+         split. {apply H. } {right. apply H. }
+    -intros.
+     induction l.
+      +simpl in H. destruct H. destruct H. destruct H0.
+      +simpl. simpl in H. destruct H.
+         destruct H. destruct H0.
+          *left. rewrite H0 in H. symmetry. apply H.
+          *right. apply IHl. exists x0. split. {apply H. } {apply H0. }
+Qed.
+
+
+Lemma In_app_iff : 
+  forall (A:Type) (l l':list A) (a:A), In a (l++l') <-> In a l \/ In a l'.
+Proof.
+  intros.
+  split.
+    -intros.
+     induction l.
+      +simpl in H. right. apply H.
+      +simpl in H. simpl. apply or_assoc.
+       destruct H.
+        *left. apply H.
+        *right. apply IHl. apply H.
+    -intros.
+     induction l.
+      +simpl. destruct H. {simpl in H. destruct H. } {apply H. }
+      +simpl. simpl in H. apply or_assoc in H. destruct H.
+        *left. apply H.
+        *right. apply IHl. apply H.
+Qed.
+
+
+
+Fixpoint All {T:Type} (P:T -> Prop) (l:list T):Prop :=
+  match l with
+  | [] => True
+  | h:t => (P h) /\ All P t
+  end.
+
+Lemma All_In : 
+  forall (T:Type) (P:T -> Prop) (l:list T), (forall x:T, In x l -> P x) <-> All P l.
+Proof.
+  intros.
+  split.
+    -intros.
+     induction l.
+      +simpl. reflexivity.
+      +simpl. simpl in H. split.
+        *apply H. left. reflexivity.
+        *apply IHl. intros. apply H. right. apply H0.
+    -intros.
+     induction l.
+      +simpl in H0. destruct H0.
+      +simpl in H. simpl in H0. destruct H0.
+        *rewrite <- H0 in H. apply H.
+        *apply IHl. { apply H. } {apply H0. }
+Qed.
+
+
+
+// to page 125.
+
+
+
+
+
 
 
 
