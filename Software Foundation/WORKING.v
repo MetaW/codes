@@ -554,25 +554,167 @@ Proof.
 Qed.
 
 
+Definition combine_odd_even (Podd Peven :nat -> Prop): nat -> Prop :=
+  (fun n => if evenb n then Peven n else Podd n).
+
+
+
+Check combine_odd_even.
+
+
+Theorem combine_odd_even_intro : 
+  forall (Podd Peven :nat -> Prop) (n:nat), 
+    (evenb n = false -> Podd n) -> 
+    (evenb n = true -> Peven n) ->
+    (combine_odd_even Podd Peven n).
+ Proof.
+  intros.
+  unfold combine_odd_even.
+  destruct (evenb n).
+    -apply H0. reflexivity.
+    -apply H. reflexivity.
+Qed.
+
+
+
+Check combine_odd_even_intro.
+
+
+Check @rev.
+
+Axiom functional_extensionality :
+  forall (X Y:Type) (f g: X -> Y), (forall x:X, f x = g x) -> f = g.
+  
+
+Fixpoint rev_append {X:Type} (l1 l2:list X):list X :=
+  match l1 with
+  | [] => l2
+  | h:t => rev_append t (h:l2)
+  end.
+
+Definition tr_rev {X:Type} (l:list X):list X :=
+  rev_append l [].
+
+Lemma rev_append_lemma:
+  forall (X:Type) (l1 l2:list X), rev_append l1 l2 = rev_append l1 [] ++ l2.
+Proof.
+  intros X l.
+  induction l as [|x0 l'].
+    -simpl. reflexivity.
+    -simpl. rewrite IHl'. intros l2. 
+     assert(H: rev_append l' (x0 : l2) = rev_append l' [ ] ++ (x0:l2)).
+      {rewrite IHl'. reflexivity. }
+     rewrite H. rewrite <- app_assoc. simpl.
+     reflexivity.
+Qed.
+
+Lemma tr_rev_correct : 
+  forall X:Type, @tr_rev X = @rev X.
+Proof.
+  intros.
+  apply functional_extensionality.
+  intros.
+  induction x.
+    -simpl. unfold tr_rev. simpl. reflexivity.
+    -simpl. unfold tr_rev. simpl. rewrite <- IHx.
+     unfold tr_rev. rewrite rev_append_lemma.
+     reflexivity.
+Qed.
+Check evenb.
+Check double.
+
+
+
+Theorem evenb_double : 
+  forall k:nat, evenb (double k) = true.
+ Proof.
+  intros.
+  induction k.
+    -simpl. reflexivity.
+    -simpl. apply IHk.
+Qed.
+
+Definition notb (b:bool):bool :=
+match b with
+| true => false
+| false => true
+end.
+
+Fixpoint oddb (n:nat):bool :=
+  match n with
+  | O => false
+  | S O => true
+  | S (S n') => oddb n'
+  end.
+
+
+
+Theorem evenb_double_conv : 
+  forall n:nat, (exists (k:nat), n = if evenb n then double k else S (double k)).
+Admitted.
+
+Theorem even_bool_prop : 
+  forall n:nat, evenb n = true <-> exists k:nat, n = double k.
+Proof.
+  intros. unfold iff. split.
+    -intros. destruct (evenb_double_conv n).
+     exists x. rewrite H in H0. apply H0.
+    -intros. destruct H. rewrite H. apply evenb_double.
+Qed.
 
 
 
 
+Lemma andb_true_iff : 
+  forall (b1 b2:bool), andb b1 b2 = true <-> b1 = true /\ b2 = true.
+Proof.
+  intros.
+  split.
+    -intros. split.
+      +destruct b1. *reflexivity. *simpl in H. inversion H.
+      +destruct b2. *reflexivity. *destruct b1. {inversion H. } {inversion H. }
+    -intros. destruct H. rewrite H. rewrite H0.
+     reflexivity.
+Qed.
 
+Lemma orb_true_iff : 
+  forall (b1 b2:bool), orb b1 b2 = true <-> b1 =true \/ b2 = true.
+Proof.
+  intros.
+  split.
+    -intros. destruct b1.
+      +left. reflexivity.
+      +simpl in H. right. apply H.
+    -intros. destruct H. +rewrite H. reflexivity. +rewrite H. destruct b1.
+      *reflexivity. *reflexivity.
+Qed.
 
+Require Export tactics.
 
+Lemma beq_nat_n_n:
+  forall n:nat, beq_nat n n = true.
+Proof.
+  intros.
+  induction n.
+    -reflexivity.
+    -simpl. apply IHn.
+Qed.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+Theorem beq_nat_false_iff : 
+  forall (x y:nat), beq_nat x y = false <-> x<>y.
+Proof.
+  intros.
+  split.
+    -intros. unfold not. intros.
+     rewrite H0 in H. 
+     induction y.
+      +simpl in H. inversion H.
+      +simpl in H. rewrite beq_nat_n_n in H. inversion H.
+    -generalize dependent y. induction x.
+      +intros. induction y. *exfalso. apply H. reflexivity. *reflexivity.
+      +induction y.
+        *intros. reflexivity.
+        *simpl. intros. apply IHx. intros. unfold not. intros. rewrite H0 in H. unfold not in H.
+         apply H. reflexivity.
+Qed.
 
