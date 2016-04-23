@@ -679,7 +679,7 @@ Theorem even_bool_prop :
   forall n:nat, evenb n = true <-> exists k:nat, n = double k.
 Proof.
   intros. unfold iff. split.
-    -intros. destruct (evenb_double_conv n).
+    -intros. destruct (evenb_double_conv n).      (*??????????*)
      exists x. rewrite H in H0. apply H0.
     -intros. destruct H. rewrite H. apply evenb_double.
 Qed.
@@ -742,7 +742,93 @@ Proof.
 Qed.
 
 
-// to page 132.
+
+Fixpoint beq_list {A:Type} (beq:A -> A -> bool) (l1 l2:list A):bool :=
+  match l1,l2 with
+  | [],[] => true
+  | [],h2:t2 => false
+  | h1:t1,[] => false
+  | h1:t1,h2:t2 => (beq h1 h2) && beq_list beq t1 t2
+  end.
+
+Lemma beq_list_true_iff : 
+  forall (A:Type) (beq: A -> A -> bool), 
+  (forall (a1 a2:A), beq a1 a2 = true <-> a1 = a2 ) ->
+  (forall (l1 l2:list A), beq_list beq l1 l2 = true <-> l1 = l2).
+Proof.
+  split.
+    -generalize dependent l2. induction l1.
+      +induction l2. *simpl. reflexivity. * simpl. intros. inversion 0.
+      +induction l2. * simpl. intros. inversion H0. *simpl. intros.
+       apply andb_true_iff in H0. destruct H0. apply H in H0.
+       rewrite H0. apply IHl1 in H1. rewrite H1. reflexivity.
+    -generalize dependent l2. induction l1.
+      +induction l2. *simpl. reflexivity. *simpl. intros. inversion H0.
+      +induction l2. *simpl. intros. inversion H0.
+        *simpl. intros. inversion H0. apply andb_true_iff. split.
+          {apply H. reflexivity. }
+          {rewrite <- H3. apply IHl1. reflexivity. }
+Qed.
+
+
+Theorem forallb_true_iff: 
+  forall (X:Type) (test:X->bool) (l:list X), 
+    forallb test l = true <-> All (fun x => test x = true) l.
+Proof.
+  split.
+    -induction l.
+      +simpl. reflexivity.
+      +simpl. intros. apply andb_true_iff in H. destruct H.
+       apply IHl in H0. split. *apply H. *apply H0.
+    -induction l.
+      +simpl. reflexivity.
+      +simpl. intros. destruct H. apply andb_true_iff. apply IHl in H0.
+       split. *apply H. *apply H0.
+Qed.
+
+
+
+(*excluded_middle*)
+(*------------------------------------------------------------*)
+Theorem excluded_middle : 
+  forall P:Prop, P \/ ~P.
+Proof.
+  intros.
+Abort.
+
+Theorem excluded_middle_irrefutable : 
+  forall P:Prop, ~~(P \/ ~P).
+Proof.
+  intros.
+  unfold not.
+  intros.
+  apply H.
+  right.
+  intros.
+  apply H.
+  left.
+  apply H0.
+Qed.
+
+Theorem not_exists_dist : 
+  (forall Q:Prop, (Q \/ ~Q)) -> (forall (X:Type) (P:X->Prop), ~(exists x:X, ~(P x)) -> (forall x:X, P x)).
+Proof.
+  intros.
+  unfold not in H0.
+  unfold not in H.
+  destruct H with (P x).      (*!!!!!!!!!!*)
+    -apply H1.
+    -destruct H0.
+     exists x. apply H1.
+Qed.
+
+
+
+
+
+
+
+
 
 
 
