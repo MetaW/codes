@@ -598,16 +598,28 @@ Proof.
     -apply H. reflexivity.
 Qed.
 
-(**)
+
+
+(* Coq中的逻辑 *)
 (*-------------------------------------------------------------*)
 (*
-  
+  Coq中使用的逻辑与经典逻辑有些不同,比如只能进行构造性证明
+  不支持直接证明函数相等，但Coq可以使用Axiom关键字手动加入一些
+  公理，这些公理可以扩充Coq的能力，如支持排中律，支持判断函数相同等，
+  但新加入的公理必须与Coq中自带的推导规则保持一致。
+
+  Coq中实际上有两套逻辑系统：bool与Prop，使用bool本身就具有真假值，能够
+  自动判断一个表达式的真假，但表达能力很弱；使用Prop有很丰富的表达能力，但
+  由于表达能力过强，表达式本身的正确性无法自动验证，只能手动证明。
+  bool:andb orb ...   能力:命题逻辑的模型检测
+  Prop: /\ \/  ~  <-> 能力:支持谓词逻辑的形式证明和模型检测
 *)
 
-(**)
+
+(* 增加判断函数相等的公理 *)
 Axiom functional_extensionality :
   forall (X Y:Type) (f g: X -> Y), (forall x:X, f x = g x) -> f = g.
-
+(*公理无需证明*)
 
 Fixpoint rev_append {X:Type} (l1 l2:list X):list X :=
   match l1 with
@@ -638,7 +650,7 @@ Lemma tr_rev_correct :
   forall X:Type, @tr_rev X = @rev X.
 Proof.
   intros.
-  apply functional_extensionality.      (**)
+  apply functional_extensionality.      (*利用新增的公理*)
   intros.
   induction x.
     -simpl. unfold tr_rev. simpl. reflexivity.
@@ -788,8 +800,10 @@ Qed.
 
 
 
-(*excluded_middle*)
+(*excluded_middle ：排中律*)
 (*------------------------------------------------------------*)
+(*Coq使用构造性逻辑，所以排中律无法证明*)
+
 Theorem excluded_middle : 
   forall P:Prop, P \/ ~P.
 Proof.
