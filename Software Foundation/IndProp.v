@@ -1,8 +1,8 @@
 (*
 	包含:
-	1.
-	2.
-	3.
+	1. 归纳定义返回Prop类型的函数
+	2. inversion on hypo
+	3. induction on hypo
 	4.
 
 *)
@@ -22,7 +22,7 @@ Require Export logic.
 (* 假设我们定义一个判断是非为偶数的函数 ev *)
 (*归纳定义函数也用Inductive*)
 
-IInductive ev : nat -> Prop :=
+Inductive ev : nat -> Prop :=
   | ev_O : ev 0
   | ev_SS : forall n:nat, ev n -> ev (S (S n)).
 
