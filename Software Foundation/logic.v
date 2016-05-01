@@ -4,10 +4,9 @@
 	2. \/ or/destruct/left/right
 	3. ~  not/True/False/exfalso
 	4. <-> iff/destruct/split/(rewrite/reflexivity)
-  5. exists /destruct
-  6. Programming with Type: Prop
+  	5. exists /destruct
+  	6. Programming with Type: Prop
 *)
-
 
 Require Export poly.
 Require Export lists.
