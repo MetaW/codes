@@ -23,3 +23,12 @@
 ### 在命令行执行python文件
 * 可以使用"python filename.py"来执行
 * 也可以用"./filename.py"来执行，但此方法要求在文件第一行加上#!/usr/bin/env python，并且文件要赋予执行的权利
+
+### import 与 reload
+* import用的很多就不多说
+* reload在REPL中调试时很常用,由于文件只能import一次，但很多时候我们修改代码后要重新import，这时只能用reload
+* import与reload的用法不同:
+``` python
+  import filename
+  reload(filename)
+```
