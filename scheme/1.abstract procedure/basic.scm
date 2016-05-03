@@ -7,8 +7,10 @@
 ;每次打开都要为终端窗口设置syntex为scheme,以显示颜色和提示,方法View->syntex->scheme
 
 
+;constant binding
+(define aa 100)
 
-;define a function
+;function binding
 (define (myadd x y)
 	(+ x y))
 
@@ -32,14 +34,35 @@
 
 ;(Ack 1 10)
 
-;树形递归
 
+;bool
+(define bb (= 1 2))			;bb = #f
+(define cc (and bb #t))		;cc = #f
+(define dd (or bb #t))		;dd = #t
+(define ee (not bb))		;ee = #t
+
+
+
+;local binding
+;可以嵌套多层
+(define (ff x)
+	(define (f x)
+		(define (tf x)
+			(* x x))
+		(tf x)) 
+	(define (g x)
+	  	(+ x x))
+	(f (g x)))
+
+
+
+;树形递归
 (define (fib n)
   	(cond 	((= n 0) 0) 
   			((= n 1) 1) 
   			(else (+ 
-  				(fib (- n 1))
-  				(fib (- n 2))))))
+  					(fib (- n 1))
+  					(fib (- n 2))))))
 
 
 ;树形递归改迭代
@@ -53,10 +76,19 @@
 ;exercise 1.11
 (define (f n)
 	(cond ((< n 3) n)
-	      (else (+
-	      		(f (- n 1))
-	      		(* 2 (f (- n 2)))
-	      		(* 3 (f (- n 3)))))))
+	      (else (+	(f (- n 1))
+	      			(* 	2 
+	      				(f (- n 2)))
+	      			(* 	3 
+	      				(f (- n 3)))))))
+
+
+;gcd
+(define (gcd n m)
+  	(if (= n 0) 
+  		m
+  		(gcd (remainder m n) n)))
+
 
 
 
