@@ -34,7 +34,7 @@ fun cube(x:int) = 			(* int -> int *)
 	pow(x,3)
 
 
-(*前面定义的会被hidden掉*)
+(*前面定义的会被hidden掉(也叫shadow掉)*)
 fun cube(x:int) = 
 	x * x * x
 
