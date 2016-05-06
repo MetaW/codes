@@ -1,3 +1,5 @@
+# coding: utf-8
+
 
 # if else
 if 2>3:
@@ -8,6 +10,7 @@ else:
 
 
 #多分枝
+
 score = 86
 if score > 90:
 	print("good")
@@ -60,8 +63,9 @@ while x < N:
 
 #break
 #-------------------------------------------------
-while True:
+while False:
 	print(x)
+	x = x + 1
 	if x > 20:
 		break
 
@@ -70,12 +74,53 @@ while True:
 #------------------------------------------------
 
 for i in range(1,10):
-	if i = 5:
+	if i == 5:
 		continue
 	print(i)
 
 
 
+
+#函数
+#------------------------------------------------
+def max_num(a,b):
+	if a>b:
+		return a
+	else:
+		return b
+
+
+#返回多值
+def get_my_info():
+	return "wll", 22, 1.70
+	#实际返回的是("wll",22,1.70)
+
+#调用
+(name,age,tall) = get_my_info()
+
+	#或
+name2,age2,tall2 = get_my_info()
+
+
+#默认参数
+def power(x, n = 2):
+	s = 1
+	while n>0:
+		s = s*x
+		n = n - 1
+	return s
+
+def demofunc(a, b = 1, c = 2):
+	return "haha"
+	#默认参数必须放在最后
+
+#调用含默认参数的函数
+power(4,4)	#或 power(4, n=4)
+power(4)
+
+
+
+#个数可变的参数
 
 
 

@@ -182,9 +182,16 @@ cmp([1,2,3],[4,5])	#list与字符串比较规则一样
 
 
 #转换函数
-str()
-int()
-float()
+str(123)
+str(12.34)
+str(False)
+
+
+int(1.234)
+int("123")
+
+float("1.23")
+float(12)
 
 
 
