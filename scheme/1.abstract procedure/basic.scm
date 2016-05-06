@@ -7,6 +7,10 @@
 ;每次打开都要为终端窗口设置syntex为scheme,以显示颜色和提示,方法View->syntex->scheme
 
 
+;scheme中的递归函数并非都做递归计算，其计算过程分为：
+;递归计算过程和迭代计算过程
+;迭代计算过程是不保留状态的尾递归由编译器优化得来的
+
 ;constant binding
 (define aa 100)
 
@@ -88,6 +92,100 @@
   	(if (= n 0) 
   		m
   		(gcd (remainder m n) n)))
+
+
+
+
+;;高阶函数
+;------------------------------------------------
+; g(f,a b) = sum(f n){n = a,a+1,..,b}
+(define (sum f a next b)
+	(if (> a b) 
+		0
+		(+ 	(f a) 
+			(sum f (next a) next b))))
+
+;具像化
+(define (inc x) (+ x 1))
+
+;求立方和
+(define (cube x) (* x x x))
+(define (sum_cube a b)
+	(sum cube a inc b))
+
+
+;迭代计算过程的sum
+(define (sum2 f a next b)
+	(define (iter cur a)
+		(if (> a b) 
+			cur
+			(iter (+ cur (f a)) (next a))))
+	(iter 0 a))
+
+;求积分
+(define (integral f a b dx)
+	(define (add_dx x) (+ x dx))
+	(* 	(sum2 f (+ a (/ dx 2.0)) add_dx b)
+		dx))
+;example
+(integral cube 1 10 0.001)
+
+
+;匿名函数
+;------------------------------------------------
+;lambda函数可以出现在所有能调用函数的地方
+;eg: ((lambda (x) (+ x 1)) 5) 值为6
+;如何处理匿名函数的递归问题？？？？？
+
+;重新定义intergral
+(define (integral2 f a b dx)
+	(* 	(sum2 f (+ a (/ dx 2.0)) (lambda (x) (+ x dx)) b)
+		dx))
+
+
+
+;;;;let定义局部变量(使用匿名函数的语法糖)
+;一般我们习惯用define定义局部函数,let定义局部变量,当然这不是必须的
+(define (ff1 x y)
+	(define a (+ x y))	;定义局部变量
+	(define b (- x y))
+	(* 	(+ a b)
+		(- a b)))
+
+
+;还可以用lambda函数实现
+(define (ff2 x y)
+	((lambda (a b)
+		(* 	(+ a b)
+			(- a b)))
+	(+ x y)
+	(- x y)))
+
+;转化为let
+(define (ff3 x y)
+	(let   ((a (+ x y))
+			(b (- x y))) 
+		(* 	(+ a b)
+			(- a b))))
+
+;let的语法：
+;
+;(let 	((var exp)
+;		 (var exp)
+;		 (var exp))
+;	(body))
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
