@@ -177,16 +177,23 @@
 
 
 
+;exercise
+;1.41
+(define (inc x)
+	(+ x 1))
 
+(define (double f)
+	(lambda (x) (f (f x))))
 
+;1.42
+(define (compose f g)
+	(lambda (x) (f (g x))))
 
-
-
-
-
-
-
-
+;1.43
+(define (repeated f n)
+	(if (> n 1)
+		(lambda (x) (f ((repeated f (- n 1)) x)))
+		(lambda (x) (f x))))
 
 
 
