@@ -191,8 +191,15 @@ datatype exp =
 
 val tta = Add (Constant 5, Mul (Constant 2, Neg (Constant 4)))
 
+fun eval e = 	(* exp的解释器 *)
+	case e of
+	  Constant x => x
+	| Neg x => ~ (eval x)
+	| Mul (x,y) => (eval x) * (eval y)
+	| Add (x,y) => (eval x) + (eval y)
 
 
+eval tta (* retuen ~3 *)
 
 
 
