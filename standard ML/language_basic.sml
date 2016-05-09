@@ -157,25 +157,39 @@ datatype mytype =
 	| Str of string
 	| TwoInt of int * int
 
-
+datatype days = 
+	  Monday
+	| Tuesday
+	| Wensday
+	| Thusday
+	| Friday
+	| Saterday
+	| Sunday
 
 datatype mylist = 
 	  Nil
 	| Cons of int * mylist
 
 
-
 (* pattern match *)
 (*---------------------------------------------------*)
 fun pm x = 
 	case x of
-		  Pizza => 3
-		| TwoInt (x1,x2) => x1 + x2
-		| Str s => String.size s
+	  Pizza => 3
+	| TwoInt (x1,x2) => x1 + x2
+	| Str s => String.size s
 
 
 
+(* example of expression *)
 
+datatype exp = 
+	  Constant of int
+	| Add of exp * exp 
+	| Mul of exp * exp
+	| Neg of exp
+
+val tta = Add (Constant 5, Mul (Constant 2, Neg (Constant 4)))
 
 
 
