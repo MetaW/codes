@@ -135,6 +135,52 @@ val b6 = 12<>13
 
 
 
+(* record *)
+(*---------------------------------------------------*)
+val red1 = {name = "wll", age = 22, height = 170, likeCat = true}
+
+(*tuple is a special record*)
+(* acturally it is the syntex suger of the special record *)
+val red2 = {1 = "wll", 2 = 22, 3 = 170, 4 = true} 	(*by name*)
+
+val red3 = ("wll", 22, 170, true)					(*by position*)
+(*red2 will become red3 when run in the repl*)
+
+
+
+
+(* datatype binding *)
+(*---------------------------------------------------*)
+(* similar in Coq *)
+datatype mytype = 
+	  Pizza 
+	| Str of string
+	| TwoInt of int * int
+
+
+
+datatype mylist = 
+	  Nil
+	| Cons of int * mylist
+
+
+
+(* pattern match *)
+(*---------------------------------------------------*)
+fun pm x = 
+	case x of
+		  Pizza => 3
+		| TwoInt (x1,x2) => x1 + x2
+		| Str s => String.size s
+
+
+
+
+
+
+
+
+
 
 
 
