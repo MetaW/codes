@@ -18,6 +18,14 @@ val re = 1.234	(* re:real *)
 
 val z = x + y + 1
 
+val str1 = "hahaha"
+
+val str2 = "hahaha" ^ "hihihi"	(* sml 中的字符串链接用^ *)
+
+val li1 = [1,2,3,4]
+
+val li2 = [1,2,3] @ [4,5,6] (*@ is append in sml*)
+
 (* if-else 也是表达式级别的*)
 val abs_of_z = if z > 0 then z else 0-z
 
@@ -149,8 +157,17 @@ val red3 = ("wll", 22, 170, true)					(*by position*)
 
 
 
+
+
+
+
+
+
+
+
 (* datatype binding *)
 (*---------------------------------------------------*)
+(*自定义数据类型*)
 (* similar in Coq *)
 datatype mytype = 
 	  Pizza 
@@ -171,6 +188,32 @@ datatype mylist =
 	| Cons of int * mylist
 
 
+(* polymorphic datatype *)
+datatype 'a polylist = 
+	  PolyNil
+	| PolyCons of 'a * 'a polylist
+
+
+datatype 'a myoption = 
+	  MyNone
+	| MySome of 'a
+
+(*多态二叉树*)
+datatype ('a, 'b) tree =
+	  NilTree
+	| Leaf of 'b
+	| Node of 'a * ('a, 'b) tree * ('a, 'b) tree
+
+
+
+
+
+
+
+
+
+
+
 (* pattern match *)
 (*---------------------------------------------------*)
 fun pm x = 
@@ -180,6 +223,13 @@ fun pm x =
 	| Str s => String.size s
 
 
+exception BadLengthUnEqual
+
+fun myzip (l1, l2) = 
+	case (l1,l2) of
+	  ([],[]) => []
+	| (x::xl,y::yl) => (x,y)::myzip (xl,yl)
+	| (_,_) => raise BadLengthUnEqual
 
 (* example of expression *)
 
@@ -199,7 +249,85 @@ fun eval e = 	(* exp的解释器 *)
 	| Add (x,y) => (eval x) + (eval y)
 
 
-eval tta (* retuen ~3 *)
+val ans1 = eval tta (* retuen ~3 *)
+
+
+(* other kinds of pattern match *)
+
+(* variable definition *)
+val (ax,ay) = (123,true)
+val thd::ttl = [1,2,3,4,5]
+
+
+
+(* function parameter *)
+(*
+	in sml every function actually has only one parameter,
+	the way we written like "(a,b,c)", does not mean three 
+	parameter but a pattern match for a tuple, so it is actually
+	just one parameter. 
+*)
+
+fun addthree (a,b,c) = 
+	a + b + c
+
+val ans2 = addthree (1,2,3) (*get 6*)
+
+val test = (1,2,3)
+
+val ans3 = addthree test	(* 这说明了addthree实际只有一个tuple类型的参数 *)
+
+
+
+(* haskell style pattern match *)
+
+fun   eval2 (Constant x) 	= x
+	| eval2 (Neg x) 		= ~ (eval2 x)
+	| eval2 (Mul (x,y)) 	= (eval2 x) * (eval2 y)
+	| eval2 (Add (x,y)) 	= (eval2 x) + (eval2 y)
+
+
+
+
+
+
+
+
+
+
+
+
+(* type synonyms *)
+(* 为类型起别名 *)
+(*---------------------------------------------------*)
+
+type foo = int * int
+
+(* foo will be the same as int * int *)
+
+(* 在某些情况下才有用: eg: *)
+type stu_type = 
+	{
+	name:string,
+	id:int,
+	sex:string,
+	height:int
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
