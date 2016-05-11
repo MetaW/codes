@@ -1,11 +1,12 @@
 (*
 	包含:
-	1. 归纳定义返回Prop类型的函数
+	1. 用inductive定义单参数返回Prop类型的函数
 	2. inversion on hypo
 	3. induction on hypo
-	4.
+	4. 用inductive定义多个参数的返回Prop的函数
 
 *)
+
 
 Require Export logic.
 (*
@@ -19,15 +20,18 @@ Require Export logic.
 	定义的实体，这一节讲如何用base和induction rule来定义返回Prop的函数。
 *)
 
-(* 假设我们定义一个判断是非为偶数的函数 ev *)
-(*归纳定义函数也用Inductive*)
+(*用inductive定义单参数返回Prop类型的函数*)
+(* 
+	假设我们定义一个判断是非为偶数的函数 ev
+	归纳定义函数也用Inductive
+*)
 
 Inductive ev : nat -> Prop :=
   | ev_O : ev 0
   | ev_SS : forall n:nat, ev n -> ev (S (S n)).
 
 (*其中第一行相当于定义一个没有实体的函数*)
-(*第2，3行相当于两个theorem*)
+(*第2，3行相当于两个默认已成立的theorem*)
 
 Theorem ev_4 :
 	ev 4.
@@ -70,8 +74,13 @@ Proof.
 Qed.
 
 
-(* inversion on "ev X"(evidence) *)
 
+
+
+
+
+(* inversion on hypo: "ev X" *)
+(*-------------------------------------------------------------------*)
 Theorem ev_minus2 : 
 	forall n:nat, ev n -> ev (pred (pred n)).
 Proof.
@@ -117,19 +126,94 @@ Proof.
 Qed.
 
 
-(* induction on "ev X" (evidence) *)
 
+
+
+
+
+(* induction on hypo: "ev X" *)
+(*-------------------------------------------------------------------*)
+(*
+	如果hypo是由inductive定义出来的,那么可以对其使用induction来归纳
+	证明. 有时对某个数据的归纳时，将规模减1不能完成证明，而必须将规模减少
+	一个大于1的量，如这里对"ev n"的证明，这时对某个数据进行induction将无
+	法完成证明，而应该对hypo进行induction.
+*)
 Theorem ev_even : 
 	forall n:nat, ev n -> exists k:nat, n = double k.
 Proof.
   intros n E.
-  induction E.
+  induction E.		(*对hypo 进行归纳证明*)
     -exists 0. reflexivity.
     -destruct IHE. exists (S x). simpl.
      rewrite H. reflexivity.
 Qed.
 
-// to page 143.
+
+
+Theorem ev_even_iff : 
+	forall n:nat, ev n <-> exists k:nat, n = double k.
+Proof.
+  intros.
+  unfold iff.
+  split.
+    -intros. apply ev_even. apply H.
+    -intros. destruct H. rewrite H. apply ev_double.
+Qed.
+
+(* exercise *)
+Theorem ev_sum : 
+	forall (n m:nat), ev n -> ev m -> ev (n + m).
+Proof.
+  intros. induction H.
+    -apply H0.
+    -simpl. apply ev_SS.
+     apply IHev.
+Qed.
+
+
+(*归纳定义一个返回hypo的函数方法可能不止一种,eg:*)
+Inductive ev' : nat -> Prop :=
+  | ev'_O : ev' 0
+  | ev'_2 : ev' 2
+  | ev'_sum : forall (n m:nat), ev' n -> ev' m -> ev' (n + m).
+
+Lemma plus_n_2:
+  forall n:nat, n + 2 = S (S n).
+Proof.
+  intros.
+  induction n.
+    -reflexivity.
+    -rewrite <- IHn.
+     simpl. reflexivity.
+Qed.
+
+
+Theorem ev'_ev : 
+	forall n:nat, ev' n <-> ev n.
+Proof.
+  intros. split.
+    -intros.
+     induction H.
+      +apply ev_O. +apply ev_SS. apply ev_O.
+      +apply ev_sum. *apply IHev'1. * apply IHev'2.
+    -intros. induction H.
+      +apply ev'_O.
+      +rewrite <- plus_n_2.
+       apply ev'_sum.
+        *apply IHev. *apply ev'_2.
+Qed.
+
+
+Theorem ev_ev__ev : 
+	forall (n m:nat), ev (n + m) -> ev n -> ev m.
+Proof.
+  intros.
+  induction H0.
+    -simpl in H. apply H.
+    -apply IHev. simpl in H.
+     inversion H. apply H2.
+Qed.
 
 
 
@@ -137,13 +221,35 @@ Qed.
 
 
 
+(*归纳定义多个参数的返回Prop的函数*)
+(*-------------------------------------------------------------------*)
 
+Module LeModule.
 
+(*eg:定义一个nat上的判断小于等于函数*)
+Inductive le : nat -> nat -> Prop :=
+  | le_n : forall n:nat, le n n
+  | le_S : forall (n m:nat), le n m -> le n (S m).
 
+Notation "n <= m" := (le n m).
 
+End LeModule.
 
+(*用上门定义再定义一个nat上的判断小于函数*)
+Definition lt (n m:nat) := le (S n) m.
 
+Notation "n < m" := (lt n m).
 
+(*更多的例子*)
+Inductive squire_of : nat -> nat -> Prop :=
+  | sq : forall n:nat, squire_of n (n*n).
+
+Inductive next_nat : nat -> nat -> Prop :=
+  | nn : forall n:nat, next_nat n (S n).
+
+Inductive next_even : nat -> nat -> Prop :=
+  | ne_1 : forall n:nat, ev (S n) -> next_even n (S n)
+  | ne_2 : forall n:nat, ev (S (S n)) -> next_even n (S (S n)).
 
 
 
