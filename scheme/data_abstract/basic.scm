@@ -160,7 +160,22 @@
 
 
 
+;枚举一个list的所有排列
+;当map将每一个元素都转换成一个list时
+;就要注意是否需要使用flatmap
+(define (flatmap f seq)
+	(myfold append () (map f seq)))
 
+
+(define (remove ls x)
+	(filter (lambda (t) (not (= t x))) ls))
+
+(define (permutation ls)
+	(cond ((null? ls) (list (list)))
+	      (else (flatmap (lambda (x) 
+	      				 	(map (lambda (t) (cons x t)) 
+	      					  	 (permutation (remove ls x)))) 
+	      			     ls))))
 
 
 
