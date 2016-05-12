@@ -108,10 +108,62 @@
 			seq))
 
 ;;;exercise2.37
+;sometimes you need to define your own map to solve a 
+;more complex problem. eg:
+(define (comap f x w)
+	(cond ((null? x) ())
+	      (else (cons (myfold + 0 
+	      					  (map (lambda (t) (* t (car x))) 
+	      					  	   (car w))) 
+		       		  (comap f (cdr x) (cdr w))))))		
+
+(define (dotmap f v w)
+	(map (lambda (row) (comap * row w)) v))
+
+(define (dot_prod v w)
+	(myfold + 0 (map (lambda (x) (fold + 0 x)) 
+					 (dotmap * v w))))
+
+
+;2
+(define (map2x f x y)
+	(cond ((null? y) 
+				(map (lambda (a) (cons a ())) x))
+		  ((null? x) ())
+	      (else (cons (f (car x) (car y))
+	      			  (map2x f (cdr x) (cdr y))))))
+
+(define (foldn r li)
+	(map2x cons r li))
+
+(define (trans m)
+	(myfold foldn () m))
+
 
 ;;;exercise2.38
+;执行顺序
+;(fold_right f E (list a b c d))
+;= (f a (f b ( f c ( f d E)))
+
+;(fold_left f E (list a b c d))
+;= (f(f(f(f E a) b) c) d)
+
 
 ;;;exercise2.39
+;用fold-left与fold-right分别实现reverse函数
+
+(define (myreverse1 seq)
+	(fold-left (lambda (x y) (cons y x)) () seq))
+
+(define (myreverse2 seq)
+	(fold-right (lambda (x y) (append y (list x))) () seq))
+
+
+
+
+
+
+
 
 
 
