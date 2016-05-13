@@ -4,11 +4,13 @@
 	2. inversion on hypo
 	3. induction on hypo
 	4. 用inductive定义多个参数的返回Prop的函数
-
+	5. 应用:正则表达式的定义与匹配判断
+	
 *)
 
 
 Require Export logic.
+Require Export lists.
 (*
 	返回Prop的函数的定义:
 	  如何定义一个函数:根据计算理论，可以给出基于图灵机的函数实体，即一般的函数
@@ -29,9 +31,11 @@ Require Export logic.
 Inductive ev : nat -> Prop :=
   | ev_O : ev 0
   | ev_SS : forall n:nat, ev n -> ev (S (S n)).
-
-(*其中第一行相当于定义一个没有实体的函数*)
-(*第2，3行相当于两个默认已成立的theorem*)
+(*
+	其中第一行相当于定义一个没有实体的函数,
+	第2，3行相当于两个默认已成立的关于上面
+	的函数的事实(theorem)
+*)
 
 Theorem ev_4 :
 	ev 4.
@@ -241,8 +245,8 @@ Definition lt (n m:nat) := le (S n) m.
 Notation "n < m" := (lt n m).
 
 (*更多的例子*)
-Inductive squire_of : nat -> nat -> Prop :=
-  | sq : forall n:nat, squire_of n (n*n).
+Inductive square_of : nat -> nat -> Prop :=
+  | sq : forall n:nat, square_of n (n*n).
 
 Inductive next_nat : nat -> nat -> Prop :=
   | nn : forall n:nat, next_nat n (S n).
@@ -250,6 +254,110 @@ Inductive next_nat : nat -> nat -> Prop :=
 Inductive next_even : nat -> nat -> Prop :=
   | ne_1 : forall n:nat, ev (S n) -> next_even n (S n)
   | ne_2 : forall n:nat, ev (S (S n)) -> next_even n (S (S n)).
+
+
+Inductive total_relation : nat -> nat -> Prop :=
+  | always : forall  (n m:nat), True -> (total_relation n m).
+
+Inductive empty_relation : nat -> nat -> Prop :=
+  | never : forall  (n m:nat), (empty_relation n m) -> Flase.
+
+
+(*再定义个3参数的返回Prop的函数*)
+
+Inductive R : nat -> nat -> nat -> Prop :=
+  | c1 : R 0 0 0
+  | c2 : forall (m n o:nat), R m n o -> R (S m) n (S o)
+  | c3 : forall (m n o:nat), R m n o -> R m (S n) (S o)
+  | c4 : forall (m n o:nat), R (S m) (S n) (S (S o)) -> R m n o
+  | c5 : forall (m n o:nat), R m n o -> R n m 0.
+
+Definition fR (n m:nat):nat :=
+  n + m.
+
+
+Lemma plus_prop:
+  forall (n m:nat), n + S m = S (n + m).
+Proof.
+  intros.
+  induction n.
+    -simpl. auto.
+    -simpl. rewrite IHn. auto.
+Qed.
+
+Lemma plus_commu:
+  forall (n m:nat), n + m = m + n.
+Proof.
+  intros.
+  induction m.
+    -simpl. induction n. +auto. +simpl. rewrite IHn. auto.
+    -simpl. rewrite <- IHm. rewrite plus_prop. auto.
+Qed.
+
+(* exercise *)
+Theorem R_eq_fR : 
+	forall (n m o:nat), R n m o <-> fR n m = o.
+Proof.
+  split.
+    -unfold fR. intros.
+     induction H.
+      +reflexivity.
+      +rewrite <- IHR. reflexivity.
+      +rewrite <- IHR. auto.
+      +simpl in IHR. inversion IHR. rewrite plus_prop in H1. inversion H1. auto.
+      +rewrite <- IHR. apply plus_commu.
+    -unfold fR. generalize dependent o. induction n.
+      +induction m. *simpl. intros. rewrite <- H. apply c1.
+        *intros. simpl in H. rewrite <- H. apply c3. apply IHm. reflexivity.
+      +induction m.
+        *simpl. intros. rewrite <- H. rewrite plus_commu. simpl. apply c2. apply IHn. auto.
+        *intros. rewrite <- H. simpl. apply c2. apply IHn. reflexivity.
+Qed.
+
+(* exercise *)
+Inductive subseq : list nat -> list nat -> Prop :=
+  | sqc1 : forall (l:list nat), subseq l l
+  | sqc2 : forall (l1 l2 l3:list nat), subseq l1 l2 -> subseq l1 (l2 ++ l3)
+  | sqc3 : forall (lx llx ly lly:list nat), subseq lx llx -> subseq ly lly -> subseq (lx ++ ly) (llx ++ lly).
+
+
+
+
+
+
+
+
+
+
+
+
+(*正则表达式的定义与匹配的判断*)
+(*-------------------------------------------------------------------*)
+
+(*归纳定义多态类型的正则表达式*)
+Inductive reg_exp (T:Type) : Type :=
+  | EmptySet : reg_exp T 
+  | EmptyStr : reg_exp T
+  | Char : T -> reg_exp T
+  | App : reg_exp T -> reg_exp T -> reg_exp T
+  | Union : reg_exp T -> reg_exp T -> reg_exp T
+  | Star : reg_exp T -> reg_exp T -> reg_exp T.
+
+
+// to page 149.
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
