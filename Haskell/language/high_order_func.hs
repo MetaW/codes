@@ -124,4 +124,3 @@ qst (x:xl) = qst (filter (<=x) xl) ++ x:qst (filter (>x) xl)
 
 
 
-
