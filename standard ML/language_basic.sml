@@ -1,4 +1,14 @@
 (*
+	Include:
+	1.
+	2.
+	3.
+	4.
+*)
+
+(*---------------------------------------------------*)
+(*	
+	Attention:
 	-在命令行中输入 use "filename.sml"; 来加载代码文件
 	
 	-sml 不允许赋值操作,所有数据都是immutable的
@@ -8,6 +18,7 @@
 	-sml中负号用~而不是－来表示
 	 如：－123应写成：~123
 *)
+
 
 (*variable binding*)
 val x = 34		(* x:int *)
@@ -319,6 +330,17 @@ type stu_type =
 
 
 
+
+(* anonymous function *)
+(*--------------------------------------------------*)
+
+fun n_times (f,n,x) = 
+	if n = 0
+	then x
+	else f (n_times(f,n-1,x))
+
+
+fun triple_n_times = n_times(fn x = 3 * x, n, x)
 
 
 

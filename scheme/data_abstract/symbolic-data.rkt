@@ -11,7 +11,7 @@
 ;(quote 'exp) = 'exp
 
 
-;函数eq?, equal?
+;函数eq?, equal?, memq
 
 ;eq?只能判断两个symbol/atom是否相等,无法判断list
 (eq? 123 123)
@@ -23,9 +23,13 @@
 (equal? 'asdsd 'asdsd)
 (equal? (list 123 12) (list 123 12))
 (equal? '(qas 234) '(qas 234))
-
-
-
+(equal? (list 12 34) '(12 34))
+ 
+;memq判断一个symbol/atom是否在另一个symbol/atom的list中
+;如果是则返回第一次出现的位置开始的字串,否则返回#f
+(memq 12 (12 1212)
+(memq 12 (list 23 45 667))
+(memq 'asd '(qwe asd 334))
 
 
 
