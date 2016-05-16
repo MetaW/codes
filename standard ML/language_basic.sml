@@ -1,9 +1,13 @@
 (*
 	Include:
-	1.
-	2.
-	3.
-	4.
+	1. variable binding & function binding
+	2. pair, tuple, list
+	3. option type
+	4. record
+	5. datatype definition & polymorphic datatype
+	6. pattern match
+	7. type synonyms
+	8. anonymous function
 *)
 
 (*---------------------------------------------------*)
@@ -340,7 +344,8 @@ fun n_times (f,n,x) =
 	else f (n_times(f,n-1,x))
 
 
-fun triple_n_times(n,x) = n_times(fn x => 3 * x, n, x)
+fun triple_n_times(n,x) = n_times((fn x => 3 * x), n, x)
+
 
 
 
