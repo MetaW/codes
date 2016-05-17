@@ -26,7 +26,10 @@
 (*
 	lexical scope: The body of a function is evaluated in the
 	environment where the function is DEFINED, not the 
-	environment where the function is CALLED
+	environment where the function is CALLED.
+
+	Another scope is dynamic scope, it use the environment where
+	the function is called while evaluated.
 *)
 
 (* example *)
@@ -58,11 +61,51 @@ val z = f (x + y)	(* z = f 5 = (1 + 5) = 6 *)
 
 
 
+(* currying *)
+(*--------------------------------------------------------*)
+(*
+	We know that every function can take only one parameter
+	but like many other FP languages, actually we can define
+	a function which take more than one params via a syntex sugur 
+	called "CURRYING", which transform a function with more than
+	one params to many wraped anonymous function and each of them take
+	exactlly one param. 
+
+	Lexical scope is essential to this technique working correctly
+*)
+
+(* example *)
+fun sorted3 x y z = 
+	z >= y andalso y >= x
+
+(* the function above is actually a syntex sugur of the next one *)
+
+val sorted3 = 	(* ATTENTION: here we use val instead of fun *)
+	fn x =>
+		(fn y =>
+			(fn z =>
+				(z >= y andalso y >= x)))
+(* this process is called currying *)
+
+(* sorted3 1 2 3 = (((sorted3 1) 2) 3) *)
 
 
+(* partial application *)
 
+sorted3 1 		(*   fn: int -> int -> bool *)
+sorted3 1 2 	(*   fn: int -> bool *)
+sorted3 1 2 3 	(* true: bool *)
 
+(* conclusion on how to pass more than one params to a function *)
+(*
+	1. we can put all params into a tuple.
+		eg: fun g (x,y,z) = ...
+	2. we can use the currying 
+		eg: val g x y z = ...
 
+	Attention: the second way is better than the first one, cause
+	in the second way we can use partial application.
+*)
 
 
 
