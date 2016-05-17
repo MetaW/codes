@@ -66,7 +66,7 @@ val z = f (x + y)	(* z = f 5 = (1 + 5) = 6 *)
 (*
 	We know that every function can take only one parameter
 	but like many other FP languages, actually we can define
-	a function which take more than one params via a syntex sugur 
+	a function which take more than one params via a syntex sugar 
 	called "CURRYING", which transform a function with more than
 	one params to many wraped anonymous function and each of them take
 	exactlly one param. 
@@ -78,7 +78,7 @@ val z = f (x + y)	(* z = f 5 = (1 + 5) = 6 *)
 fun sorted3 x y z = 
 	z >= y andalso y >= x
 
-(* the function above is actually a syntex sugur of the next one *)
+(* the function above is actually a syntex sugar of the next one *)
 
 val sorted3 = 	(* ATTENTION: here we use val instead of fun *)
 	fn x =>
@@ -96,6 +96,8 @@ sorted3 1 		(*   fn: int -> int -> bool *)
 sorted3 1 2 	(*   fn: int -> bool *)
 sorted3 1 2 3 	(* true: bool *)
 
+
+
 (* conclusion on how to pass more than one params to a function *)
 (*
 	1. we can put all params into a tuple.
@@ -109,6 +111,29 @@ sorted3 1 2 3 	(* true: bool *)
 
 
 
+
+(* Mutation via reference *)
+(*
+	ML is not a pure FP language, because it support a way
+	to mutate a special kind of data: "ref data". In ML, only
+	this kind of data type can be mutate via some syntex sugar.
+
+	ref : constructer
+	:=  : syntex sugar for change the content of a ref
+	!   : syntex sugar for get the content of a ref
+*)
+
+val x = ref 123	(* create a ref data: int ref *)
+val x1 = x 		(* x1: int ref *)
+val x2 = ref 123	(* x2: int ref *)
+
+val y = !x (* get the content of a ref data. y:int *)
+val _ = x:= 234	(* change the content of a ref data *)
+(*
+x  -> ref 234 : int ref
+x1 -> ref 234 : int ref
+x2 -> ref 123 : int ref
+*)
 
 
 
