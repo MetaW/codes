@@ -114,7 +114,12 @@ sorted3 1 2 3 	(* true: bool *)
 
 
 
+
+
+
+
 (* Mutation via reference *)
+(*--------------------------------------------------------*)
 (*
 	ML is not a pure FP language, because it support a way
 	to mutate a special kind of data: "ref data". In ML, only
@@ -125,16 +130,16 @@ sorted3 1 2 3 	(* true: bool *)
 	!   : syntex sugar for get the content of a ref
 *)
 
-val x = ref 123	(* create a ref data: int ref *)
-val x1 = x 		(* x1: int ref *)
+val x = ref 123		(* create a ref data: int ref *)
+val x1 = x 			(* x1: int ref *)
 val x2 = ref 123	(* x2: int ref *)
 
-val y = !x (* get the content of a ref data. y:int *)
-val _ = x:= 234	(* change the content of a ref data *)
+val y = !x 			(* get the content of a ref data. y:int *)
+val _ = x:= 234		(* change the content of a ref data *)
 (*
-x  -> ref 234 : int ref
-x1 -> ref 234 : int ref
-x2 -> ref 123 : int ref
+	x  -> ref 234 : int ref
+	x1 -> ref 234 : int ref
+	x2 -> ref 123 : int ref
 *)
 
 
@@ -142,7 +147,10 @@ x2 -> ref 123 : int ref
 
 
 
+
+
 (* abstract data type *)
+(*--------------------------------------------------------*)
 datatype set = S of { insert : int -> set, member : int -> bool, size : unit -> int }
 
 
