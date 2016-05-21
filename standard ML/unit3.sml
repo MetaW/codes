@@ -1,9 +1,11 @@
 (*
 	content:
-	1.
-	2.
-	3.
-	4.
+	1. first class function
+	2. lexical scope & closures
+	3. currying & partial application
+	4. Mutation via reference
+	5. 
+	6. 
 
 *)
 
