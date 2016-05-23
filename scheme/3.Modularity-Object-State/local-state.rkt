@@ -51,7 +51,7 @@
 (define new-withdrow
 	(let ((balance 100)) 
 		 (lambda (amount)
-		 		 (if (< amount balance)
+		 		 (if (<= amount balance)
 		 		 	 (begin (set! balance (- balance amount))
 		 		 	 		balance)
 		 		 	 "insufficent money!"))))
@@ -72,7 +72,7 @@
 (define make-withdrow
 	(lambda (balance)
 		(lambda (amount)
-		 	(if (< amount balance)
+		 	(if (<= amount balance)
 		 		(begin (set! balance (- balance amount))
 		 		 	 	balance)
 		 		"insufficent money!"))))
@@ -92,8 +92,27 @@
 
 
 
+;add deposit
+
+(define (make-account balance)
+	(define (withdrow m)
+		(if (<= m balance)
+			(begin (set! balance (- balance m))
+					balance)
+			"insufficent money!"))
+	(define (deposit m)
+		(begin (set! balance (+ balance m)))
+				balance)
+	(lambda (m)
+		(cond 	((eq? m 'withdrow) withdrow)
+				((eq? m 'deposit) deposit)
+				(else (error "Unknow operation!")))))
 
 
+;(define c1 (make-account 100))
+;((c1 'deposit) 100) ==> 200
+;((c1 'withdrow) 150) ==> 50
+;((c1 ' withdrow) 60) ==> "insufficent money"
 
 
 
