@@ -112,11 +112,36 @@
 ;(define c1 (make-account 100))
 ;((c1 'deposit) 100) ==> 200
 ;((c1 'withdrow) 150) ==> 50
-;((c1 ' withdrow) 60) ==> "insufficent money"
+;((c1 'withdrow) 60) ==> "insufficent money"
 
 
 
 
+;;;exercise 3.1
+(define (acc init)
+	(lambda (ad)
+		(begin (set! init (+ init ad))
+				init)))
+
+
+
+;;;exercise 3.3
+
+(define (make-account balance passwd)
+	(define (withdrow m)
+		(if (<= m balance)
+			(begin (set! balance (- balance m))
+					balance)
+			"insufficent money!"))
+	(define (deposit m)
+		(begin (set! balance (+ balance m)))
+				balance)
+	(lambda (pass op)
+		(if (eq? pass passwd)
+			(cond   ((eq? op 'deposit) deposit)
+					((eq? op 'withdrow) withdrow)
+					(else (error "Unknow operation!")))
+			(error "incorect password!")))) 
 
 
 
