@@ -17,6 +17,9 @@
 ;-------------------------------------------------
 ;(begin exp1 exp2 exp3 ... expn) ==> value of expn.
 
+;begin expression will eval every expression in
+;the bracket but take the value of the last expression
+;as its (retrun)value.
 
 
 
@@ -152,6 +155,16 @@
 
 ; data structure with mutable data
 ;-------------------------------------------------
+
+
+
+
+
+
+
+
+
+
 
 
 
