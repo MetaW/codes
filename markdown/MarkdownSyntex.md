@@ -1,4 +1,4 @@
-# Markdown Synte
+# Markdown Syntex
 
 Guide for writing in Markdown
 
@@ -11,6 +11,7 @@ Guide for writing in Markdown
 #### 44444
 ##### 55555
 ###### 66666
+77777
 
 > hello
 > hello
@@ -25,11 +26,11 @@ Guide for writing in Markdown
 - hello hello hello
 
 
-*** hello hello hello ***
-- *** hello hello hello ***
-- ## hello hello hello
-## *** hello hello hello ***
-- ## *** hello hello hello ***
+*** 1.hello hello hello ***
+- *** 2.hello hello hello ***
+- ## 3.hello hello hello
+## *** 4.hello hello hello ***
+- ## *** 5.hello hello hello ***
 
 ---
 ## 2. 插入代码
@@ -46,6 +47,7 @@ int main()
 }
 
 ```
+
 
 ---
 ## 3. 插入图片
