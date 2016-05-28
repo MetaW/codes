@@ -3,6 +3,13 @@
 Guide for writing in Markdown
 
 ---
+## 0.Latex fomular
+$m + a = s$
+
+$[x] = [y]$
+
+
+---
 ## 1. 基本文字布局
 
 # 11111
