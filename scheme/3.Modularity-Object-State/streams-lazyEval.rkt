@@ -77,11 +77,50 @@
 
 ; (memo-fun (delay <exp>)) ==> (memo-fun (lambda () <exp>))
 
-(define (memo-fun f)
-	())
+(define (memo-fun lambda-exp)
+	(let ((already-run? false) (result false))
+		 (lambda ()
+		 	(if (= already-run? false)
+		 		(begin  (set! already-run true)
+		 				(set! result (lambda-exp))
+		 				result)
+		 		result))))
+
+; then we can use "(memo-fun (lambda () <exp>))" to replace
+; "(lambda () <exp>)"
 
 
 
+
+
+
+
+
+;infinite stream
+;---------------------------------------------------------
+
+; example
+(define (int-start-from n)
+	(cons n (lambda () (int-start-from (+ n 1)))))
+
+
+;now we use it to create a infinite prime number stream
+
+(define (divisible? x y) (= (remainder x y) 0))
+
+(define intfrom2 (int-start-from 2))
+
+(define (sieve-stream s) 
+	(cons 	(mystream-car s)
+			(lambda () 
+				(sieve-stream 
+					(mystream-filter (lambda (x) (not (divisible? x (mystream-car s)))) 
+								 	 (mystream-cdr s))))))
+
+;now we get a prime stream:
+(define prime-stream (sieve-stream intfrom2))
+
+ 
 
 
 
