@@ -119,6 +119,8 @@ z[1.56]	# = "hehe"
 
 z[2] = 5	#update
 
+
+
 #判断是否有某个key
 #way1:
 "blabla" in z #返回True/False，这里为False
@@ -127,10 +129,19 @@ z[2] = 5	#update
 z.get("blabla")	#返回None
 z.get(2)		#返回3
 
+
+
 #遍历
 for key in z:
 	#处理key
 	print(z[key])
+
+
+
+#将dict转化为list
+li = a.items()
+
+#li = [(2, 3), ('sw', True), (1.56, 'hehe')]
 
 
 #set
