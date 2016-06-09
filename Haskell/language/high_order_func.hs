@@ -4,6 +4,9 @@
 	2. high order function
 	3. map, filter
 	4. foldl, foldr
+	5. scanl, scanr
+	6. $运算符 (syntax suger)
+	7. function composition (syntax suger)
 
 -}
 
@@ -147,6 +150,8 @@ addThree = \x -> \y -> \z -> x + y + z
 
 	foldr f e [a,b,c]
 	==> (f a (f b (f c e)))
+
+	所有遍历 list 中元素并据此返回一个值的操作都可以交给 fold 实现
 -}
 
 
@@ -164,6 +169,90 @@ myElem e l = foldl (\acc x -> acc||(x == e)) False l
 
 myMap2 :: (a -> a1) -> [a] -> [a1]
 myMap2 f l = foldr (\x acc -> f x:acc) [] l
+
+
+myReverse :: [a] -> [a]
+myReverse = foldl (\acc x -> x:acc) []
+
+
+--foldl1 与 foldr1 的行为与 foldl 和 foldr 相似
+--只是你无需明确提供初始值。他们假定 list 的首个或末尾元素作为起始值
+
+
+
+
+
+
+--scanl, scanr
+--------------------------------------------------
+{-
+	scanl 和 scanr 与 foldl 和 foldr 相似,只是它们会记
+	录下累加值的所有状态到一个 list。也有 scanl1 和 scanr1。
+-}
+
+mm = scanl (+) 0 [1,2,3,4]	-- mm = [0,1,3,6,10]
+
+nn = scanr (+) 0 [1,2,3,4]	-- nn = [10,9,7,4,0]
+
+oo = scanl1 (+) [1,2,3,4]	-- oo = [1,3,6,10]
+
+pp = scanr1 (+) [1,2,3,4]	-- pp = [10,9,7,4]
+
+
+
+
+
+-- $ 运算符
+-------------------------------------------------
+{-
+	作用：f $ x = f x
+
+	普通的函数调用是左结合的，拥有最高优先级：
+	f a b c = (((f a) b) c)
+
+	$ 是中缀运算符，是右结合的，且拥有最低优先级
+
+	用处:语法糖
+	$可以改变求值顺序,减少括号数量
+	(f (g (p x))) = f $ g $ p x
+
+	eg: sqrt 3 + 4 + 5 = (sqrt 3) + 4 + 5
+		sqrt $ 3 + 4 + 5 = sqrt (3 + 4 + 5)
+-}
+
+--实现
+($) :: (a -> b) -> a -> b
+f $ x = f x
+
+
+
+
+-- function composition
+{-
+	f (g x) = (f . g) x
+
+	. 是右结合的
+
+	f (g (p x)) = (f . g . p) x
+
+	用处:语法糖
+	可以用 f . g . p 代替 \x -> f (g (p x))
+-}
+
+--实现
+(.) :: (b -> c) -> (a -> b) -> a -> c
+f . g = \x -> f (g x)
+
+{-
+example:
+
+fn x = ceiling (negate (tan (cos (max 50 x))))
+==>
+fn = ceiling . negate . tan . cos . max 50
+
+-}
+
+
 
 
 
