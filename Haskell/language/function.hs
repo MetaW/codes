@@ -1,5 +1,10 @@
 {-
-	内容:typeclass/pattern match/guard/let-in/case...of...
+	内容:
+	1. typeclass
+	2. pattern match
+	3. guard
+	4. let-in
+	5. case...of...
 -}
 --------------------------------------------------------
 --------------------------------------------------------

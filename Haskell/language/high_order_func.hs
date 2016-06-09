@@ -1,9 +1,14 @@
 {-
-	内容：
--}
--------------------------------------------------------------
--------------------------------------------------------------
+	内容:
+	1. curried function
+	2. high order function
+	3. map, filter
+	4. foldl, foldr
 
+-}
+
+-------------------------------------------------------------
+-------------------------------------------------------------
 {-
     haskell中的函数可以作为参数和返回值传来传去,这样的
     函数就被称作高阶函数.
@@ -35,6 +40,8 @@ aa = ((biggest 10) 20) 30
 bb = biggest 10 20 30
 
 
+
+
 --高阶函数
 -----------------------------------------------------
 --高阶函数即可以把函数作为参数或返回函数的函数
@@ -63,6 +70,7 @@ myZipWith f (x:xl) (y:yl) = (f x y):myZipWith f xl yl
 
 ff = myZipWith (+) [1,2,3] [4,5,6]		--ff=[5,7,9]
 gg = myZipWith (*) [1,2,3,4,5] [10,10]  --gg=[10,20]
+
 
 
 
@@ -99,28 +107,63 @@ qst [] = []
 qst (x:xl) = qst (filter (<=x) xl) ++ x:qst (filter (>x) xl)
 
 
---惰性求值与无限list
+
+
+
+
+--惰性求值与无穷list
+----------------------------------------------------
 {-
-	
+	haskell是惰性求值的语言
+	因此可以使用无穷list(无穷流)
 -}
 
 
 --匿名函数lambda
 ----------------------------------------------------
+{-
+	syntex:
+	(\ x -> x * 2)
+	(\ x y -> x + y)
+	(\ l -> length l > 10)
+
+-}
+
+kk = filter (\x -> x > 5) [2,3,5,7,90,23,4,1]	-- kk = [7,90,23]
+
+--example
+addThree :: (Num a) => a -> a -> a -> a
+addThree = \x -> \y -> \z -> x + y + z
 
 
 
 
 
+--foldl,foldr
+--------------------------------------------------
+{-
+	foldl f e [a,b,c]
+	==> (f(f(f e a) b) c)
+
+	foldr f e [a,b,c]
+	==> (f a (f b (f c e)))
+-}
 
 
+isAllPosit::(Ord a, Num a) =>[a] -> Bool
+isAllPosit l = foldl (\acc x -> acc&&(x>0)) True l
 
 
+mySum :: (Num a) => [a] -> a
+mySum = foldl (+) 0
 
 
+myElem :: Eq a => a -> [a] -> Bool
+myElem e l = foldl (\acc x -> acc||(x == e)) False l
 
 
-
+myMap2 :: (a -> a1) -> [a] -> [a1]
+myMap2 f l = foldr (\x acc -> f x:acc) [] l
 
 
 

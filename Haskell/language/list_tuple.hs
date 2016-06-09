@@ -1,7 +1,22 @@
 {-
-list中元素必须同类型
-字符串也是一个list
-list中的元素可以是list,但仍要求所有list类型相同
+	content:
+	1. list
+	2. Range
+	3. 由条件生成集合
+	4. tuple
+
+
+-}
+
+
+
+
+
+
+{-
+	list中元素必须同类型
+	字符串也是一个list
+	list中的元素可以是list,但仍要求所有list类型相同
 -}
 
 
