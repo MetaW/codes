@@ -3,8 +3,8 @@
 	1. import
 	2. :browse
 	3. Data.List
-	4.
-	5.
+	4. Data.Char
+	5. 
 -}
 
 
@@ -32,7 +32,7 @@ import Data.List hiding (nub, sort)
 import qualified Data.Map 
 -- 这样调用Data.Map中的定义只能用Data.Map.xxx来进行了
 
--- 若觉得每次都写Data.Map 太妈烦可以为其定义alias
+-- 若觉得每次都写Data.Map 太麻烦可以为其定义alias
 import qualified Data.Map as M
 -- 这样就能用 M.xxx 代替 Data.Map.xxx 了
 
@@ -57,6 +57,111 @@ import qualified Data.Map as M
 -- Data.List
 -------------------------------------------------------
 -- Data.List应用的示例
+
+aa = intersperse '.' "wanglulu"	-- aa = "w.a.n.g.l.u.l.u"
+
+bb = intersperse 0 [1,2,3,4]	-- bb = [1,0,2,0,3,0,4]
+
+
+cc = transpose [[1,2,3],	-- cc =[[1,4,7],
+				[4,5,6],	--		[2,5,8],
+				[7,8,9]]	--		[3,6,9]]
+
+-- nub 删除重复元素
+ccc = nub [1,2,3,3,2,5,6,1,1,2,3]
+	-- ccc = [1,2,3,5,6]
+
+
+-- foldl', foldl1' 是foldl和foldl1的严格版本
+-- 如果用惰性 fold 时经常遇到溢出错误,就应换用它们的严格版
+
+
+
+-- iterate 取一个函数和一个值作参数。它会用该值去调用该函数
+-- 并用所得的结果再次调用该函数,产生一个无限的 list
+
+dd = take 10 (iterate (*2) 1)	-- dd = [1,2,4,8,16,32,64,128,256,512]
+
+ee = take 3 (iterate (++ "hehe") "hehe")
+								-- ee = ["hehe","hehehehe","hehehehehehe"]
+
+
+-- takeWhile 类似于filter。但它从一个 list 中取元素,一旦遇到
+-- 不符合条件的某元素就停止。常用于处理无穷list
+
+ff = takeWhile (>3) [6,5,4,3,2,1,9,10,12,14]	-- f = [6,5,4]
+
+gg = sort [2,4,7,45,7,3,1,3,5657,98]	-- gg = [1,2,3,3,4,7,7,45,98,5657]
+
+
+
+-- group 取一个 list 作参数,并将其中相邻并相等的
+-- 元素各自归类,组成一个个子 list
+
+hh = group [1,1,2,2,3,4,4,2,2,1]
+-- hh = [[1,1],[2,2],[3],[4,4],[2,2],[1]]
+
+
+
+
+-- isInfixOf 搜索字串 [a] -> [a] -> Bool
+ii = isInfixOf "wll" "my name is wll and you?"	-- ii = True
+
+jj = isInfixOf "Wll" "my name is wll and you?"	-- jj = False
+
+
+
+
+-- partition
+kk = partition (>3) [1,2,5,6,3,2,1,5,7,9]
+	-- kk = ([5,6,5,7,9],[1,2,3,2,1])
+
+ll = partition (`elem` ['A'..'Z']) "guyGUYGYUGbvgvVYTUCFUT"
+	-- ll = ("GUYGYUGVYTUCFUT","guybvgv")
+
+
+
+-- lines, unlines
+mm = lines "first line\nsecond line\nthrid line"
+	-- mm = ["first line","second line","thrid line"]
+
+nn = unlines ["first line","second line","thrid line"]
+	-- nn = "first line\nsecond line\nthrid line\n"
+
+
+
+-- words, unwords
+oo = words "Hello My name is\nwanglulu"
+	-- oo = ["Hello","My","name","is","wanglulu"]
+
+pp = unwords ["Hello","My","name","is","wanglulu"]
+	-- pp = "Hello My name is wanglulu"
+
+
+
+
+-- 差集操作 \\
+qq = [1..10] \\ [1,2,3,8,9,10]
+	-- qq = [4,5,6,7]
+
+-- 并集 union
+rr = [1,1,1] `union` [2,2,2]
+	-- rr = [1,1,1,2]
+
+-- 交集 intersect
+ss = [1,1,1,2,2,2] `intersect` [2,2,2]
+	-- ss = [2,2,2]
+
+
+
+
+
+
+-- Data.Char
+------------------------------------------------------
+
+
+
 
 
 
