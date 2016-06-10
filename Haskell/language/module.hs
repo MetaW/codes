@@ -5,6 +5,9 @@
 	3. Data.List
 	4. Data.Char
 	5. Data.Map (字典)
+	6. Data.Set
+	7. 创建module
+	
 -}
 
 
@@ -215,7 +218,102 @@ import qualified Data.Map as M
 xx = M.fromList [("lulu",170), ("god",195), ("naruto",173)]
 	-- xx = fromList [("god",195),("lulu",170),("naruto",173)]
 
-	
+xx2 = M.insert "libai" 180 xx
+	-- xx = fromList [("god",195),("hehe",122),("lulu",170),("naruto",173)]
+
+{-
+	-- M.fromList [] = M.empty
+-}
+
+yy = M.null $ M.fromList []
+	-- yy = True
+
+zz = M.null xx
+	-- zz = False
+
+
+
+aaa = M.size M.empty
+	-- aaa = 0
+
+bbb = M.size xx
+	-- bbb = 4
+
+
+
+ccc = M.lookup "lulu" xx
+	-- ccc = Just 170
+
+ddd = M.lookup "wll" xx
+	-- ddd = Nothing
+
+
+eee = M.member "lulu" xx 
+	-- eee = True
+
+fff = M.member "wll" xx
+	-- fff = False
+
+
+-- Map 有自己的 map, filter 它们作用于value而不是key
+-- pass
+
+
+ggg = M.toList xx
+	-- ggg = [("god",195),("hehe",122),("lulu",170),("naruto",173)]
+
+
+-- 其它：多值map...
+-- pass
+
+
+
+
+
+
+-- Data.Set
+---------------------------------------------------------------
+-- Set的每个元素都是唯一的,必须得是可排序的.
+
+-- Data.Set与Prelude中的部分函数有冲突，因此
+import qualified Data.Set as Set
+
+hhh = Set.fromList "iuohiHINIUOIUGUG ihixunhdwciohdocohihuihHIUH"
+	-- hhh = fromList " GHINOUcdhinouwx"	-- 有序的!!!
+
+iii = Set.fromList "uyigxgunVTYVYTUBVYgytuvyzsy xhuis7878"
+	-- iii = fromList " 78BTUVYghinstuvxyz"
+
+
+
+jjj = Set.intersection hhh iii
+	-- jjj = fromList " Uhinux"
+
+kkk = Set.union hhh iii
+	-- kkk = fromList " 78BGHINOTUVYcdghinostuvwxyz"
+
+lll = Set.difference hhh iii
+	-- lll = fromList "GHINOcdow"
+
+{-
+	Set.null
+	Set.empty
+	Set.size
+	Set.member
+	Set.insert
+	Set.delete
+	Set.isSubsetOf
+	Set.isProperSubsetOf
+	Set.map
+	Set.filter
+	...
+-}
+
+mmm = Set.toList hhh
+	-- mmm = " GHINOUcdhinouwx"
+
+-- 用Set对list元素去重再转回list，要比直接使用nub快很多
+-- 时间复杂度：前者n*log(n),而后者n^2
 
 
 
@@ -223,6 +321,9 @@ xx = M.fromList [("lulu",170), ("god",195), ("naruto",173)]
 
 
 
+
+-- 创建module
+----------------------------------------------------------
 
 
 
