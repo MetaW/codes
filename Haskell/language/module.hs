@@ -4,7 +4,7 @@
 	2. :browse
 	3. Data.List
 	4. Data.Char
-	5. 
+	5. Data.Map (字典)
 -}
 
 
@@ -159,6 +159,67 @@ ss = [1,1,1,2,2,2] `intersect` [2,2,2]
 
 -- Data.Char
 ------------------------------------------------------
+-- 包含一些处理字符的函数
+import Data.Char
+{-
+	Char -> Bool:
+
+	isControl
+	isSpace
+	isLower
+	isUper
+	isAlpha
+	isAlphaNum
+	isDigit
+	isPrint
+
+-}
+
+-- eg:
+tt = all isLower "hi, i am happly"
+	-- tt = False
+
+uu = all isLower "hiiamhappy"
+	-- uu = True
+
+{-
+	toUpper : 将一个字符转为大写字母,若该字符不是小写字母,就按原值返回.
+	toLower
+	digitToInt
+-}
+
+vv = map digitToInt "FF85AB"
+	-- vv = [15,15,8,5,10,11]
+
+
+
+-- ord, chr
+{-
+	ord 'a' => 97
+	chr 97  => 'a'
+-}
+
+ww = map ord "abcdefgh"	-- ww = [97,98,99,100,101,102,103,104]
+
+
+
+
+
+
+-- Data.Map (字典)
+----------------------------------------------------
+-- Data.Map与Prelude中的部分函数有冲突，因此
+import qualified Data.Map as M
+
+
+xx = M.fromList [("lulu",170), ("god",195), ("naruto",173)]
+	-- xx = fromList [("god",195),("lulu",170),("naruto",173)]
+
+	
+
+
+
+
 
 
 
