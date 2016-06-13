@@ -1,5 +1,5 @@
 {-
-	内容:
+	content:
 	1. typeclass
 	2. pattern match
 	3. guard
