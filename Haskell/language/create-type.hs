@@ -138,9 +138,30 @@ bb = Person {firstName = "haha", lastName = "haha", age = 123, height = 12.0, ph
 
 
 
--- 带有参数的 data type
+-- 带有参数的 data type 
 --------------------------------------------------
+{-
+	polymorphic data type
+-}
 
+data Maybe a = Nothing | Just a deriving (Show)
+-- Haskell 具有自动类型推导的能力，因此 Just 'a' 类型为 Maybe Char
+ 
+
+{-
+	Haskell 不支持在 data 声明中加类型约束，因为没有必要，
+	免得在函数声明时写过多不必要的类型约束。
+
+	由于类型约束都是为了满足某些函数的要求，因此约束只需写在
+	对于函数的定义处即可，如果写在 data 的声明处，那么与它
+	相关的函数都要写这些类型约束，这显然是不必要的。
+-}
+
+
+data Vector a = Vector a a a deriving (Show)
+
+vplus :: (Num a) => Vector a -> Vector a -> Vector a
+vplus (Vector a1 a2 a3) (Vector b1 b2 b3) = Vector (a1 + b1) (a2 + b2) (a3 + b3)
 
 
 
