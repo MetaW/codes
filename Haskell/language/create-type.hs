@@ -5,6 +5,10 @@
 	3. 在module中创建data type
 	4. record
 	5. 带有参数的 data type
+	6. typeclass 的作用
+	7. 
+
+
 -}
 
 
@@ -138,6 +142,9 @@ bb = Person {firstName = "haha", lastName = "haha", age = 123, height = 12.0, ph
 
 
 
+
+
+
 -- 带有参数的 data type 
 --------------------------------------------------
 {-
@@ -160,8 +167,81 @@ data Maybe a = Nothing | Just a deriving (Show)
 
 data Vector a = Vector a a a deriving (Show)
 
+-- 在函数上加类型约束
 vplus :: (Num a) => Vector a -> Vector a -> Vector a
 vplus (Vector a1 a2 a3) (Vector b1 b2 b3) = Vector (a1 + b1) (a2 + b2) (a3 + b3)
+
+vectmult :: (Num a) => Vector a -> Vector a -> Vector a
+vectmult (Vector a1 a2 a3) (Vector b1 b2 b3) = Vector (a1 * b1) (a2 * b2) (a3 * b3)
+
+
+{-
+	注意区分类型构造子 vector t 和值构造子 Vector t t t
+	声明函数时必须用类型构造子声明,而不能用值构造子。
+-}
+
+
+
+
+
+
+
+
+
+-- typeclass 的作用
+---------------------------------------------------
+{-
+	haskell 中的 typeclass 类似于java中的 interface
+	它规定并实现了一些行为(函数)，例如：
+	Eq: 能够进行 == 或 /= 操作
+	Show: 实现了 show 函数，能够将数据转成字符串
+	Read: 实现了 read 函数，能够将字符串转为某个类型的数据
+	Ord: 实现了 compare 函数，能够判断数据类型的优先级
+	...
+	
+	若一个type是某个typeclass的一员,则称该type为该
+	typeclass 的instance
+-}
+-- eg:
+
+data Day = Monday | Tuesday | Wednsday | Thursday | Friday | Saturday | Sunday
+			deriving (Eq, Ord, Show, Read, Bounded, Enum)
+
+
+
+
+
+
+
+
+-- 为type起别名
+--------------------------------------------------
+-- eg:
+type String = [Char]
+
+-- 使用别名是为了让类型声明更加易读
+-- eg:
+
+type Name = String
+type Phone = Int
+type Address = String
+
+
+-- 类型别名也是可以有参数的
+type AssocList k v = [(k,v)]
+
+
+-- 我们可以用不全调用来得到新的函数,
+-- 同样也可以使用不全调用得到新的类型构造子
+import qualified Data.Map as Map
+type IntMap v = Map Int v
+{-- or
+type IntMap = Map Int
+-}
+
+
+
+
 
 
 
