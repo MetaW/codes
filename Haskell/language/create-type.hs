@@ -6,8 +6,8 @@
 	4. record
 	5. 带有参数的 data type
 	6. typeclass 的作用
-	7. 
-
+	7. Maybe, Either
+	8. 
 
 -}
 
@@ -242,6 +242,19 @@ type IntMap = Map Int
 
 
 
+
+
+-- Maybe, Either
+-------------------------------------------------
+{-
+	Maybe 是最常见的表示可能失败的计算的类型了。但有时 Maybe 
+	也并不是十分的好用,因为 Nothing 中包含的信息还是太少。
+	要是我们不关心函数失败的原因,它还是不错的。
+	Either 可以更好的显示错误信息，错误一律用 Left 值构造子, 
+	而结果一律用 Right
+-}
+
+data Either a b = Left a | Right b deriving (Eq, Ord, Read, Show)
 
 
 
