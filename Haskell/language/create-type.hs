@@ -1,3 +1,5 @@
+import qualified Data.Map as Map
+
 {-
 	content:
 	1. 简单的 data type 定义
@@ -217,7 +219,7 @@ data Day = Monday | Tuesday | Wednsday | Thursday | Friday | Saturday | Sunday
 -- 为type起别名
 --------------------------------------------------
 -- eg:
-type String = [Char]
+type MyString = [Char]
 
 -- 使用别名是为了让类型声明更加易读
 -- eg:
@@ -233,8 +235,8 @@ type AssocList k v = [(k,v)]
 
 -- 我们可以用不全调用来得到新的函数,
 -- 同样也可以使用不全调用得到新的类型构造子
-import qualified Data.Map as Map
-type IntMap v = Map Int v
+
+type IntMap v = Map.Map Int v
 {-- or
 type IntMap = Map Int
 -}
@@ -259,6 +261,15 @@ data Either a b = Left a | Right b deriving (Eq, Ord, Read, Show)
 
 
 
+
+
+
+
+
+-- recursive data structure
+--------------------------------------------------
+
+data MyList a = Empty | Cons a (MyList a) deriving (Eq, Ord, Show, Read)
 
 
 
