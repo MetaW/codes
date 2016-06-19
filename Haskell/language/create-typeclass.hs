@@ -3,6 +3,8 @@
 	1. create typeclass
 	2. typeclass instance
 	3. subclass
+	4. 一个实例
+	5.
 -}
 
 
@@ -46,6 +48,8 @@ class Eq a where
 	show Red 默认就是 Red, 我们要想让它显示为 Red Light，就
 	需要把该类型手动创建为某 typeclass 的 instance.
 
+	另外，自动创建的instance只能在定义时进行，这样一些已经定义的
+	type就无法通过自动的方式加入新的typeclass， 而手动的可以。
 -}
 
 data TrafficLight = Red | Green | Yellow
@@ -74,7 +78,8 @@ instance Show TrafficLight where
 	即该 typeclass 的 instance 是某些 typeclass 的 instance
 	的子集。
 -}
--- eg:
+-- eg!!!:
+
 -- class (Eq a) => Num a where
 --		...
 {-
@@ -83,14 +88,52 @@ instance Show TrafficLight where
 	于 Eq 因此能使用 ==。
 -}
 
-
--- 当 instance 是多态类型的type，手动约束它到某个typeclass的
+-- 同理当 instance 是多态类型的type，手动约束它到某个typeclass的
 -- instance 时要这样写：
 {-}
-instance Eq (Maybe m) where
+instance (Eq m) => Eq (Maybe m) where
 	(==) Just x Just y = x == y
 	(==) Nothing Nothing = True
 	(==) _ _ = False
 -}
 
- 
+
+
+
+
+
+-- 一个实例
+-------------------------------------------------------------
+{-
+	我们创建一个弱类型的 if 语句，它能接受很多类型作为
+	条件，不仅仅是Bool类型。
+	这里使用typeclass实现dispatch，当然，可以不这样做。
+-}
+class WeakYesNo a where
+	yesno :: a -> Bool
+
+instance WeakYesNo Int where
+	yesno 0 = False
+	yesno _ = True
+
+instance WeakYesNo [a] where
+	yesno [] = False
+	yesno _ = True
+
+instance WeakYesNo Bool where
+	yesno True = True
+	yesno False = False
+
+instance WeakYesNo (Maybe m) where
+	yesno Nothing = False
+	yesno _ = True
+
+-- 使用typeclass来定义函数: weakIf
+weakIf ::(WeakYesNo a) => a -> b -> b -> b
+weakIf cond trueRes elseRes = if yesno cond then trueRes else elseRes
+
+-- example:
+aa = weakIf (length [1,2,3]) "hehe" "haha"	-- aa = "hehe"
+bb = weakIf [] 123 456		-- bb = 456
+cc = weakIf True [] [1,2]	-- cc = []
+dd = weakIf (Just "wooo") 2.11 3.22		-- dd = 2.11
