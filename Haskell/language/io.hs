@@ -35,6 +35,20 @@ main = do
 {-
     aa <- getLine
     the operator <- is a syntex suger, which take the
-    value out of the box "IO xxx", and set aa with the fitched value obviously the value
-    should have the type xxx,
+    value out of the box "IO xxx", and set aa with
+    the fitched value obviously the value should have the type xxx.
+
+    <- can mutate a variable, so it is impure.
 -}
+
+{-
+    I/O actions will only be performed when they are given a
+    name of main or when they're inside a bigger I/O action
+    that we composed with a do block. We can also use a do block
+    to glue together a few I/O actions and then use that I/O
+    action in another do block and so on. Either way, they'll
+    be performed only if they eventually fall into main.
+-}
+
+
+// to "Remember let bindings"
