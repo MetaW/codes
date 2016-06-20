@@ -4,7 +4,8 @@
 	2. typeclass instance
 	3. subclass
 	4. 一个实例
-	5.
+	5. typeclass: functor
+	6. :kind
 -}
 
 
@@ -137,3 +138,75 @@ aa = weakIf (length [1,2,3]) "hehe" "haha"	-- aa = "hehe"
 bb = weakIf [] 123 456		-- bb = 456
 cc = weakIf True [] [1,2]	-- cc = []
 dd = weakIf (Just "wooo") 2.11 3.22		-- dd = 2.11
+
+
+
+
+
+
+-- typeclass: functor
+------------------------------------------------------------
+{-
+	functor是一种特殊的typeclass，它只接受 * -> * 的类型作为参数，
+	它用于将“盒子”中的数据从一种类型转化为另一种类型，最具代表性的是
+	map函数。
+
+	常见的"盒子"有: List, Map, Tree, Maybe, Either ...
+-}
+-- functor 的定义
+
+class Functor t where
+	fmap :: (a -> b) -> t a -> t b
+
+
+-- 使list成为Functor的instance
+{-
+instance Functor [] where
+	fmap = map
+-}
+
+
+-- 使Maybe成为Functor的instance
+{-
+instance Functor Maybe where
+	fmap f (Just x) = Just (f x)
+	fmap f Nothing = Nothing
+-}
+
+
+-- 使Either成为Functor的instance
+{-
+	由于Functor要求类型的kind为 * -> * 的，而Either是 * -> * -> * 的
+	所以Either无法直接加入Functor,必须实例化一个参数，如 Either a
+	才能加入Functor
+-}
+{-
+instance Functor (Either a) where
+	fmap f (Left x) = Left (f x)
+	fmap f (Right x) = Right x
+-}
+
+
+
+
+
+
+-- kind 命令
+------------------------------------------------------------
+{-
+	value has a type, type has a kind
+
+	:t 123					:k Int
+	==> Int					==> *
+
+	:t sqrt					:k Maybe
+	==> a -> a				==> * -> *
+
+	:t (+)					:k Map
+	==> a -> a -> a			==> * -> * -> *
+
+	:t (+3)					:k Map String
+	==> a -> a				==> * -> *
+
+	value is isomorphism with type
+-}
