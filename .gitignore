@@ -8,3 +8,7 @@
 *.bci
 
 Coq/Software Foundation/WORKING.v
+
+*.hi
+
+*.o
