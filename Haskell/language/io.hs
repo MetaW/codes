@@ -31,3 +31,10 @@ main = do
     putStrLn "hello, what is your name?"
     name <- getLine
     putStrLn ("hey " ++ name)
+
+{-
+    aa <- getLine
+    the operator <- is a syntex suger, which take the
+    value out of the box "IO xxx", and set aa with the fitched value obviously the value
+    should have the type xxx,
+-}
