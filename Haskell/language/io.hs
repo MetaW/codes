@@ -1,10 +1,13 @@
 import Data.Char
+import Control.Monad
 
 {-
     content:
     1. compile a source file
     2. mian & IO actions
-    3.
+    3. some io functions
+    4. when
+    5. sequence
 -}
 
 -- compile a source file
@@ -12,6 +15,8 @@ import Data.Char
 {-
     在终端下输入 ghc --make filename
     就能进行编译了m之后会生成可执行文件, 输入 ./filename 就能执行了
+
+    !也可以直接在终端输入 runhaskell filename, 效果和编译后执行一样。
 -}
 
 
@@ -76,7 +81,77 @@ code = do
 
 
 
+-- some io functions
+--------------------------------------------------------
+{-
+putStr "haha"
+-- similar to putStrLn, just without a new line
 
+putChar 'a'
+
+-- definition
+putStr :: String -> IO ()
+putStr [] = return ()
+putStr (x:xl) = do
+    putChar x
+    putStr xl
+
+-- print = putStrLn . show
+-- print can print any type that ia an instance of Show
+-- putStrLn can only print String
+print "haha"
+print [1,2,3]
+print 123
+print True
+
+
+getChar :: IO Char
+-}
+
+
+
+
+
+-- when
+--------------------------------------------------------
+{-
+    in module Control.Monad there is a function "when" which
+    works like it in imp lang, but it is acturaly just a function.
+    its type:
+    when :: Monad m => Bool -> m () -> m ()
+-}
+-- import Control.Monad
+
+code4 = do
+    c <- getChar
+    when (c /= ' ') $ do
+        putChar c
+        code4
+
+
+
+
+
+
+-- sequence
+--------------------------------------------------------
+{-
+    sequence :: Monad m => [m a] -> m [a]
+-}
+code5 = do
+    a <- getChar
+    b <- getChar
+    c <- getChar
+    print [a,b,c]
+
+-- equals to:
+code6 = do
+    abc <- sequence [getChar, getChar, getChar]
+    print abc
+
+
+
+// to "mapM and mapM_"
 
 
 
@@ -92,6 +167,20 @@ code2 = do
             putStrLn $ reverse line
             code2
 
+-- return in haskell is different with it in other imp language,
+-- it is just a function with type "Monad m => a -> m a"
+-- and the exec of it woundn't end a method like in C++/Java.
+-- eg:
+code3 = do
+    return ()
+    return "haha"
+    line <- getLine
+    aa <- return 443
+    putStrLn line
+    print aa
+
+
+-- take params
 tt :: String -> IO ()
 tt x = do
     putStrLn x
