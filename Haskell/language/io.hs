@@ -1,3 +1,5 @@
+import Data.Char
+
 {-
     content:
     1. compile a source file
@@ -27,6 +29,7 @@
 -}
 -- main = putStrLn "hello world"
 -- or:
+main :: IO ()
 main = do
     putStrLn "hello, what is your name?"
     name <- getLine
@@ -44,11 +47,51 @@ main = do
 {-
     I/O actions will only be performed when they are given a
     name of main or when they're inside a bigger I/O action
-    that we composed with a do block. We can also use a do block
-    to glue together a few I/O actions and then use that I/O
-    action in another do block and so on. Either way, they'll
-    be performed only if they eventually fall into main.
+    within a do block. We can also use a do block to glue
+    together a few I/O actions and then use that I/O action
+    in another do block, they'll be performed only if they
+    eventually fall into main.
 -}
 
 
-// to "Remember let bindings"
+
+
+
+
+-- let
+--------------------------------------------------------
+-- example:
+code :: IO ()
+code = do
+    putStrLn "what is your first name?"
+    firstName <- getLine
+    putStrLn "what is your last name?"
+    lastName <- getLine
+    let bigFirstName = map toUpper firstName
+        bigLastName = map toUpper lastName
+    putStrLn $ "hey " ++ bigFirstName ++ bigLastName ++ ", how are you?"
+
+
+
+
+
+
+
+
+
+
+
+-- more example
+--------------------------------------------------------
+code2 :: IO ()
+code2 = do
+    line <- getLine
+    if null line
+        then return ()  -- main has a IO value, so () must be transformed into IO () type with "return".
+        else do     -- do is similar to begin in scheme
+            putStrLn $ reverse line
+            code2
+
+tt :: String -> IO ()
+tt x = do
+    putStrLn x
