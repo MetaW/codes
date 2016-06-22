@@ -12,3 +12,5 @@ Coq/Software Foundation/WORKING.v
 *.hi
 
 *.o
+
+*.txt

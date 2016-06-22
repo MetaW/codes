@@ -8,6 +8,8 @@ import Control.Monad
     3. some io functions
     4. when
     5. sequence
+    6. mapM and mapM_
+    7. more example
 -}
 
 -- compile a source file
@@ -151,7 +153,29 @@ code6 = do
 
 
 
-// to "mapM and mapM_"
+
+
+
+-- mapM and mapM_
+--------------------------------------------------------
+{-
+mapM :: Monad m => (a -> m b) -> [a] -> m [b]
+mapM f l = sequence (map f l)
+
+mapM_ :: Monad m => (a -> m b) -> [a] -> m ()
+-}
+mapM print [1,2,3]
+-- 1
+-- 2
+-- 3
+-- [(),(),()]
+
+mapM_ print [1,2,3]
+-- 1
+-- 2
+-- 3
+
+
 
 
 
