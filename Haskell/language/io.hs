@@ -1,16 +1,21 @@
 import Data.Char
 import Control.Monad
+import System.IO.Error
+import System.Environment
 
 {-
     content:
     1. compile a source file
     2. mian & IO actions
-    3. some io functions
-    4. when
-    5. sequence
-    6. mapM and mapM_
-    7. more example
+    3. let
+    4. some IO functions
+    5. when
+    6. sequence
+    7. mapM and mapM_
+    8. more examples
+    9. IO Exceptions
 -}
+
 
 -- compile a source file
 --------------------------------------------------------
@@ -20,6 +25,8 @@ import Control.Monad
 
     !也可以直接在终端输入 runhaskell filename, 效果和编译后执行一样。
 -}
+
+
 
 
 
@@ -36,8 +43,8 @@ import Control.Monad
 -}
 -- main = putStrLn "hello world"
 -- or:
-main :: IO ()
-main = do
+code7 :: IO ()
+code7 = do
     putStrLn "hello, what is your name?"
     name <- getLine
     putStrLn ("hey " ++ name)
@@ -83,7 +90,7 @@ code = do
 
 
 
--- some io functions
+-- some IO functions
 --------------------------------------------------------
 {-
 putStr "haha"
@@ -114,6 +121,7 @@ getChar :: IO Char
 
 
 
+
 -- when
 --------------------------------------------------------
 {-
@@ -129,6 +137,7 @@ code4 = do
     when (c /= ' ') $ do
         putChar c
         code4
+
 
 
 
@@ -156,6 +165,7 @@ code6 = do
 
 
 
+
 -- mapM and mapM_
 --------------------------------------------------------
 {-
@@ -164,13 +174,13 @@ mapM f l = sequence (map f l)
 
 mapM_ :: Monad m => (a -> m b) -> [a] -> m ()
 -}
-mapM print [1,2,3]
+-- mapM print [1,2,3]
 -- 1
 -- 2
 -- 3
 -- [(),(),()]
 
-mapM_ print [1,2,3]
+-- mapM_ print [1,2,3]
 -- 1
 -- 2
 -- 3
@@ -208,3 +218,48 @@ code3 = do
 tt :: String -> IO ()
 tt x = do
     putStrLn x
+
+
+
+
+
+
+
+-- IO Exceptions
+--------------------------------------------------------
+{-
+    Pure code can throw exceptons, but they only can be caught
+    in IO code, because you don't know when anything will be evaluated
+    in pure code, for pure code is lazy and doesn't have a well-defined
+    order of execution, whereas I/O code does.
+
+    In this part we only talk about IO exception.
+-}
+-- import System.IO.Error
+
+{-
+    similar in other imp lang:
+
+    try {Code}
+    catch Exception {Process Exception Code}
+-}
+
+main = do
+    catchIOError tryCode handleCode
+    catchIOError tryCode handleCode
+    putStrLn "some other IO code"
+
+-- catchIOError :: IO a -> (IOError -> IO a) -> IO a
+
+tryCode :: IO ()
+tryCode = do
+    (fileName:_) <- getArgs
+    contents <- readFile fileName
+    putStrLn ("the file contents is: " ++ contents)
+
+handleCode :: IOError -> IO ()
+handleCode e
+    | isDoesNotExistError e = putStrLn "the file does not exist!"
+    | otherwise = ioError e     -- throw the exception e
+
+-- ioError :: IOError -> IO a

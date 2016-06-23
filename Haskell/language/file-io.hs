@@ -9,7 +9,8 @@ import System.Environment
     2. readFile, writeFile, appendFile
     3. removeFile, renameFile
     4. command line arguments
-    
+    5. random number    -- TODO
+    6. bytestrings      -- TODO
 -}
 
 -- basic file operation
@@ -147,3 +148,21 @@ main = do
     mapM_ putStrLn args
     putStrLn "the name of the program is:"
     putStrLn pname
+
+
+
+
+
+
+-- random number
+---------------------------------------------------------
+-- import System.Random (need cabal install ...)
+-- TODO
+
+
+
+
+
+-- bytestrings
+---------------------------------------------------------
+-- TODO
