@@ -151,7 +151,7 @@ dd = weakIf (Just "wooo") 2.11 3.22		-- dd = 2.11
 	它用于将“盒子”中的数据从一种类型转化为另一种类型，最具代表性的是
 	map函数。
 
-	常见的"盒子"有: List, Map, Tree, Maybe, Either ...
+	常见的"盒子"有: List, Map, Tree, Maybe, Either, IO ...
 -}
 -- functor 的定义
 
@@ -184,6 +184,23 @@ instance Functor Maybe where
 instance Functor (Either a) where
 	fmap f (Left x) = Left (f x)
 	fmap f (Right x) = Right x
+-}
+
+-- 使IO成为Functor的instance
+{-
+instance Functor IO where
+	fmap f actions = do
+		result <- actions
+		return (f result)
+--	If you ever find yourself binding the result of an I/O action
+	to a name, only to apply a function to that and call that
+	something else, consider using fmap
+
+	eg:
+	line <- getLine
+	res = f line
+	==>
+	res = fmap f getLine
 -}
 
 
