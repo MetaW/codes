@@ -179,12 +179,12 @@ instance Functor Maybe where
 	由于Functor要求类型的kind为 * -> * 的，而Either是 * -> * -> * 的
 	所以Either无法直接加入Functor,必须实例化一个参数，如 Either a
 	才能加入Functor
--}
-{-
+
 instance Functor (Either a) where
 	fmap f (Left x) = Left (f x)
 	fmap f (Right x) = Right x
 -}
+
 
 -- 使IO成为Functor的instance
 {-
@@ -205,6 +205,21 @@ instance Functor IO where
 
 
 
+-- 使 函数类型:(* -> *) 成为Functor的instance
+{-
+	由于形如 Int -> String 的式子也是type，因为实际上 (->) 也
+	是类型构造子!!!
+	a -> b 就是 (->) a b
+	:k (->) == * -> * -> *
+
+	因此与前面的 Either 类似，(->) a 也可以变为 Functor 的instance!
+	just like Maybe, ((->) a) is also a "BOX"!
+
+instance Functor ((->) a) where
+	fmap f g = \x -> f (g x)
+
+-- 事实上 fmap f g => f . g
+-}
 
 
 
