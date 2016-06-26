@@ -6,6 +6,8 @@
 	4. <-> iff/destruct/split/(rewrite/reflexivity)
   	5. exists /destruct
   	6. Programming with Type: Prop
+    7. Coq中的逻辑
+    8. excluded_middle ：排中律
 *)
 
 Require Export poly.
@@ -123,6 +125,10 @@ Theorem or_commut :
     -right. apply H.
     -left. apply H.
 Qed.
+
+
+
+
 
 
 (* negation: ~/not/True/False/exfalso *)
@@ -254,6 +260,10 @@ Lemma True_is_true: True.
 Proof. 
   apply I.
 Qed.
+
+
+
+
 
 
 (*logic equivalence: <-> / iff *)
@@ -405,6 +415,8 @@ Qed.
 
 
 
+
+
 (*Existential Quantification*)
 (*---------------------------------------------------------------*)
 (*
@@ -458,6 +470,8 @@ Proof.
       +destruct H. exists x. left. apply H.
       +destruct H. exists x. right. apply H.
 Qed.
+
+
 
 
 

@@ -11,6 +11,8 @@
 
 Require Export logic.
 Require Export lists.
+Require Export poly.
+
 (*
 	返回Prop的函数的定义:
 	  如何定义一个函数:根据计算理论，可以给出基于图灵机的函数实体，即一般的函数
@@ -341,10 +343,81 @@ Inductive reg_exp (T:Type) : Type :=
   | Char : T -> reg_exp T
   | App : reg_exp T -> reg_exp T -> reg_exp T
   | Union : reg_exp T -> reg_exp T -> reg_exp T
-  | Star : reg_exp T -> reg_exp T -> reg_exp T.
+  | Star : reg_exp T -> reg_exp T.
+
+Arguments EmptySet {T}.
+Arguments EmptyStr {T}.
+Arguments Char {T} _.
+Arguments App {T} _ _.
+Arguments Union {T} _ _.
+Arguments Star {T} _.
 
 
-// to page 149.
+(*定义match函数：返回Prop*)
+
+Inductive exp_match {T:Type} : list T -> reg_exp T -> Prop :=
+  | MEmpty : exp_match [] EmptyStr
+  | MChar : forall x:T,  exp_match [x] (Char x)
+  | MApp : forall (s1 s2:list T) (re1 re2:reg_exp T), 
+                exp_match s1 re1 ->
+                exp_match s2 re2 ->
+                exp_match (s1 ++ s2) (App re1 re2)
+  | MUnionL : forall (s1:list T) (re1 re2:reg_exp T), exp_match s1 re1 
+                -> exp_match s1 (Union re1 re2)
+  | MUnionR : forall (re1 re2:reg_exp T) (s2: list T), exp_match s2 re2 
+                -> exp_match s2 (Union re1 re2)
+  | MStarO : forall re:reg_exp T, exp_match [] (Star re)
+  | MStarApp : forall (s1 s2:list T) (re:reg_exp T), exp_match s1 re
+                -> exp_match s2 (Star re)
+                -> exp_match (s1 ++ s2) (Star re).
+
+Notation "s =~ re" := (exp_match s re)
+  (at level 80).
+
+
+Example reg_exp_ex1: 
+    [1] =~ Char 1.
+Proof.
+  apply MChar.
+Qed.
+
+
+Example reg_exp_ex2: 
+    [1,2] =~ App (Char 1) (Char 2).
+Proof.
+  apply (MApp [1] _).
+    -apply MChar.
+    -apply MChar.
+Qed.
+
+
+Example reg_exp_ex3: 
+    ~([1,2] =~ Char 1).
+Proof.
+  intros H.
+  inversion H.
+Qed.
+
+
+Fixpoint reg_exp_of_list {T} (l:list T):=
+  match l with
+  | [] => EmptyStr
+  | x:xl => App (Char x) (reg_exp_of_list xl)
+  end.
+
+
+Example reg_exp_ex4: 
+    [1,2,3] =~ reg_exp_of_list [1,2,3].
+Proof.
+  simpl.
+  apply (MApp [1] _).
+    -apply MChar.
+    -apply (MApp [2] _).
+      +apply MChar.
+      +apply (MApp [3] _).
+        *apply MChar.
+        *apply MEmpty.
+Qed.
 
 
 
