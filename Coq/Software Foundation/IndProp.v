@@ -420,7 +420,25 @@ Proof.
 Qed.
 
 
+Lemma app_empty : forall {X:Type} (l:list X), l = l ++ [].
+Proof.
+  intros.
+  induction l.
+    -simpl. reflexivity.
+    -simpl. rewrite <- IHl.
+     reflexivity.
+Qed.
 
+
+Lemma MStar1 : 
+    forall {T:Type} (s:list T) (re : reg_exp T), s =~ re -> s =~ Star re.
+Proof.
+  intros.
+  rewrite app_empty with s.
+  apply MStarApp.
+    -apply H.
+    -apply MStarO.
+Qed.    
 
 
 
