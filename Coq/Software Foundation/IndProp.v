@@ -440,7 +440,8 @@ Proof.
     -apply MStarO.
 Qed.    
 
-
+Lemma reg_exp_of_list_spec : 
+    forall {X:Type} ():, .
 
 
 
