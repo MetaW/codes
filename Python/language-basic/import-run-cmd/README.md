@@ -33,7 +33,7 @@
   reload(filename)
 ```
 
-
+---
 ### module, package
 * 一个.py文件就是一个模块(module)
 * 若模块名字之间有冲突,可以通过包(package)来组织模块
@@ -41,7 +41,7 @@
 
 eg:
 
-``` 
+```
 other.py
 haha.py
 mymodule
@@ -52,3 +52,11 @@ mymodule
 * 放在包内的模块引入时，名称变为 mymodule.abc, mymodule.xyz 而不再是 abc, xyz 了
 
 
+### 模块中变量的作用域
+
+* 正常的函数和变量名是public的, 可以在模块外部引用, eg: abc, x123, func()
+* 前缀为_的变量是private的,只应该在模块内部被访问, eg: _abc, _x123, _func()
+* 注意: 即使加了前缀_,也能够从外部访问到，因此说是“不应该”而不是“不能”，但这访问它们是错误的编程风格。
+
+### 模块搜索路径
+import 一个模块时, Python解释器会搜索当前目录、所有已安装的内置模块和第三方模块，搜索路径存放在sys模块的path变量中
