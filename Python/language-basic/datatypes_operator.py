@@ -41,6 +41,15 @@ l = 'hehe'
 m = "hihi" + k + l
 n = "ab" * 3	#n = "ababab"
 
+
+# 格式化字符串
+str0 = "hi %s" % "wll"
+
+str1 = "hi my name is %s, I am %d years old" % ("wll", 20)
+
+
+
+
 #运算符
 #------------------------------------------------
 #算术
