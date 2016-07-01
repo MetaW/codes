@@ -13,6 +13,8 @@ class ClassName(object):
 	def otherFunc(self, otherParams):
 		pass
 
+# 创建实例
+ins = ClassName("haha", "hehe")
 
 # __init__(..) 是初始化函数
 # FatherClass如果没有就写 object
@@ -32,15 +34,63 @@ class Animal(object):
 	def run(self):
 		print("Animal %s is running!" % self.__name)
 
+	def getName(self):
+		return self.__name
+
 
 
 class Dog(Animal):	
 	def __init__(self, name):
-		super(Dog, self).__init__(name)
+		super(Dog, self).__init__(name)	#super的固定写法
 
 	def run(self):	# 函数重载
-		print("Dog %s is runnig" % self.__name)
+		print("Dog %s is runnig" % self.getName())
 
+
+# 子类无法直接访问父类的private属性和方法
+# 父类中只有public的属性和方法才能直接访问
+
+
+
+# help functions 
+# ------------------------------------------------------------
+
+# isinstance(a,b)
+# instance -> class -> bool
+# 判断一个对象是否是某个类的实例
+
+
+# type
+# instance -> type
+# 判断数据的类型
+
+aa = type(123) 
+# aa = int
+
+bb = type("haha")
+# bb = str
+
+cc = type(int)
+# cc = type
+
+dd = type(type)
+# dd = type
+
+# 非基本类型时
+import types
+
+ee = type(max)
+# ee == types.BuiltinFunctionType
+
+ff = type(lambda x : x + x) 
+# ff = types.LambdaType
+
+def foo():
+	return 123
+
+gg = type(foo)
+
+# gg = types.FunctionType
 
 
 		
