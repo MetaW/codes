@@ -25,6 +25,24 @@ ins = ClassName("haha", "hehe")
 
 
 
+
+
+# 实例属性，类属性
+# ------------------------------------------------------------
+# 在__init__中定义的为实例属性，在class中直接定义的是类属性
+class NewClass(object):
+
+	attr = "haha" 	# attr 是类属性
+
+	def __init__(self, arg):
+		self.arg = arg 	# arg 是实例属性
+		
+
+
+
+
+
+
 # 继承，多态，重载
 # ------------------------------------------------------------
 class Animal(object):
@@ -52,17 +70,21 @@ class Dog(Animal):
 
 
 
+
+
+
+
 # help functions 
 # ------------------------------------------------------------
 
-# isinstance(a,b)
-# instance -> class -> bool
+# ---------- isinstance(a,b)
+# (instance, class) -> bool
 # 判断一个对象是否是某个类(或其子类)的实例
 
 
 
-# type
-# instance -> type
+# ---------- type
+# (instance) -> type
 # 判断数据的类型
 
 aa = type(123) 
@@ -99,7 +121,7 @@ gg = type(foo)
 
 	
 
-# dir(a)
+# ---------- dir(a)
 # anything -> list
 # dir返回任何变量(广义上)的所有能够访问的东西，包括对象，模块，函数等
 
@@ -128,4 +150,34 @@ jj = ['__call__', '__class__', '__closure__', '__code__',
 	  'func_defaults', 'func_dict', 'func_doc', 'func_globals', 
 	  'func_name']
 '''
+
+
+
+
+# ---------- hasattr(a,b)
+# (anything, str) -> bool
+# 测试一个变量是否有属性str, 其实就是检查 str 是否在 dir(anything)当中
+
+kk = hasattr(Dog("haha"), "run")
+# kk = True
+
+ll = hasattr(Dog("haha"), "__class__")
+# ll = True
+
+
+
+# ---------- getattr(a,b) 
+# (anything, str) -> attribute
+# getattr 返回 anything 的 名为str的attribute，若没有该attri即
+# hasattr返回False，则getattr会抛出异常
+
+mm = getattr([1,2,3],"__len__")()
+# mm = 3
+
+
+# ---------- setattr(a,b,c)
+# (anything, str, value) -> ()
+# pass 
+
+
 
