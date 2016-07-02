@@ -57,7 +57,8 @@ class Dog(Animal):
 
 # isinstance(a,b)
 # instance -> class -> bool
-# 判断一个对象是否是某个类的实例
+# 判断一个对象是否是某个类(或其子类)的实例
+
 
 
 # type
@@ -76,6 +77,9 @@ cc = type(int)
 dd = type(type)
 # dd = type
 
+hh = type([1,2,3])
+# hh = list
+
 # 非基本类型时
 import types
 
@@ -93,4 +97,35 @@ gg = type(foo)
 # gg = types.FunctionType
 
 
-		
+	
+
+# dir(a)
+# anything -> list
+# dir返回任何变量(广义上)的所有能够访问的东西，包括对象，模块，函数等
+
+
+ii = dir(Dog("abc"))
+
+'''
+ii = ['_Animal__name', '__class__', '__delattr__', 
+	  '__dict__', '__doc__', '__format__', '__getattribute__', 
+	  '__hash__', '__init__', '__module__', '__new__', 
+	  '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', 
+	  '__sizeof__', '__str__', '__subclasshook__', '__weakref__', 
+	  'getName', 'run']
+'''
+
+jj = dir(lambda x : x + x)
+
+'''
+jj = ['__call__', '__class__', '__closure__', '__code__', 
+	  '__defaults__', '__delattr__', '__dict__', '__doc__', 
+	  '__format__', '__get__', '__getattribute__', 
+	  '__globals__', '__hash__', '__init__', '__module__', 
+	  '__name__', '__new__', '__reduce__', '__reduce_ex__', 
+	  '__repr__', '__setattr__', '__sizeof__', '__str__', 
+	  '__subclasshook__', 'func_closure', 'func_code', 
+	  'func_defaults', 'func_dict', 'func_doc', 'func_globals', 
+	  'func_name']
+'''
+
