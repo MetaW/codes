@@ -2,6 +2,7 @@
 
 
 # syntax
+# -------------------------------------------------
 '''
 try:
 	...
@@ -18,7 +19,27 @@ finally:
 
 '''
 
+
+
+
+# raise的用法
+# -------------------------------------------------
+# raise(XXXError('oh! error!')) or raise
+# raise语句如果不带参数，就会把当前错误原样抛出
+
+
+
+
+# 捕获到异常后可以使用 logging.exception(e) 打印出异常的具体信息
+
+
+
+
+
+
+# -------------------------------------------------
 # exception 也是一些类组成的，其根类为BaseException，继承数为：
+
 ''' from: https://docs.python.org/3/library/exceptions.html#exception-hierarchy
 BaseException
  +-- SystemExit

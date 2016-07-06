@@ -48,10 +48,10 @@ class NewClass(object):
 class Animal(object):
 	def __init__(self, name):
 		self.__name = name
-		
+	
 	def run(self):
 		print("Animal %s is running!" % self.__name)
-
+	
 	def getName(self):
 		return self.__name
 
@@ -59,7 +59,7 @@ class Animal(object):
 
 class Dog(Animal):	
 	def __init__(self, name):
-		super(Dog, self).__init__(name)	#super的固定写法
+		super().__init__(name)	#super的固定写法
 
 	def run(self):	# 函数重载
 		print("Dog %s is runnig" % self.getName())
