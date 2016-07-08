@@ -28,7 +28,7 @@ class Math(object):
 	def __init__(self, name):
 		super().__init__()
 		self.__name = name
-		
+
 	def plus(self,a,b):
 		return a + b
 
@@ -51,6 +51,14 @@ class Math(object):
 	def getName(self):
 		return self.__name
 
+# setUp于tearDown分别会在每一个test方法调用前后被执行,这在某些情况下，
+# 如测试中有文件操作，数据库操作等情况时，将打开关闭操作写在这两个方法中，
+# 就不用在每个测试函数中都写了。
+	def setUp(self):
+		print("test start!!!\n")
+
+	def tearDown(self):
+		print("test finished!!!\n")
 
 
 
@@ -106,3 +114,11 @@ OK
 
 '''
 
+
+'''
+单元测试的测试用例要覆盖常用的输入组合、边界条件和异常。
+
+单元测试代码要非常简单，如果测试代码太复杂，那么测试代码本身就可能有bug。
+
+单元测试通过了并不意味着程序就没有bug了，但是不通过程序肯定有bug。
+'''
