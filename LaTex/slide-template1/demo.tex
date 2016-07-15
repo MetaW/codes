@@ -1,0 +1,273 @@
+\documentclass[10pt]{beamer}
+
+\usetheme[progressbar=frametitle]{metropolis}
+
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+
+\usepackage{pgfplots}
+\usepgfplotslibrary{dateplot}
+
+\usepackage{xspace}
+\newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
+
+
+% Informotion
+%-------------------
+\title{Amazing Report}
+\subtitle{This is really exciting}
+\date{\today}
+\author{Wang Lulu}
+\institute{Peking University}
+\titlegraphic{\hfill\includegraphics[height=1.5cm]{logo}} % "logo" comes from "logo.pdf"
+\begin{document}
+\maketitle
+
+
+% START
+%-------------------
+\begin{frame}{Table of contents}
+  \setbeamertemplate{section in toc}[sections numbered]
+  \tableofcontents[hideallsubsections]
+\end{frame}
+
+
+
+% section 1 -----
+\section{Introduction}
+
+
+
+% page 1.1
+\begin{frame}[fragile]{Metropolis}
+
+  The \themename theme is a Beamer theme with minimal visual noise
+  inspired by the \href{https://github.com/hsrmbeamertheme/hsrmbeamertheme}{\textsc{hsrm} Beamer
+  Theme} by Benjamin Weiss.
+
+  Enable the theme by loading \ldots
+
+  \begin{verbatim}    
+	\documentclass{beamer}
+	\usetheme{metropolis}
+  \end{verbatim}
+
+  Note, that you have to have Mozilla's \emph{Fira Sans} font and XeTeX
+  installed to enjoy this wonderful typography.
+\end{frame}
+
+
+
+% section 2 -----
+\section{Elements}
+
+
+
+% page 2.1
+\begin{frame}[fragile]{Typography}
+	\begin{verbatim}
+		The theme provides sensible defaults to \emph{emphasize} 
+		text, \alert{accent} parts or show \textbf{bold} results.
+	\end{verbatim}
+
+	\begin{center}
+		normal
+		\emph{emphasize}
+		\alert{alert}
+		\textbf{bold}
+	\end{center}
+	
+	\begin{quote}
+    Quoted things should be write in this place.
+  	\end{quote}
+
+\end{frame}
+
+
+
+% page 2.2
+\begin{frame}{Font feature test}
+  \begin{itemize}
+    \item Regular
+    \item \textit{Italic}
+    \item \textsc{SmallCaps}
+    \item \textbf{Bold}
+    \item \textbf{\textit{Bold Italic}}
+    \item \textbf{\textsc{Bold SmallCaps}}
+    \item \texttt{Monospace}
+    \item \texttt{\textit{Monospace Italic}}
+    \item \texttt{\textbf{Monospace Bold}}
+    \item \texttt{\textbf{\textit{Monospace Bold Italic}}}
+  \end{itemize}
+\end{frame}
+
+
+
+% page 2.2
+\begin{frame}{Lists}
+  \begin{columns}[T,onlytextwidth]
+  
+	\column{0.33\textwidth}
+		This is items
+		\begin{itemize}
+			\item Milk 
+			\item Eggs 
+			\item Potatos
+		\end{itemize}
+
+    \column{0.33\textwidth}
+		This is enumerations
+		\begin{enumerate}
+        	\item First, 
+        	\item Second 
+        	\item Last.
+		\end{enumerate}
+
+    \column{0.33\textwidth}
+		This is descriptions
+      	\begin{description}
+        	\item[PowerPoint] Meeh. 
+        	\item[Beamer] Yeeeha.
+      	\end{description}
+      	
+  \end{columns}
+\end{frame}
+
+
+
+
+% page 2.3
+\begin{frame}{Animation}
+  \begin{itemize}[<+- | alert@+>] % this is important
+  
+    \item This is important
+    \item Now this
+    \item And now this
+    
+  \end{itemize}
+\end{frame}
+
+
+
+
+% page 2.4
+\begin{frame}{Tables}
+  
+	\begin{table}[tbp]
+	\centering  
+	\begin{tabular}{c|c|c|c|c}
+		\hline
+		the value of $k$ &$k=m$ &$k=0.1*m$ &$k=0.01*m$ &$k=0.005*m$\\ 
+		\hline  
+		accuracy of test set &99.47\% &\textbf{97.25\%} &85.56\% &82.11\%\\     
+		training time & 1543.8s &\textbf{7.2s} &0.62s & 0.27s \\
+		memory requirements & 765.81kb & \textbf{76.59kb} & 7.69kb & 3.84kb \\    
+		\hline
+	\end{tabular}
+	\caption{This is a table}
+	\end{table}
+
+\end{frame}
+
+
+
+% page 2.5
+\begin{frame}{Blocks}
+  Three different block environments are pre-defined and may be styled with an
+  optional background color.
+
+      \metroset{block=fill}
+
+      \begin{block}{Default}
+        Block content.
+      \end{block}
+
+      \begin{alertblock}{Alert}
+        Block content.
+      \end{alertblock}
+
+      \begin{exampleblock}{Example}
+        Block content.
+      \end{exampleblock}
+
+\end{frame}
+
+
+
+% page 2.6
+\begin{frame}{Math}
+	\[
+			D({x^{(1)}},{x^{(2)}},...,{x^{(m)}}) = \sum\limits_{i = 1}^m {{{\left\| {{x^{(i)}} - x_n^{(ci)}} \right\|}^2}} 
+	\]
+\end{frame}
+
+
+
+% page 2.7
+\begin{frame}[fragile]{Frame footer}
+    this page has a footer.\footnote{this is a footer}
+\end{frame}
+
+
+% page 2.8
+\begin{frame}{References}
+
+	Write the information of reference paper in demo.bib 
+	and only cited with cite command in this slide, the paper 
+	can be find in the later "Reference" part, for example:
+
+	\cite{knuth92,ConcreteMath,Simpson,Er01,greenwade93}
+	
+\end{frame}
+
+
+
+
+% Section 3 -----
+\section{Conclusion}
+
+% page 3.1
+\begin{frame}{license}
+
+	Get the source of this theme and the demo presentation from
+
+	\begin{center}
+  		\url{github.com/matze/mtheme}
+	\end{center}
+
+  	The theme \emph{itself} is licensed under a
+  	\href{http://creativecommons.org/licenses/by-sa/4.0/}{Creative Commons
+  	Attribution-ShareAlike 4.0 International License}.
+
+  	\begin{center}
+  		\ccbysa
+  	\end{center}
+\end{frame}
+
+
+
+% page 3.2 
+\begin{frame}[standout]
+  This page is excited! 
+\end{frame}
+
+%------------------------------
+
+
+\appendix
+
+
+% reference
+
+\begin{frame}[allowframebreaks]{References}
+
+  \bibliography{demo} % demo comes from the file "demo.bib"
+  
+  \bibliographystyle{abbrv}
+
+\end{frame}
+
+
+
+
+\end{document}
