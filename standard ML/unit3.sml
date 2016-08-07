@@ -4,6 +4,9 @@
 	2. lexical scope & closures
 	3. currying & partial application
 	4. Mutation via reference
+	5. 
+	6. 
+
 *)
 
 
@@ -138,4 +141,17 @@ val _ = x:= 234		(* change the content of a ref data *)
 	x1 -> ref 234 : int ref
 	x2 -> ref 123 : int ref
 *)
+
+
+
+
+
+
+
+
+(* abstract data type *)
+(*--------------------------------------------------------*)
+datatype set = S of { insert : int -> set, member : int -> bool, size : unit -> int }
+
+
 
