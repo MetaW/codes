@@ -6,6 +6,9 @@
 --Integer 	大整数长度不限
 --Float 	浮点数
 --Double	双精度浮点数
+--Rational
+--Scientific
+
 --Bool		布尔
 --Char		字符
 --[xx]		xx类型的list

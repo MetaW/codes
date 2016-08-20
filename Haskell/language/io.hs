@@ -23,6 +23,16 @@ import System.Environment
     在终端下输入 ghc --make filename
     就能进行编译了m之后会生成可执行文件, 输入 ./filename 就能执行了
 
+	这种做法会把用到的运行时全编译进去，文件较大，但运行不需要任何环境。
+	ghc --make filename -dynamic 使用动态链接，生成的文件会小很多，
+	但运行需要安装一些Haskell的环境。
+
+	!!!只有两种文件能够编译：模块文件(会生成.o文件)，包含main的IO代码的
+	非模块文件(会生成.o文件和可执行文件)
+	
+	非pure但没有main的文件和pure但不是模块的文件无法编译成功.
+
+
     !也可以直接在终端输入 runhaskell filename, 效果和编译后执行一样。
 -}
 
@@ -253,8 +263,8 @@ main = do
 
 tryCode :: IO ()
 tryCode = do
-    (fileName:_) <- getArgs
-    contents <- readFile fileName
+    fileNames <- getArgs
+    contents <- readFile $ head fileNames
     putStrLn ("the file contents is: " ++ contents)
 
 handleCode :: IOError -> IO ()
