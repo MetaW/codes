@@ -1,5 +1,4 @@
-;===============================================================
-; define a module :
+;;;;; define a module :
 ;---------------------- two ways:
 #lang racket
 
@@ -26,11 +25,7 @@
 
 
 
-
-
-
-
-;===============================================================
+;=====================
 ;local binding : let, let*, letrec, define
 
 ;-----
@@ -57,9 +52,6 @@
 
 ;-----
 ;3. letrec : exp are evaled in the env that included all the bindings of this letrec. Use define mutual recsive function.
-;!!!! ATTENTION: letrec binding allow access binding defined in everywhere of the same scope, that is the sequence is not
-;matter, HOWEVER, letrec does not allow shadowing, you can not define a variable twice in the same scope.
-
 (define t3
   (letrec ([f (lambda () (+ a b))]
            [a 1]
@@ -78,29 +70,4 @@
   (define (even? (lambda (n) (if (= n 0) #t (odd? (- n 1))))))
   (define (odd? (lambda (n) (if (= n 0) #f (even? (- n 1))))))
   (...))
-
-
-
-
-
-
-
-;===============================================================
-;-----top level bindings
-
-
-
-
-
-
-;===============================================================
-;-----macro system
-; macro system works at the level of tokens not string.
-
-(define-syntex my-if
-  (syntex-rules (then else)
-                [(my-if e1 then e2 else e3)  ; self defined concerte syntex tree
-                 (if e1 e2 e3)]              ; original concrete syntex tree
-                [...]
-                [...]))
 

@@ -261,18 +261,15 @@ Inductive next_even : nat -> nat -> Prop :=
 Inductive total_relation : nat -> nat -> Prop :=
   | always : forall  (n m:nat), True -> (total_relation n m).
 
-Inductive empty_relation : nat -> nat -> Prop :=
-  | never : forall  (n m:nat), (empty_relation n m) -> Flase.
-
 
 (*再定义个3参数的返回Prop的函数*)
 
 Inductive R : nat -> nat -> nat -> Prop :=
-  | c1 : R 0 0 0
+  | c1 : R O O O
   | c2 : forall (m n o:nat), R m n o -> R (S m) n (S o)
   | c3 : forall (m n o:nat), R m n o -> R m (S n) (S o)
   | c4 : forall (m n o:nat), R (S m) (S n) (S (S o)) -> R m n o
-  | c5 : forall (m n o:nat), R m n o -> R n m 0.
+  | c5 : forall (m n o:nat), R m n o -> R n m o.
 
 Definition fR (n m:nat):nat :=
   n + m.
@@ -297,7 +294,7 @@ Proof.
 Qed.
 
 (* exercise *)
-Theorem R_eq_fR : 
+Theorem R_eq_fR :
 	forall (n m o:nat), R n m o <-> fR n m = o.
 Proof.
   split.
@@ -430,6 +427,7 @@ Proof.
 Qed.
 
 
+
 Lemma MStar1 : 
     forall {T:Type} (s:list T) (re : reg_exp T), s =~ re -> s =~ Star re.
 Proof.
@@ -438,13 +436,7 @@ Proof.
   apply MStarApp.
     -apply H.
     -apply MStarO.
-Qed.    
-
-Lemma reg_exp_of_list_spec : 
-    forall {X:Type} ():, .
-
-
-
+Qed.
 
 
 
