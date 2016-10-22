@@ -1,0 +1,34 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{CJKutf8}
+\usepackage[top=1in,bottom=1in,left=1.25in,right=1.25in]{geometry}
+\begin{document}
+
+\begin{CJK}{UTF8}{gbsn}
+\title{第三次作业}
+\author{姓名：王璐璐 \\ 学号：1601214485}
+\date{2016.10.22}
+\maketitle
+	问题：
+	把原始数据流分析中的并集换成交集，Gen/Kill
+	标准型上的交汇运算和组合运算还能定义出来吗？
+	还能组成半格吗？给出你的证明。
+	
+	解答：把原始数据流分析中的并集换成交集:
+	\[
+		f\left( x \right)\; =\; gen\cup \left( x-kill \right)
+	\]
+	
+	\[\begin{array}{l}		{f_2} \circ {f_1}(x) = ge{n_2} \cup ((ge{n_1} \cup (x - kil{l_1})) - kil{l_2})\\	 	= (ge{n_2} \cup (ge{n_1} - kil{l_2})) \cup (x - (kil{l_1} \cup kil{l_2}))	\end{array}\]
+		\[\begin{array}{l}		{f_2} \sqcap {f_1}(x) = {f_2}(x) \sqcap {f_1}(x)\\ 		= (ge{n_1} \cup (x - kil{l_1})) \cap (ge{n_2} \cup (x - kil{l_2}))\\		= (ge{n_1} \cap ge{n_2}) \cup (ge{n_1} \cap (x - kil{l_2})) \cup \\		(ge{n_2} \cap (x - kil{l_1})) \cup ((x - kil{l_1}) \cap (x - kil{l_2}))\\ 		= (ge{n_1} - kil{l_1}) \cap (ge{n_2} - kil{l_2}) \cup (x - (kil{l_1} \cup kil{l_2}))	\end{array}\]
+	
+	所以标准型上的交汇运算和组合运算能够定义出来。	
+
+	半格格元素为Gen/Kill标准型的抽象表示，其中Gen和Kill都只包含为原始分析中半格元素，是有限集合。
+	交汇运算$\sqcap$为函数上的交集操作,由	\[(ge{n_1},kil{l_1}) \sqcap (ge{n_2},kil{l_2}) = ((ge{n_1} - kil{l_1}) \cap (ge{n_2} - kil{l_2}),kil{l_1} \cup kil{l_2})\],
+	该操作满足幂等性、交换性、结合性。因此还能组成半格。
+	
+	
+\end{CJK}
+
+\end{document}
+
