@@ -5,6 +5,7 @@
 	3. induction on hypo
 	4. 用inductive定义多个参数的返回Prop的函数
 	5. 应用:正则表达式的定义与匹配判断
+	6. tactic: remember[TODO]
 	
 *)
 
@@ -12,6 +13,7 @@
 Require Export F_logic.
 Require Export C_lists.
 Require Export D_poly.
+Require Import C_lists.
 
 (*
 	返回Prop的函数的定义:
@@ -444,6 +446,7 @@ Qed.
 
 
 
-
+(* tactic: remember *)
+(*-------------------------------------------------*)
 
 
