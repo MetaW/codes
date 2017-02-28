@@ -14,3 +14,9 @@ Coq/Software Foundation/WORKING.v
 *.o
 
 *.txt
+
+*.vo
+
+*.glob
+
+*.aux

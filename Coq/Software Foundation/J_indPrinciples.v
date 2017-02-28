@@ -1,10 +1,7 @@
 (*
   contents:
   1. 自动产生的induction principle,手写induction principle.
-  2. 
-  3.
-  4.
-  5.
+  2. induction principles for inductively defined Prop
 *)
 
 Require Export I_proofObjects.
@@ -63,7 +60,7 @@ Definition yesno_ind' : forall P : yesno -> Prop,
                         P yes ->
                         P no  ->
                         (forall y : yesno, P y).
-
+Admitted.
 
 Inductive natlist : Type :=
 | nnil : natlist
@@ -72,7 +69,7 @@ Definition natlist_ind' : forall P : natlist -> Prop,
                           P nnil ->
                           (forall n nl, P nl -> P (ncons n nl)) ->
                           (forall y : natlist, P y).
-
+Admitted.
 
 Inductive natlist1 : Type :=
 | nnil1 : natlist1
@@ -81,6 +78,7 @@ Definition natlist1_ind' : forall P : natlist1 -> Prop,
                            P nnil1 ->
                            (forall nl n, P nl -> P (ncons1 nl n)) ->
                            (forall y : natlist1, P y).
+Admitted.
 
 
 Inductive byntree : Type :=
@@ -93,6 +91,7 @@ Definition byntree_ind' : forall P : byntree -> Prop,
                           (forall (y : yesno) (t1 t2 : byntree), 
                             P t1 -> P t2 -> P (nbranch y t1 t2)) -> 
                           (forall t:byntree, P t).
+Admitted.
 
 
 
@@ -108,6 +107,7 @@ Definition list_ind' : forall (X : Type) (P : list X -> Prop),
                        (forall (x : X) (li : list X), 
                           P li -> P (cons X x li)) ->
                        (forall li : list X, P li).
+Admitted.
 
 
 
@@ -116,11 +116,40 @@ Definition list_ind' : forall (X : Type) (P : list X -> Prop),
 
 
 
-
-
-
+(* induction principles for inductively defined Prop *)
 (*--------------------------------------------------------*)
-(*--------------------------------------------------------*)
-(*--------------------------------------------------------*)
-(*--------------------------------------------------------*)
-(*--------------------------------------------------------*)
+Inductive ev : nat -> Prop :=
+| ev_O : ev 0
+| ev_SS : forall n:nat, ev n -> ev (S (S n)).
+
+(*
+对Prop进行归纳不同与一般的Type，我们并不是证明某个性质P对所有的
+Prop都成立，而是证明P对所有的Prop中包含的那个普通Type的数据都成立。
+eg:
+*)
+Check ev_ind.
+(*
+ev_ind
+     : forall P : nat -> Prop,
+       P 0 ->
+       (forall n : nat,
+        ev n -> P n -> P (S (S n))) ->
+       forall n : nat, ev n -> P n
+*)
+
+
+(*
+The precise form of an Inductive definition can affect the 
+induction principle Coq generates.
+eg:
+*)
+Inductive le : nat -> nat -> Prop :=
+| le_n : forall n, le n n
+| le_S : forall n m, le n m -> le n (S m).
+
+Inductive le' (n:nat) : nat -> Prop :=
+| le_n' : le' n n
+| le_S' : forall m, le' n m -> le' n (S m).
+(* le_ind and le'_ind is different *)
+
+

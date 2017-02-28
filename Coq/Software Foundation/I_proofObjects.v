@@ -32,6 +32,10 @@ Require Import G_IndProp.
     A : B 
     A has a type of B
     A is a proof of B
+    
+    program   ---   type
+    proof     ---   proposition
+    evidence  ---   fact
 *)
 
 
