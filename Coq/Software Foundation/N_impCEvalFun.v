@@ -2,7 +2,6 @@
   contents:
   1. 如何定义可能不停机的函数
   2. step_indexed求值函数与关系的等价性证明!!!
-  3.
 *)
 
 Require Import Coq.omega.Omega.
@@ -188,6 +187,61 @@ Proof.
     *inversion H1. clear H1. apply E_WhileEnd. subst.
      apply Heqrl.
 Qed.
+
+
+
+Theorem ceval_step_more: forall i1 i2 st st' c,
+  i1 <= i2 ->
+  ceval_step st c i1 = Some st' ->
+  ceval_step st c i2 = Some st'.
+Admitted.
+
+
+
+Theorem ceval__ceval_step: forall c st st',
+      c / st \\ st' ->
+      exists i, ceval_step st c i = Some st'.
+Proof.
+  intros.
+  induction H.
+  -exists 5. simpl. auto.
+  -destruct IHceval1. destruct IHceval2. exists (x+x0).
+   destruct x. 
+   +simpl in H1. inversion H1. 
+   +simpl. rewrite ceval_step_more with (i1:=S x) (st':=st1).
+    *apply ceval_step_more with (i1:=x0) (i2:=x+x0) in H2.
+      **apply H2.
+      **omega.
+    *destruct x0.
+      **simpl in H2. inversion H2.
+      **omega.
+    *apply H1.
+  -exists 5. simpl. subst. auto.
+  -destruct IHceval. exists (x+10).
+   induction x.
+   *simpl in H1. inversion H1.
+   *simpl. rewrite H. apply ceval_step_more with (i2:=(x+10)) in H1.
+    **apply H1. **omega.
+  -destruct IHceval. exists (x+10).
+   induction x.
+   *simpl in H1. inversion H1.
+   *simpl. rewrite H. apply ceval_step_more with (i2:=(x+10)) in H1.
+    **apply H1. **omega.
+  -exists 1. simpl. rewrite H. auto.
+  -destruct IHceval1. destruct IHceval2. exists (x+x0).
+   destruct x. 
+   +simpl in H2. inversion H2.
+   +simpl. destruct x0.
+    *simpl in H3. inversion H3.
+    *apply ceval_step_more with (i1:=(S x)) (i2:=x+S x0) in H2.
+      **rewrite H2. rewrite H. 
+        apply ceval_step_more with (i1:=(S x0)) (i2:=x+S x0) in H3.
+          ++apply H3.
+          ++omega.
+      **omega.
+Qed.
+
+
 
 
 
