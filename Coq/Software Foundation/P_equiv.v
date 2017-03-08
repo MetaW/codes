@@ -1,9 +1,13 @@
 (*
   contents:
   1. behaviorally equivalent
-  2.
-  3.
-  4.
+  2. Properties of Behavioral Equivalence
+      -equivance relation
+      -Congruence
+  3. Program Transformations
+  4. Proving That Programs Are Not Equivalent
+  5. Nondeterministic Imp
+
 *)
 
 Require Import Coq.Bool.Bool.
@@ -455,4 +459,476 @@ Qed.
 
 
 
+
+
+(*Program Transformations*)
 (*---------------------------------------------------*)
+(*
+A program transformation is a function that takes a program
+as input and produces some variant of the program as output.
+
+Compiler optimizations such as constant folding are a canonical 
+example, but there are many others.
+
+A program transformation is sound if it preserves the behavior
+of the original program.
+*)
+
+Definition atrans_sound (atrans : aexp -> aexp) : Prop :=
+  forall (a : aexp),
+    aequiv a (atrans a).
+
+Definition btrans_sound (btrans : bexp -> bexp) : Prop :=
+  forall (b : bexp),
+    bequiv b (btrans b).
+
+Definition ctrans_sound (ctrans : com -> com) : Prop :=
+  forall (c : com),
+    cequiv c (ctrans c).
+
+
+(*The Constant-Folding Transformation*)
+Fixpoint fold_constants_aexp (a : aexp) : aexp :=
+  match a with
+  | ANum n => ANum n
+  | AId i => AId i
+  | APlus a1 a2 =>
+    match (fold_constants_aexp a1, fold_constants_aexp a2)
+    with
+    | (ANum n1, ANum n2) => ANum (n1 + n2)
+    | (a1', a2') => APlus a1' a2'
+    end
+  | AMinus a1 a2 =>
+    match (fold_constants_aexp a1, fold_constants_aexp a2)
+    with
+    | (ANum n1, ANum n2) => ANum (n1 - n2)
+    | (a1', a2') => AMinus a1' a2'
+    end
+  | AMult a1 a2 =>
+    match (fold_constants_aexp a1, fold_constants_aexp a2)
+    with
+    | (ANum n1, ANum n2) => ANum (n1 * n2)
+    | (a1', a2') => AMult a1' a2'
+    end
+  end.
+
+Example fold_aexp_ex1 :
+    fold_constants_aexp
+      (AMult (APlus (ANum 1) (ANum 2)) (AId X))
+  = AMult (ANum 3) (AId X).
+Proof. 
+  reflexivity. 
+Qed.
+
+Fixpoint fold_constants_bexp (b : bexp) : bexp :=
+  match b with
+  | BTrue => BTrue
+  | BFalse => BFalse
+  | BEq a1 a2 =>
+      match (fold_constants_aexp a1, fold_constants_aexp a2) with
+      | (ANum n1, ANum n2) =>
+          if beq_nat n1 n2 then BTrue else BFalse
+      | (a1', a2') =>
+          BEq a1' a2'
+      end
+  | BLe a1 a2 =>
+      match (fold_constants_aexp a1, fold_constants_aexp a2) with
+      | (ANum n1, ANum n2) =>
+          if leb n1 n2 then BTrue else BFalse
+      | (a1', a2') =>
+          BLe a1' a2'
+      end
+  | BNot b1 =>
+      match (fold_constants_bexp b1) with
+      | BTrue => BFalse
+      | BFalse => BTrue
+      | b1' => BNot b1'
+      end
+  | BAnd b1 b2 =>
+      match (fold_constants_bexp b1, fold_constants_bexp b2) with
+      | (BTrue, BTrue) => BTrue
+      | (BTrue, BFalse) => BFalse
+      | (BFalse, BTrue) => BFalse
+      | (BFalse, BFalse) => BFalse
+      | (b1', b2') => BAnd b1' b2'
+      end
+  end.
+
+
+Fixpoint fold_constants_com (c : com) : com :=
+  match c with
+  | SKIP =>
+      SKIP
+  | i ::= a =>
+      CAss i (fold_constants_aexp a)
+  | c1 ;; c2 =>
+      (fold_constants_com c1) ;; (fold_constants_com c2)
+  | IFB b THEN c1 ELSE c2 FI =>
+      match fold_constants_bexp b with
+      | BTrue => fold_constants_com c1
+      | BFalse => fold_constants_com c2
+      | b' => IFB b' THEN fold_constants_com c1
+                     ELSE fold_constants_com c2 FI
+      end
+  | WHILE b DO c END =>
+      match fold_constants_bexp b with
+      | BTrue => WHILE BTrue DO c END
+      | BFalse => SKIP
+      | b' => WHILE b' DO (fold_constants_com c) END
+      end
+  end.
+
+
+Example fold_com_ex1 :
+  fold_constants_com
+    (* Original program: *)
+    (X ::= APlus (ANum 4) (ANum 5);;
+     Y ::= AMinus (AId X) (ANum 3);;
+     IFB BEq (AMinus (AId X) (AId Y))
+             (APlus (ANum 2) (ANum 4)) THEN
+       SKIP
+     ELSE
+       Y ::= ANum 0
+     FI;;
+     IFB BLe (ANum 0)
+             (AMinus (ANum 4) (APlus (ANum 2) (ANum 1)))
+     THEN
+       Y ::= ANum 0
+     ELSE
+       SKIP
+     FI;;
+     WHILE BEq (AId Y) (ANum 0) DO
+       X ::= APlus (AId X) (ANum 1)
+     END)
+  = (* After constant folding: *)
+    (X ::= ANum 9;;
+     Y ::= AMinus (AId X) (ANum 3);;
+     IFB BEq (AMinus (AId X) (AId Y)) (ANum 6) THEN
+       SKIP
+     ELSE
+       (Y ::= ANum 0)
+     FI;;
+     Y ::= ANum 0;;
+     WHILE BEq (AId Y) (ANum 0) DO
+       X ::= APlus (AId X) (ANum 1)
+     END).
+Proof.
+  simpl. reflexivity.
+Qed.
+
+
+
+
+
+
+
+(*Soundness of Constant Folding*)
+Theorem fold_constants_aexp_sound :
+  atrans_sound fold_constants_aexp.
+Proof.
+  unfold atrans_sound. unfold aequiv.
+  intros. induction a; try(simpl; reflexivity);
+  try(destruct (fold_constants_aexp a1) eqn:Hd; 
+      destruct (fold_constants_aexp a2) eqn:Hd2;
+      simpl; rewrite Hd; rewrite Hd2; rewrite IHa1; 
+      rewrite IHa2; simpl; reflexivity).
+Qed.
+
+
+Theorem fold_constants_bexp_sound:
+  btrans_sound fold_constants_bexp.
+Proof.
+  unfold btrans_sound. unfold bequiv. intros.
+  induction b; try(simpl; reflexivity).
+  -rename a into a1. rename a0 into a2. simpl.
+   remember (fold_constants_aexp a1) as a1'.
+   remember (fold_constants_aexp a2) as a2'.
+   replace (aeval st a1) with (aeval st a1').
+   replace (aeval st a2) with (aeval st a2').
+   try(destruct a1'; destruct a2');
+    try(simpl; destruct (n =? n0);
+        try(simpl; reflexivity));
+    repeat try(simpl; reflexivity).
+    *rewrite Heqa2'; rewrite <- fold_constants_aexp_sound; reflexivity.
+    *rewrite Heqa1'; rewrite <- fold_constants_aexp_sound; reflexivity.
+  -rename a into a1. rename a0 into a2. simpl.
+   remember (fold_constants_aexp a1) as a1'.
+   remember (fold_constants_aexp a2) as a2'.
+   replace (aeval st a1) with (aeval st a1').
+   replace (aeval st a2) with (aeval st a2').
+   try(destruct a1'; destruct a2');
+    try(simpl; destruct (n =? n0);
+        try(simpl; reflexivity));
+    repeat try(simpl; reflexivity).
+    *destruct (n <=? n0). **simpl. reflexivity. **reflexivity.
+    *destruct (n <=? n0). **simpl. reflexivity. **reflexivity.
+    *rewrite Heqa2'; rewrite <- fold_constants_aexp_sound; reflexivity.
+    *rewrite Heqa1'; rewrite <- fold_constants_aexp_sound; reflexivity.
+  -simpl. rewrite IHb. destruct b;
+   try(simpl; reflexivity).
+Admitted.
+
+
+Theorem fold_constants_com_sound :
+  ctrans_sound fold_constants_com.
+Proof.
+  unfold ctrans_sound. intros c.
+  induction c; simpl.
+  - (* SKIP *) apply refl_cequiv.
+  - (* ::= *) apply CAss_congruence.
+              apply fold_constants_aexp_sound.
+  - (* ;; *) apply CSeq_congruence; assumption.
+  - (* IFB *)
+    assert (bequiv b (fold_constants_bexp b)). {
+      apply fold_constants_bexp_sound. }
+    destruct (fold_constants_bexp b) eqn:Heqb;
+      try (apply CIf_congruence; assumption).
+    + (* b always true *)
+      apply trans_cequiv with c1; try assumption. unfold cequiv.
+      intros. split.
+      *intros. inversion H0. subst. **assumption. **subst.
+       unfold bequiv in H. rewrite H in H6. simpl in H6. inversion H6.
+      *intros. apply E_IfTrue. **unfold bequiv in H. rewrite H. 
+       simpl. reflexivity. **assumption.
+    + (* b always false *)
+      apply trans_cequiv with c2; try assumption.
+      apply IFB_false; assumption.
+  - (* WHILE *)
+Admitted.
+
+
+
+
+
+
+
+
+
+(*Proving That Programs Are Not Equivalent*)
+(*----------------------------------------------------------*)
+
+(*把a中的i替换为u*)
+Fixpoint subst_aexp (i : id) (u : aexp) (a : aexp) : aexp :=
+  match a with
+  | ANum n =>
+      ANum n
+  | AId i' =>
+      if beq_id i i' then u else AId i'
+  | APlus a1 a2 =>
+      APlus (subst_aexp i u a1) (subst_aexp i u a2)
+  | AMinus a1 a2 =>
+      AMinus (subst_aexp i u a1) (subst_aexp i u a2)
+  | AMult a1 a2 =>
+      AMult (subst_aexp i u a1) (subst_aexp i u a2)
+  end.
+
+Definition subst_equiv_property := forall i1 i2 a1 a2,
+  cequiv (i1 ::= a1;; i2 ::= a2)
+         (i1 ::= a1;; i2 ::= subst_aexp i1 a1 a2).
+
+
+Theorem subst_inequiv :
+  not subst_equiv_property.
+Proof.
+  unfold subst_equiv_property.
+  intros Contra.
+  remember (X ::= APlus (AId X) (ANum 1);;
+            Y ::= AId X)
+      as c1.
+  remember (X ::= APlus (AId X) (ANum 1);;
+            Y ::= APlus (AId X) (ANum 1))
+      as c2.
+  assert (cequiv c1 c2) by (subst; apply Contra).
+  remember (t_update (t_update empty_state X 1) Y 1) as st1.
+  remember (t_update (t_update empty_state X 1) Y 2) as st2.
+  assert (H1: c1 / empty_state \\ st1);
+  assert (H2: c2 / empty_state \\ st2);
+  try (subst;
+       apply E_Seq with (st' := (t_update empty_state X 1));
+       apply E_Ass; reflexivity).
+  -subst. apply E_Seq with (t_update empty_state X 1).
+    *apply E_Ass. simpl. reflexivity.
+    *apply E_Ass. reflexivity.
+  -subst. apply E_Seq with (t_update empty_state X 1).
+    *apply E_Ass. reflexivity.
+    *apply E_Ass. reflexivity.
+  -subst. apply E_Seq with (t_update empty_state X 1).
+    *apply E_Ass. reflexivity.
+    *apply E_Ass. reflexivity.
+  -unfold cequiv in *.
+  apply H in H1.
+  assert (Hcontra: st1 = st2)
+    by (apply (ceval_deterministic c2 empty_state); assumption).
+  assert (Hcontra': st1 Y = st2 Y)
+    by (rewrite Hcontra; reflexivity).
+  subst. inversion Hcontra'.
+Qed.
+
+
+Theorem inequiv_exercise:
+  not (cequiv (WHILE BTrue DO SKIP END) SKIP).
+Proof.
+  unfold not.
+  intros.
+  unfold cequiv in *.
+  remember (WHILE BTrue DO SKIP END) as Wc.
+  remember (empty_state) as st.
+  remember (t_update empty_state X 1) as st'.
+  assert (SKIP / st \\ st).
+  -apply E_Skip.
+  -apply H in H0.  induction H0;
+   try(subst; inversion HeqWc).
+   *subst. inversion HeqWc. subst. simpl in H0. inversion H0.
+   *subst. inversion HeqWc. subst. clear HeqWc H0. inversion H0_.
+    subst. clear H0_. apply IHceval2.
+    +reflexivity.
+    +apply H.
+    +reflexivity.
+Qed.
+
+
+
+
+
+
+
+
+
+
+
+(* Nondeterministic Imp *)
+(*-------------------------------------------------------------*)
+(*
+The new command has the syntax HAVOC X, where X is an identifier.
+The effect of executing HAVOC X is to assign an arbitrary number
+to the variable X, nondeterministically.
+
+In a sense, a variable on which we do HAVOC roughly corresponds 
+to an unitialized variable in a low-level language like C
+*)
+Module Himp.
+
+Inductive com : Type :=
+  | CSkip : com
+  | CAss : id -> aexp -> com
+  | CSeq : com -> com -> com
+  | CIf : bexp -> com -> com -> com
+  | CWhile : bexp -> com -> com
+  | CHavoc : id -> com. (* <---- new *)
+
+Notation "'SKIP'" :=
+  CSkip.
+Notation "X '::=' a" :=
+  (CAss X a) (at level 60).
+Notation "c1 ;; c2" :=
+  (CSeq c1 c2) (at level 80, right associativity).
+Notation "'WHILE' b 'DO' c 'END'" :=
+  (CWhile b c) (at level 80, right associativity).
+Notation "'IFB' e1 'THEN' e2 'ELSE' e3 'FI'" :=
+  (CIf e1 e2 e3) (at level 80, right associativity).
+Notation "'HAVOC' l" := (CHavoc l) (at level 60).
+
+Reserved Notation "c1 '/' st '\\' st'"
+                  (at level 40, st at level 39).
+
+Inductive ceval : com -> state -> state -> Prop :=
+  | E_Skip : forall st : state, SKIP / st \\ st
+  | E_Ass : forall (st : state) (a1 : aexp) (n : nat) (X : id),
+      aeval st a1 = n ->
+      (X ::= a1) / st \\ t_update st X n
+  | E_Seq : forall (c1 c2 : com) (st st' st'' : state),
+      c1 / st \\ st' ->
+      c2 / st' \\ st'' ->
+      (c1 ;; c2) / st \\ st''
+  | E_IfTrue : forall (st st' : state) (b1 : bexp) (c1 c2 : com),
+      beval st b1 = true ->
+      c1 / st \\ st' ->
+      (IFB b1 THEN c1 ELSE c2 FI) / st \\ st'
+  | E_IfFalse : forall (st st' : state) (b1 : bexp) (c1 c2 : com),
+      beval st b1 = false ->
+      c2 / st \\ st' ->
+      (IFB b1 THEN c1 ELSE c2 FI) / st \\ st'
+  | E_WhileEnd : forall (b1 : bexp) (st : state) (c1 : com),
+      beval st b1 = false ->
+      (WHILE b1 DO c1 END) / st \\ st
+  | E_WhileLoop : forall (st st' st'' : state) (b1 : bexp) (c1 : com),
+      beval st b1 = true ->
+      c1 / st \\ st' ->
+      (WHILE b1 DO c1 END) / st' \\ st'' ->
+      (WHILE b1 DO c1 END) / st \\ st''
+  | E_Havoc : forall (X: id) (n: nat) (st: state), 
+      (HAVOC X) / st \\ (t_update st X n)
+
+  where "c1 '/' st '\\' st'" := (ceval c1 st st').
+
+
+Example havoc_example1 : (HAVOC X) / empty_state \\ t_update empty_state X 0.
+Proof.
+  apply E_Havoc.
+Qed.
+
+Example havoc_example2 :
+  (SKIP;; HAVOC Z) / empty_state \\ t_update empty_state Z 42.
+Proof.
+  apply E_Seq with empty_state.
+  -apply E_Skip. -apply E_Havoc.
+Qed.
+
+
+Definition cequiv (c1 c2 : com): Prop :=
+  forall st st', c1 / st \\ st' <-> c2 / st \\ st'.
+
+
+(* exercise *)
+Definition pXY :=
+  HAVOC X;; HAVOC Y.
+
+Definition pYX :=
+  HAVOC Y;; HAVOC X.
+
+
+Theorem pXY_cequiv_pYX :
+  cequiv pXY pYX \/ ~cequiv pXY pYX.
+Proof.
+Admitted.
+
+
+Definition p1 : com :=
+  WHILE (BNot (BEq (AId X) (ANum 0))) DO
+    HAVOC Y;;
+    X ::= APlus (AId X) (ANum 1)
+  END.
+
+Definition p2 : com :=
+  WHILE (BNot (BEq (AId X) (ANum 0))) DO
+    SKIP
+  END.
+
+
+Lemma p1_may_diverge : forall st st',   
+  beval st (BNot (BEq (AId X) (ANum 0))) = true  ->
+  ~ p1 / st \\ st'.
+Proof.
+Admitted.
+
+End Himp.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
