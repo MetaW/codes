@@ -98,8 +98,17 @@ Proof.
   Admitted.
 
 
+Theorem t_update_neq : forall (X:Type) v x1 x2
+                         (m : total_map X),
+  x1 <> x2 ->
+  (t_update m x1 v) x2 = m x2.
+Proof.
+Admitted.
 
-
+Lemma t_update_eq : forall A (m: total_map A) x v,
+  (t_update m x v) x = v.
+Proof.
+Admitted.
 
 
 
