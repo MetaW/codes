@@ -97,8 +97,8 @@
 ;-----macro system
 ; macro system works at the level of tokens not string.
 
-(define-syntex my-if
-  (syntex-rules (then else)
+(define-syntax my-if
+  (syntax-rules (then else)
                 [(my-if e1 then e2 else e3)  ; self defined concerte syntex tree
                  (if e1 e2 e3)]              ; original concrete syntex tree
                 [...]

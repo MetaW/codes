@@ -4,8 +4,6 @@
     - Open Scope XX
   2. Hoare Triples
   3. Proof Rules (& eapply, eassumption )
-  4.
-  5.
 *)
 
 Require Import Coq.Bool.Bool.
@@ -426,6 +424,37 @@ Proof.
 Qed.
 
 
+Example hoare_asgn_example4 :
+  {{fun st => True}} (X ::= (ANum 1);; Y ::= (ANum 2))
+  {{fun st => st X = 1 /\ st Y = 2}}.
+Proof.
+  eapply hoare_seq.
+  -apply hoare_asgn.
+  -eapply hoare_consequence_pre.
+   +apply hoare_asgn.
+   +unfold assert_implies, assn_sub.
+    intros.
+    simpl.
+    unfold t_update. simpl.
+    auto.
+Qed.
+
+Theorem swap_exercise :
+  {{fun st => st X <= st Y}}
+  Z ::= (AId X);;
+  X ::= (AId Y);;
+  Y ::= (AId Z)
+  {{fun st => st Y <= st X}}.
+Proof.
+  eapply hoare_seq.
+  -eapply hoare_seq.
+   +apply hoare_asgn.
+   +apply hoare_asgn.
+  -eapply hoare_consequence_pre.
+   +apply hoare_asgn.
+   +unfold assert_implies, assn_sub. simpl. intros.
+    unfold t_update. simpl. assumption.
+Qed.
 
 
 
@@ -433,6 +462,324 @@ Qed.
 
 
 
+
+(* Conditionals *)
 (*------------------------------------------------------------*)
+(*
+      {{P ∧  b}} c1 {{Q}}
+      {{P ∧ ~b}} c2 {{Q}}
+------------------------------------
+{{P}} IFB b THEN c1 ELSE c2 FI {{Q}}
+
+P ∧ b, is the conjunction of an assertion and a boolean expression 
+it doesn't well typed. To fix this, we need a way of formally change 
+any bexp b to an assertion:
+*)
+Definition bassn b : Assertion :=
+  fun st => (beval st b = true).
+
+Lemma bexp_eval_true : forall b st,
+  beval st b = true -> (bassn b) st.
+Proof.
+  intros.
+  unfold bassn. assumption.
+Qed.
+
+Lemma bexp_eval_false : forall b st,
+  beval st b = false -> not ((bassn b) st).
+Proof.
+  unfold bassn, not.
+  intros. rewrite H in H0. inversion H0.
+Qed.
+
+
+Theorem hoare_if : forall P Q b c1 c2,
+  {{fun st => P st /\ bassn b st}} c1 {{Q}} ->
+  {{fun st => P st /\ ~(bassn b st)}} c2 {{Q}} ->
+  {{P}} (IFB b THEN c1 ELSE c2 FI) {{Q}}.
+Proof.
+  unfold hoare_triple, bassn, not.
+  intros. inversion H1. subst.
+  -apply H in H9. assumption.
+   +split. ++apply H2. ++apply H8.
+  -subst. apply H0 in H9.
+   +apply H9. 
+   +split.
+    ++apply H2.
+    ++intros. rewrite H8 in H3. inversion H3.
+Qed.
+
+
+Example if_example :
+    {{fun st => True}}
+    IFB (BEq (AId X) (ANum 0))
+    THEN (Y ::= (ANum 2))
+    ELSE (Y ::= APlus (AId X) (ANum 1))
+    FI
+    {{fun st => st X <= st Y}}.
+Proof.
+  apply hoare_if.
+  -eapply hoare_consequence_pre.
+   +apply hoare_asgn.
+   +unfold assert_implies, assn_sub. intros.
+    simpl. unfold bassn in *. inversion H.
+    simpl in H1. unfold t_update. simpl.
+    apply beq_nat_true in H1. rewrite H1.
+    auto.
+  -eapply hoare_consequence_pre.
+   +apply hoare_asgn.
+   +unfold assert_implies, bassn, assn_sub. simpl.
+    intros. unfold t_update. simpl. omega.
+Qed.
+
+
+Theorem if_minus_plus :
+  {{fun st => True}}
+    IFB (BLe (AId X) (AId Y))
+    THEN (Z ::= AMinus (AId Y) (AId X))
+    ELSE (Y ::= APlus (AId X) (AId Z))
+    FI
+  {{fun st => st Y = st X + st Z}}.
+Proof.
+  apply hoare_if.
+  -eapply hoare_consequence_pre.
+   +apply hoare_asgn.
+   +unfold assert_implies, assn_sub, bassn, t_update.
+    simpl. intros. inversion H. apply leb_complete in H1.
+    omega.
+  -eapply hoare_consequence_pre.
+   +apply hoare_asgn.
+   +unfold assert_implies, assn_sub, bassn, t_update.
+    simpl. intros. reflexivity.
+Qed.
+
+
+
+
+
+(* exercise: one side condition *)
+Module If1.
+
+Inductive com : Type :=
+  | CSkip : com
+  | CAss : id -> aexp -> com
+  | CSeq : com -> com -> com
+  | CIf : bexp -> com -> com -> com
+  | CWhile : bexp -> com -> com
+  | CIf1 : bexp -> com -> com.
+
+
+Notation "'SKIP'" :=
+  CSkip.
+Notation "c1 ;; c2" :=
+  (CSeq c1 c2) (at level 80, right associativity).
+Notation "X '::=' a" :=
+  (CAss X a) (at level 60).
+Notation "'WHILE' b 'DO' c 'END'" :=
+  (CWhile b c) (at level 80, right associativity).
+Notation "'IFB' e1 'THEN' e2 'ELSE' e3 'FI'" :=
+  (CIf e1 e2 e3) (at level 80, right associativity).
+Notation "'IF1' b 'THEN' c 'FI'" :=
+  (CIf1 b c) (at level 80, right associativity).
+
+
+Reserved Notation "c1 '/' st '||' st'" (at level 40, st at level 39).
+Inductive ceval : com -> state -> state -> Prop :=
+  | E_Skip : forall st : state, SKIP / st || st
+  | E_Ass : forall (st : state) (a1 : aexp) (n : nat) (X : id),
+            aeval st a1 = n -> (X ::= a1) / st || t_update st X n
+  | E_Seq : forall (c1 c2 : com) (st st' st'' : state),
+            c1 / st || st' -> c2 / st' || st'' -> (c1 ;; c2) / st || st''
+  | E_IfTrue : forall (st st' : state) (b1 : bexp) (c1 c2 : com),
+               beval st b1 = true ->
+               c1 / st || st' -> (IFB b1 THEN c1 ELSE c2 FI) / st || st'
+  | E_IfFalse : forall (st st' : state) (b1 : bexp) (c1 c2 : com),
+                beval st b1 = false ->
+                c2 / st || st' -> (IFB b1 THEN c1 ELSE c2 FI) / st || st'
+  | E_WhileEnd : forall (b1 : bexp) (st : state) (c1 : com),
+                 beval st b1 = false -> (WHILE b1 DO c1 END) / st || st
+  | E_WhileLoop : forall (st st' st'' : state) (b1 : bexp) (c1 : com),
+                  beval st b1 = true ->
+                  c1 / st || st' ->
+                  (WHILE b1 DO c1 END) / st' || st'' ->
+                  (WHILE b1 DO c1 END) / st || st''
+  | E_If1True : forall st st' b c,
+                  beval st b = true ->
+                  c / st || st' ->
+                  (IF1 b THEN c FI) / st || st'
+  | E_If1False : forall st b c,
+                   beval st b = false ->
+                   (IF1 b THEN c FI) / st || st
+  where "c1 '/' st '||' st'" := (ceval c1 st st').
+
+Definition hoare_triple (P:Assertion) (c:com) (Q:Assertion) : Prop :=
+  forall st st',
+       c / st || st' ->
+       P st ->
+       Q st'.
+
+Notation "{{ P }} c {{ Q }}" := (hoare_triple P c Q)
+                                  (at level 90, c at next level)
+                                  : hoare_spec_scope.
+
+
+Theorem hoare_if1 : forall P Q c b,
+    (fun st => P st /\ ~(bassn b st)) ->> Q ->
+    {{fun st => P st /\ bassn b st}} c {{Q}} ->
+    {{P}} IF1 b THEN c FI {{Q}}.
+Proof.
+  unfold hoare_triple, assert_implies, bassn. intros.
+  inversion H1. subst.
+  -apply H0 in H8. +apply H8. +split; assumption.
+  -subst.
+   assert (P st' /\ beval st' b <> true).
+   +split. *assumption. *rewrite H7. auto.
+   +apply H in H3. assumption.
+Qed.
+
+End If1.
+
+
+
+
+
+
+
+
+(* loops *)
 (*------------------------------------------------------------*)
+Lemma hoare_while : forall P b c,
+  {{fun st => P st /\ bassn b st}} c {{P}} ->
+  {{P}} WHILE b DO c END {{fun st => P st /\ not (bassn b st)}}.
+Proof.
+  intros P b c Hhoare st st' He HP.
+  remember (WHILE b DO c END) as wcom eqn:Heqwcom.
+  induction He;
+    try (inversion Heqwcom); subst; clear Heqwcom.
+  - (* E_WhileEnd *)
+    split. assumption. apply bexp_eval_false. assumption.
+  - (* E_WhileLoop *)
+    apply IHHe2. reflexivity.
+    apply (Hhoare st st1). assumption.
+    split. assumption. apply bexp_eval_true. assumption.
+Qed.
+
+
+Example while_example :
+    {{fun st => st X <= 3}}
+  WHILE (BLe (AId X) (ANum 2))
+  DO X ::= APlus (AId X) (ANum 1) END
+    {{fun st => st X = 3}}.
+Proof.
+  eapply hoare_consequence_post.
+  -apply hoare_while.
+   eapply hoare_consequence_pre.
+   +apply hoare_asgn.
+   +unfold assn_sub, assert_implies, bassn.
+    simpl. intros. inversion H. unfold t_update.
+    simpl. apply leb_complete in H1. omega.
+  -unfold assn_sub, assert_implies, bassn.
+   simpl. intros. inversion H. destruct (st X <=? 2) eqn:Hx.
+   +destruct H1. reflexivity.
+   +apply leb_iff_conv in Hx. omega.
+Qed.
+
+
+Theorem always_loop_hoare : forall P Q,
+  {{P}} WHILE BTrue DO SKIP END {{Q}}.
+Proof.
+  intros.
+  eapply hoare_consequence_post.
+  -apply hoare_while.
+   eapply hoare_consequence_pre.
+   +apply hoare_skip.
+   +unfold assert_implies, bassn. simpl. intros. apply H.
+  -unfold assert_implies, bassn. simpl. intros. inversion H.
+   destruct H1. reflexivity.
+Qed.
+(*
+this result is not surprising because the definition of 
+hoare_triple asserts that the postcondition must hold only when 
+the command terminates. If the command doesn't terminate, we can 
+prove anything we like about the post-condition.
+*)
+
+
+
+
+
+
+
+(*exercise*)
 (*------------------------------------------------------------*)
+Module Himp.
+
+Inductive com : Type :=
+  | CSkip : com
+  | CAsgn : id -> aexp -> com
+  | CSeq : com -> com -> com
+  | CIf : bexp -> com -> com -> com
+  | CWhile : bexp -> com -> com
+  | CHavoc : id -> com.
+
+Notation "'SKIP'" :=
+  CSkip.
+Notation "X '::=' a" :=
+  (CAsgn X a) (at level 60).
+Notation "c1 ;; c2" :=
+  (CSeq c1 c2) (at level 80, right associativity).
+Notation "'WHILE' b 'DO' c 'END'" :=
+  (CWhile b c) (at level 80, right associativity).
+Notation "'IFB' e1 'THEN' e2 'ELSE' e3 'FI'" :=
+  (CIf e1 e2 e3) (at level 80, right associativity).
+Notation "'HAVOC' X" := (CHavoc X) (at level 60).
+
+Reserved Notation "c1 '/' st '\\' st'" (at level 40, st at level 39).
+
+
+Inductive ceval : com -> state -> state -> Prop :=
+  | E_Skip : forall st : state, SKIP / st \\ st
+  | E_Ass : forall (st : state) (a1 : aexp) (n : nat) (X : id),
+            aeval st a1 = n -> (X ::= a1) / st \\ t_update st X n
+  | E_Seq : forall (c1 c2 : com) (st st' st'' : state),
+            c1 / st \\ st' -> c2 / st' \\ st'' -> (c1 ;; c2) / st \\ st''
+  | E_IfTrue : forall (st st' : state) (b1 : bexp) (c1 c2 : com),
+               beval st b1 = true ->
+               c1 / st \\ st' -> (IFB b1 THEN c1 ELSE c2 FI) / st \\ st'
+  | E_IfFalse : forall (st st' : state) (b1 : bexp) (c1 c2 : com),
+                beval st b1 = false ->
+                c2 / st \\ st' -> (IFB b1 THEN c1 ELSE c2 FI) / st \\ st'
+  | E_WhileEnd : forall (b1 : bexp) (st : state) (c1 : com),
+                 beval st b1 = false -> (WHILE b1 DO c1 END) / st \\ st
+  | E_WhileLoop : forall (st st' st'' : state) (b1 : bexp) (c1 : com),
+                  beval st b1 = true ->
+                  c1 / st \\ st' ->
+                  (WHILE b1 DO c1 END) / st' \\ st'' ->
+                  (WHILE b1 DO c1 END) / st \\ st''
+  | E_Havoc : forall (st : state) (X : id) (n : nat),
+              (HAVOC X) / st \\ t_update st X n
+
+  where "c1 '/' st '\\' st'" := (ceval c1 st st').
+
+
+Definition hoare_triple (P:Assertion) (c:com) (Q:Assertion) : Prop :=
+  forall st st', c / st \\ st' -> P st -> Q st'.
+
+Notation "{{ P }}  c  {{ Q }}" := (hoare_triple P c Q)
+                                  (at level 90, c at next level)
+                                  : hoare_spec_scope.
+
+
+Definition havoc_pre (X : id) (Q : Assertion) : Assertion :=
+  fun st => forall n, Q (t_update st X n).
+
+
+Theorem hoare_havoc : forall (Q : Assertion) (X : id),
+  {{ havoc_pre X Q }} HAVOC X {{ Q }}.
+Proof.
+  unfold hoare_triple, havoc_pre. intros.
+  inversion H. subst. apply H0.
+Qed.
+
+End Himp.
+
