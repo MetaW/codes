@@ -1,10 +1,11 @@
 (*
   contents:
   1. Decorated Programs
-  2.
-  3.
-  4.
-  5.
+  2. Finding Loop Invariants
+  3. weakest precondition
+  4. Formal Decorated Programs
+  5. Extracting Verification Conditions
+  6. automation
 *)
 
 Require Import Coq.Bool.Bool.
@@ -996,6 +997,3 @@ Proof.
     replace (st X + 1 + 1) with (st X + 2) by omega.
     reflexivity.
 Qed.
-
-
-(*example*)
