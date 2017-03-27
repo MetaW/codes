@@ -1,8 +1,16 @@
+(*
+  contents:
+  1. define hoare rules as axioms
+  2. hoare_proof_complete
+*)
+
 
 Require Import L_imp.
 Require Import Q_hoare.
 
-Inductive hoare_proof : Assertion -> com -> Assertion -> Type :=
+
+(* define hoare rules as axioms *)
+Inductive hoare_proof : Assertion -> com -> Assertion -> Prop :=
 | H_Skip    : forall P, hoare_proof P (SKIP) P
 | H_Asgn    : forall Q V a,
                 hoare_proof (assn_sub V a Q) (V ::= a) Q
@@ -58,11 +66,10 @@ Proof.
 Qed.
 
 
-
 Theorem hoare_proof_sound : forall P c Q,
   hoare_proof P c Q -> {{P}} c {{Q}}.
 Proof.
-  intros. induction X.
+  intros. induction H.
   -apply hoare_skip.
   -apply hoare_asgn.
   -subst. apply hoare_seq with (Q:=Q).
