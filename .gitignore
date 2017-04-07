@@ -20,3 +20,5 @@ Coq/Software Foundation/WORKING.v
 *.glob
 
 *.aux
+
+*.png
