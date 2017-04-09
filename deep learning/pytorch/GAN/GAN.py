@@ -69,7 +69,7 @@ for epoch in range(200):
         real_out = discrime(images)
         real_loss = loss(real_out, real_flag)
 
-        noise = Variable(torch.randn(images.size(0), 64))
+        noise = Variable(torch.randn(images.size(0), 64)) 
         fake_images = gener(noise)
         fake_out = discrime(fake_images)
         fake_loss = loss(fake_out, fake_flag)
