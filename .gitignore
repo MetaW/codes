@@ -22,3 +22,5 @@ Coq/Software Foundation/WORKING.v
 *.aux
 
 *.png
+
+*.DS_Store
