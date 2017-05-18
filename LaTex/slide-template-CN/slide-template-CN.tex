@@ -1,0 +1,414 @@
+\documentclass{beamer}
+\usepackage{xeCJK}
+
+\usetheme{Darmstadt}
+%\usetheme{default}
+
+\title[标题]{动态逻辑(Dynamic logic)}
+\author[作者]{王璐璐，白宗磊}
+\institute[单位]{北京大学信息科学与技术学院}
+\date[日期]{2017/5/15}
+
+\begin{document}
+
+%------------------------------------------------
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Outline}
+    \begin{itemize}
+   		\item 9.1命题动态逻辑(王璐璐)
+    	\item 9.2一阶动态逻辑(王璐璐)
+    	\item 9.3确定型一阶动态逻辑(白宗磊)
+    	\item 9.4一阶动态逻辑的描述能力(白宗磊)
+    \end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+\section{9.1命题动态逻辑}
+
+\begin{frame}
+	\begin{center}
+		\item 9.1命题动态逻辑
+	\end{center}
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{背景}
+	\begin{itemize}
+		\item 动态逻辑(DL)是一种对程序的正确性进行表达和推理的逻辑
+		\item 动态逻辑是在霍尔逻辑(Hoare logic)的基础上发展出来的，是模态逻辑的一种扩充
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{霍尔逻辑(Hoare logic)}
+	\begin{block}{语法}
+		由霍尔三元组: $\{P\}C\{Q\}$ 构成, 其中P称为前置条件，C为程序，Q称为后置条件
+	\end{block}
+	\begin{block}{语义}
+		$\{P\}C\{Q\}$成立当且仅当，对任意的程序状态s，若s满足前置条件P，且s经过程序C之行之后得到s',那么s'满足后置条件Q
+	\end{block}
+	\begin{block}{霍尔逻辑与动态逻辑}
+		$\{P\}C\{Q\} \equiv P \rightarrow [C]Q$, eg: $(X=1) \rightarrow [X \leftarrow X+1](X=2)$
+	\end{block}
+\end{frame}
+
+
+
+\begin{frame}
+	\frametitle{命题动态逻辑(PDL)的语言}
+	命题动态逻辑的语言由两部分组成：程序与公式
+	\begin{block}{程序集合$R$}
+		\begin{itemize}
+	    	\item $R_0$为原子程序的集合且$R_0 \in R$, $\theta \in R_0, \tau \in R_0 $, 其中$\theta$称为空程序, $\tau$称为幺程序。
+	    	\item 若$\alpha, \beta \in R $, 那么 $\alpha;\beta \in R$, 且$\alpha;\beta$称为$\alpha$和$\beta$的串联(sequence)
+	    	\item 若$\alpha, \beta \in R $, 那么 $\alpha \cup \beta \in R$, 且$\alpha;\beta$表示一个不确定程序，称为$\alpha$和$\beta$的并联(choice)
+	    	\item 若$\alpha \in R$, 那么$\alpha ^{*} \in R$, 	$\alpha ^{*}$称为$\alpha$的kleene闭包，或称之为$\alpha$的循环	
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{命题动态逻辑的语言}
+	\begin{block}{模态词}
+		对任意的$\alpha \in R$, $[\alpha]$与<$\alpha$> 均为模态词，其中$[\alpha]$表示在$\alpha$执行之后恒有..., <$\alpha$>表示在$\alpha$执行之后将有...
+	\end{block}
+	由于$\alpha$有无穷多个，因此$[\alpha]$与<$\alpha$>也有无穷多个，因此动态逻辑有无穷多个模态词，所以动态逻辑也称为多模态逻辑(multimodal logic)
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{命题动态逻辑的语言}
+	\begin{block}{公式}
+		动态逻辑的公式在命题演算FSPC的基础上进行如下扩充。
+		\begin{itemize}
+			\item $true$与$false$为公式
+			\item 如果$\alpha \in R$, $A$为一个公式，那么$[\alpha]A$与<$\alpha$>$A$也是公式
+		\end{itemize}
+		其中$[\alpha]A$表示经$\alpha$运行后的所有状态均使$A$成立，读作$\alpha$后恒有$A$；<$\alpha$>$A$表示经$\alpha$运行后将有一个状态使$A$成立，读作$\alpha$后将有$A$
+	\end{block}
+\end{frame}
+
+
+
+\begin{frame}
+	\frametitle{命题动态逻辑(PDL)的语义}
+	PDL的语义结构用$<U, M, I>$表示，其中:
+	\begin{block}{1.$U$为状态集}
+		非空集合U称为状态集，其中的成员称为状态, 用$s, t$来表示。
+	\end{block}
+	\begin{block}{2.$M$为映射}
+		$M: R_0 \rightarrow \rho (UxU) $，$M$在原子程序和状态转换间建立了一个对应。
+		特别的: $M(\theta) = \phi$(空关系)，即任何状态经$\theta$执行后不能进入任何状态；$M(\tau) = \{<s,s> | s \in U\}$, 即任何状态经$\tau$执行后保持原来的状态。
+	\end{block}
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{命题动态逻辑(PDL)的语义}
+	\begin{block}{3.$I$为映射}
+		$I: Ux\{true,false,P1,P2,P3...\} \rightarrow \{0,1\}$, 即$I$对任一状态和任一原子命题指派该命题在该状态下的真值。
+	\end{block}
+\end{frame}
+
+
+
+\begin{frame}
+	\frametitle{命题动态逻辑(PDL)的语义}
+	\begin{block}{将M拓展到整个R上(定义9.2)}
+		$\bar{M}: R \rightarrow \rho(UxU)$, 对任意 $\alpha, \beta \in R$:
+		\begin{itemize}
+			\item $\bar{M}(\alpha) = M(\alpha)  (\alpha \in R_0)$
+			\item $\bar{M}(\alpha ; \beta) = M(\alpha) \circ M(\beta)$ = $\{<s,t> | \exists u(<s,u> \in \bar{M}(\alpha) \wedge <u,t> \in \bar{M}(\beta) ) \}$
+			\item $\bar{M}(\alpha \cup \beta) = M(\alpha) \cup M(\beta)$ = $\{<s,t> | <s,t> \in \bar{M}(\alpha) \vee <s,t> \in \bar{M}(\beta) \}$
+			\item $\bar{M}(\alpha ^ {*}) = (M(\alpha))^{*}$ = $\{<s,t> | s = t \vee <s,t> \in \bar{M}(\alpha) \vee <s,t> \in \bar{M}(\alpha ^{2}) \vee ... \}$
+		\end{itemize}
+		下面将$\bar{M}$简写为$M$, 将$<s,t> \in M(\alpha)$ 记为 $s \alpha t$
+	\end{block}
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{命题动态逻辑(PDL)的语义}
+	\begin{block}{公式真值的定义(定义9.3)}
+		对任何结构$\mathcal{K}$及其中任一状态$s$, 对任意的公式$A,B$:
+		\begin{itemize}
+			\item $\models_{\mathcal{K}} ^ {s} true $ (以下省略$\mathcal{K}$ 与 $s$)
+			\item $\not \models false $
+			\item $ \models P_i $ 当且仅当 $I(s,P_i) = 1$
+			\item $ \models \neg A $ 当且仅当 $\not \models A $
+			\item $ \models A \vee B $ 当且仅当 $\models A$ 或者 $\models B$
+			\item $ \models A \wedge B $ 当且仅当 $\models A$ 并且 $\models B$
+			\item $ \models A \rightarrow B $ 当且仅当 $\not \models A$ 或者 $\models A\wedge B$
+			\item $ \models A \leftrightarrow B $ 当且仅当 $\models A \rightarrow B $ 并且 $\models B \rightarrow A$
+			\item $[\alpha]A$ 当且仅当对所有$t$, 若$s\alpha t$则 $\models ^{t} A$
+			\item $<\alpha>A$ 当且仅当存在$t$, 使$s\alpha t$且$\models ^{t} A$
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{命题动态逻辑(PDL)的语义}
+	\begin{block}{永真式1}
+		根据上面的定义我们可以得到以下永真式:
+		\begin{itemize}
+	    	\item $[\theta]A \rightarrow A$
+	    	\item $[\tau]A \leftrightarrow A, <\tau>A \leftrightarrow A $
+	    	\item $[\alpha]A \leftrightarrow \neg <\alpha> \neg A $
+	    	\item $<\alpha>A \leftrightarrow \neg [\alpha] \neg A $
+	    	\item $[\alpha](A \rightarrow B) \rightarrow ([\alpha]A \rightarrow [\alpha]B)  $
+	    	\item $[\alpha](A \wedge B) \leftrightarrow ([\alpha]A \wedge [\alpha]B)  $
+	    	\item $[\alpha](A \vee B) \leftarrow ([\alpha]A \vee [\alpha]B)  $
+	    	\item $<\alpha>(A \vee B) \leftrightarrow (<\alpha>A \vee <\alpha>B)  $
+	    	\item $<\alpha>(A \wedge B) \rightarrow (<\alpha>A \wedge <\alpha>B)  $
+		\end{itemize}
+		证明略。
+	\end{block}
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{命题动态逻辑(PDL)的语义}
+	\begin{block}{永真式2}
+		\begin{itemize}
+			\item $[\alpha ;\beta]A \leftrightarrow [\alpha][\beta]A $
+			\item $[\alpha \cup \beta]A \leftrightarrow [\alpha]A \wedge [\beta]A $
+			\item $<\alpha ;\beta>A \leftrightarrow <\alpha><\beta>A $
+			\item $<\alpha \cup \beta>A \leftrightarrow <\alpha>A \vee <\beta>A $
+			\item $[\alpha^{*}]A = A \wedge [\alpha][\alpha^{*}]A $
+			\item $<\alpha^{*}>A = A \vee <\alpha><\alpha^{*}>A $
+		\end{itemize}
+		证明略。
+	\end{block}
+\end{frame}
+
+
+
+
+
+%------------------------------------------------
+
+\section{9.2一阶动态逻辑}
+
+\begin{frame}
+	\begin{center}
+		\item 9.2一阶动态逻辑
+	\end{center}
+\end{frame}
+
+
+
+\begin{frame}
+	\frametitle{一种简单的程序语言PL}
+	PL在一阶语言$\mathcal{L}$上进行了扩充
+	\begin{block}{PL的基本表达式}
+		\begin{itemize}
+	    	\item 一阶语言中所有变元和常元均为PL的基本表达式
+	    	\item 若$f^{(n)} e_1, e_2 ,,, e_n$为一阶语言中的n元函词，$e_1, e_2 ,,, e_n$为基本表达式，那么$f^{(n)} e_1, e_2 ,,, e_n$也是基本表达式
+		\end{itemize}
+	\end{block}
+	\begin{block}{PL的语句}
+		\begin{itemize}
+			\item $x \leftarrow e$为赋值语句，这里$x$为变元, $e$为基本表达式
+			\item $\theta, \tau$为语句，分别为空语句和幺语句
+			\item $B?$为语句，称为判断语句，这里$B$为布尔表达式
+			\item 同PDL，如果$\alpha, \beta$为语句，那么$(\alpha ; \beta), (\alpha \cup \beta), (\alpha ^{*})$也是语句
+		\end{itemize}
+	\end{block}
+	用RG表示PL中全体语句的集合。
+\end{frame}
+
+
+
+
+\begin{frame}
+	\frametitle{一阶动态逻辑(FDL)的语言}
+	一阶动态逻辑(FDL)的语言在一阶语言的基础上进行了扩充，与PDL的语法构成基本相同
+	\begin{block}{语法}
+		\begin{itemize}
+	    	\item 扩充一阶语言，定义程序集合RG，RG中的成员是不同于项和公式的，是另一类表达式
+	    	\item 同PDL, $[\alpha], <\alpha>$为模态词，但这里的$\alpha \in RG$
+	    	\item 同PDL, 如果$A$是公式，那么$[\alpha]A, <\alpha>A$也是公式
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+
+
+\begin{frame}
+	\frametitle{一阶动态逻辑(FDL)的语义}
+	FDL的语义结构为四元组$<U,D,I,M>$, 其中
+	\begin{block}{$U$}
+		U为非空集合，称为状态集，其中的成员称为状态, 用$s, t$来表示。
+	\end{block}
+	\begin{block}{$D$}
+		D为非空集合，称为个体域，其中的成员称为个体, 用$d, d_0, d_1, ...$来表示。
+		状态是变元集合到$D$的映射，即： $U = \{s| s:variable \rightarrow D \}$。
+		一个状态就是某一时刻变元取值的情况。
+	\end{block}
+	
+\end{frame}
+
+
+
+\begin{frame}
+	\frametitle{一阶动态逻辑(FDL)的语义}	
+	\begin{block}{$I$}
+		$I$为一解释，在解释$I$下，状态$s$可以扩充到任意项和基本表达式上，用$\bar{s}$表示对$s$的扩充，则：
+		\begin{itemize}
+			\item $\bar{s}(x) = s(x)$, 对一切变元x
+			\item $\bar{x}(f^{(n)}(e_1,..,e_n)) = \bar{f} ^ {(n)} \bar{s}(e_1),..,\bar{s}(e_n)$
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{一阶动态逻辑(FDL)的语义}
+	\begin{block}{$M$}
+		$M: RG \rightarrow \rho (UxU) $，与PDL类似$M$为每个语句定义了状态转换规则:
+		\begin{itemize}
+			\item $M(\theta) = \phi$
+			\item $M(\tau) = \{<s,s> | s \in U\}$
+			\item $M(x \leftarrow e) = \{<s, s(x|e')> | s \in U \}$这里$e'=\bar{s}(e)$,$s(x|e')$表示将$s$中的$x$替换为$e'$
+			\item $M(B?) = \{<s,s>|\models_{(D,I)} B[s]\}$, 显然$M(true?) = M(\tau)$, $M(false?) = M(\theta)$
+			\item $M(\alpha ; \beta)$, $M(\alpha \cup \beta)$, $M(\alpha ^{*})$的定义与PDL中的相同
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{一阶动态逻辑(FDL)的语义}
+	\begin{block}{公式真值的定义}
+	FDL公式真值定义与PDL类似，在PDL的基础上增加了下面几条:
+	(以下省略$\mathcal{K}$ 与 $s$)
+		\begin{itemize}
+			\item $\models t_1 = t_2$ 当且仅当 $\bar{s}(t_1) = \bar{s}(t_2)$
+			\item $\models P^{(n)} t_1, t_2 ,.., t_n$ 当且仅当 $<\bar{t_1},..,\bar{t_n}> \in \bar{P}^{(n)}$, 其中$P^{(n)}$为任一n元谓词。
+			\item $\models \forall xA $ 当且仅当 对所有 $s \in D, \models ^{s(x|d)} A$
+			\item $\models \exists xA $ 当且仅当 存在 $s \in D, \models ^{s(x|d)} A$
+			\item 其他情况同PDL
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+
+
+\begin{frame}
+	\frametitle{一些定理}
+	根据上面的定义我们可以得到以下定理:
+	\begin{block}{}
+		\begin{itemize}
+	    	\item $\models [x \leftarrow e]A \leftrightarrow A^{x}_{e} $
+	    	\item $\models [B?]A \leftrightarrow (B \rightarrow A) $
+		\end{itemize}
+		证明略。
+	\end{block}
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{一阶动态逻辑(FDL)的公理系统}
+	FDL的公理系统由一些公理模式和推理规则模式构成：
+	\begin{block}{公理模式}
+		\begin{itemize}
+			\item 所有重言式均为FDL中的公理
+			\item $\models [x \leftarrow e]A \leftrightarrow A^{x}_{e} $
+			\item $\models [B?]A \leftrightarrow (B \rightarrow A) $
+			\item $[\tau]A \leftrightarrow A$, $[\theta]A \leftrightarrow true $
+			\item $[\alpha ; \beta]A \leftrightarrow [\alpha][\beta]A $
+			\item $[\alpha \cup \beta]A \leftrightarrow [\alpha]A \wedge [\beta]A $
+			\item $\neg <\alpha> \neg A \leftrightarrow [\alpha]A $
+			\item $\neg \exists x \neg A \leftrightarrow \forall xA$
+			\item 在N结构中，全体自然数集上的真命题均为FDL的公理
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+
+
+\begin{frame}
+	\frametitle{一阶动态逻辑(FDL)的公理系统}
+	推理规则模式
+		\[ \frac{A \rightarrow B, A }{B} \]
+		
+		\[ \frac{A \rightarrow B }{ [\alpha]A \rightarrow [\alpha]B }  \]
+		
+		\[ \frac{A \rightarrow B }{\forall xA \rightarrow \forall xB } \]
+		
+		\[ \frac{A \rightarrow [\alpha]A }{A \alpha [\alpha ^{*}]A } \]
+
+在N结构中:
+		\[ \frac{A(n+1) \rightarrow <\alpha>A(n) }{A(n) \rightarrow <\alpha^{*}>A(0)} \]
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{一阶动态逻辑(FDL)的合理性(可靠性)}
+	\begin{block}{FDL的合理性}
+		对FDL中的任意公理A都有，$\models _{N} A$, 并且，对每一条规则$\frac{\Gamma}{B}$, 若$\models _{N} \Gamma $成立，则$\models _{N} B$ 成立。
+	\end{block}
+\end{frame}
+
+
+
+\begin{frame}
+	\frametitle{一阶动态逻辑(FDL)的一些性质}
+	\begin{block}{引理9.1}
+		对任意公式$A,B$，若$\models _{N} A, \models _{N} A \rightarrow B$, 则$\models _{N}B$
+		证明略。
+	\end{block}
+	\begin{block}{引理9.2}
+		对任意公式$A,B$，以及任意程序$\alpha$, 若$\models _{N} A \rightarrow B$, 则 $\models _{N} [\alpha]A \rightarrow [\alpha]B, \models _{N} \forall xA \rightarrow \forall xB $。
+		证明略。
+	\end{block}
+
+	\begin{block}{引理9.3}
+		对任意公式$A$，以及任意程序$\alpha$, 若$\models _{N} A \rightarrow [\alpha]A$, 那么$\models _{N} A \rightarrow [\alpha ^{*}]A$。
+		证明略。
+	\end{block}
+	\begin{block}{引理9.4}
+		对任意一阶公式$A$，以及任意程序$\alpha$, 若$A$中的自由变元n不在赋值语句的左边出现，并且$\models _{N} A(n+1) \rightarrow <\alpha>A(n)$, 那么 $\models _{N}, A(n) \rightarrow <\alpha^{*}>A(0)$
+		证明略。
+	\end{block}
+\end{frame}
+
+
+
+\begin{frame}
+	\frametitle{一阶动态逻辑(FDL)的导出规则}
+	定理9.5, 9.6, 9.7:
+		\[ \frac{\vdash [\alpha^{*](A \rightarrow [\alpha]A)}}{\vdash A \rightarrow [\alpha^{*}]A} \]
+		\[ \frac{A \rightarrow B}{<\alpha>A \rightarrow <\alpha>B} \]
+		\[ \frac{A \rightarrow B}{\exists xA \rightarrow \exists xB} \]
+		\[ \frac{C \rightarrow A, A \rightarrow [\alpha]A, A \rightarrow B}{C \rightarrow [\alpha^{*}]B} \]
+
+	证明略。
+\end{frame}
+
+
+
+\begin{frame}
+	\frametitle{}
+	\begin{center}
+		谢谢大家！
+	\end{center}
+\end{frame}
+
+%------------------------------------------------
+
+
+
+
+\end{document}
