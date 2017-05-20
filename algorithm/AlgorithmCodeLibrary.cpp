@@ -1,22 +1,12 @@
-						Code Library
-						 Wang Lulu
-						 July, 2015
-_________________________________________________________________
-=================================================================
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-.................................................................
-_________________________________________________________________
-_________________________________________________________________
-
+Code Library
+Wang Lulu
+July, 2015
 
 
 							Contents
 _________________________________________________________________
 
 经验与技巧
-A.
-B.
-C.
 
 常用STL
 A: 定义自己的类型
@@ -28,37 +18,17 @@ F: set/multiset
 G: map/multimap
 H: algorithm
 
-
 结构及操作
-A 
-B 
-C 
-
 
 通用算法
-A 
-B
-C
-
 
 数学方法
-A 
-B 
-C
-
 
 特化问题及其算法
-A 
-B 
-C 
-
-
-
-
-
-_________________________________________________________________
 =================================================================
-_________________________________________________________________
+
+
+
 
 
 经验与技巧
@@ -71,9 +41,11 @@ _________________________________________________________________
 		memset(m,-1,sizeof(m));	//将m全初始化为-1
 		memset(m,0,sizeof(m));	//将m全初始化为0
 
-    2. 用struct或class封装时,不能开辟过大的空间,否则会运行时错误，
+	2. 用struct或class封装时,不能开辟过大的空间,否则会运行时错误，
        若要开辟大空间(大数组),应开辟全局变量，并使用c语言的方式，不要
        用struct或class封装。
+
+	3. #include<bits/stdc++.h> // all bindings in one file
 
 
 常用STL
@@ -322,19 +294,30 @@ m.lower_bound(key);
 m.upper_bound(key);		
 		//返回一个iterator，指向第一个键值大于key的元素(多用于multimap)
 
+
+Demo:
+------
+map<string,string> m;
+m.insert(pair<string,string>("ss","123"));
+m.insert(pair<string,string>("aa","222"));
+m.insert(pair<string,string>("dd","333"));
+
+map<string,string>::iterator iter = m.begin();
+for(;iter != m.end(); iter++){
+    string ss = iter->second;
+    printf("%s\n",ss.c_str());
+}
+
+
 ADD:
 _________________________________________________________________
 
 1. map/multimap的iterator指向的是pair,不能像别的容器那样直接用*()访问其值,
-   而是通过iter->first和iter->second来访问它的key与value.
+   而是通过 iter->first 和 iter->second 来访问它的key与value.
 2. map支持特有的下标访问方式，multimap不支持.
 3. 下标访问map与下标访问vector截然不同,下标访问vector类似于访问数组，
    而下标访问map中不存在的元素将导致在map中添加一个新元素，其key就是访问它的
    那个下标,value为对应类型下的默认初始值，如int为0，string为空串.
-
-
-
-
 
 
 
@@ -368,8 +351,8 @@ hash模板：
 		int h_find(Type e)
 1. e相同也分别存储的情况：
 
-#define maxh 20003	
-#define maxn 10005
+const int maxh = 20003	
+const int maxn = 10005
 
 short hash_t[maxh];
 int value_t[maxn];
