@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99996 (TeX Live 2016) (preloaded format=xelatex 2016.7.31)  5 NOV 2016 12:27
+This is XeTeX, Version 3.14159265-2.6-0.99996 (TeX Live 2016) (preloaded format=xelatex 2016.7.31)  6 JUN 2017 18:35
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -943,25 +943,474 @@ Package beamerthememetropolis Warning: Could not find Fira Sans fonts on input l
 
 Package beamerthememetropolis Warning: Could not find Fira Mono fonts on input line 91.
 
+)) (/usr/local/texlive/2016/texmf-dist/tex/xelatex/xecjk/xeCJK.sty
+Package: xeCJK 2016/05/14 v3.4.0 Typesetting CJK scripts with XeLaTeX
+ (/usr/local/texlive/2016/texmf-dist/tex/latex/l3packages/xtemplate/xtemplate.sty
+Package: xtemplate 2016/05/18 v6512 L3 Experimental prototype document functions
+\l__xtemplate_tmp_dim=\dimen291
+\l__xtemplate_tmp_int=\count269
+\l__xtemplate_tmp_muskip=\muskip18
+\l__xtemplate_tmp_skip=\skip72
+) (/usr/local/texlive/2016/texmf-dist/tex/latex/l3packages/l3keys2e/l3keys2e.sty
+Package: l3keys2e 2016/05/18 v6512 LaTeX2e option processing using LaTeX3 keys
+)
+\l__xeCJK_tmp_int=\count270
+\l__xeCJK_tmp_box=\box75
+\l__xeCJK_tmp_dim=\dimen292
+\l__xeCJK_tmp_skip=\skip73
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \xeCJKShipoutHook with sig. '' on line 148.
+.................................................
+\g__xeCJK_spacefactor_int=\count271
+\l__xeCJK_begin_int=\count272
+\l__xeCJK_end_int=\count273
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \makexeCJKactive with sig. '' on line 377.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \makexeCJKinactive with sig. '' on line 378.
+.................................................
+\c__xeCJK_CJK_class_int=\XeTeXcharclass1
+\c__xeCJK_FullLeft_class_int=\XeTeXcharclass2
+\c__xeCJK_FullRight_class_int=\XeTeXcharclass3
+\c__xeCJK_HalfLeft_class_int=\XeTeXcharclass4
+\c__xeCJK_HalfRight_class_int=\XeTeXcharclass5
+\c__xeCJK_NormalSpace_class_int=\XeTeXcharclass6
+\c__xeCJK_CM_class_int=\XeTeXcharclass7
+\c__xeCJK_HangulJamo_class_int=\XeTeXcharclass8
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \xeCJKDeclareCharClass with sig. 's>{\TrimSpaces }mm' on
+. line 552.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \__xeCJK_set_char_class_aux:Nnw with sig.
+. 'm>{\SplitArgument {1}{->}}m' on line 573.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \normalspacedchars with sig. 'm' on line 618.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \xeCJKResetPunctClass with sig. '' on line 629.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \xeCJKResetCharClass with sig. '' on line 641.
+.................................................
+\l__xeCJK_last_skip=\skip74
+\g__xeCJK_node_int=\count274
+\c__xeCJK_CJK_node_dim=\dimen293
+\c__xeCJK_CJK-space_node_dim=\dimen294
+\c__xeCJK_default_node_dim=\dimen295
+\c__xeCJK_default-space_node_dim=\dimen296
+\c__xeCJK_CJK-widow_node_dim=\dimen297
+\c__xeCJK_normalspace_node_dim=\dimen298
+\l__xeCJK_ccglue_skip=\skip75
+\l__xeCJK_ecglue_skip=\skip76
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \xeCJKnobreak with sig. '' on line 1433.
+.................................................
+\l__xeCJK_widow_penalty_int=\count275
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \xeCJKDeclareSubCJKBlock with sig. 's>{\TrimSpaces }mm' on
+. line 1629.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \xeCJKCancelSubCJKBlock with sig. 'sm' on line 1640.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \xeCJKRestoreSubCJKBlock with sig. 'sm' on line 1649.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \xeCJKsetwidth with sig. 'smm' on line 1747.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \xeCJKsetkern with sig. 'mmm' on line 1751.
+.................................................
+.................................................
+. xtemplate info: "declare-object-type"
+. 
+. Declaring object type 'xeCJK/punctuation' taking \c_zero  argument(s) on
+. line 1888.
+.................................................
+\l__xeCJK_fixed_punct_width_dim=\dimen299
+\l__xeCJK_mixed_punct_width_dim=\dimen300
+\l__xeCJK_middle_punct_width_dim=\dimen301
+\l__xeCJK_fixed_margin_width_dim=\dimen302
+\l__xeCJK_mixed_margin_width_dim=\dimen303
+\l__xeCJK_middle_margin_width_dim=\dimen304
+\l__xeCJK_bound_punct_width_dim=\dimen305
+\l__xeCJK_bound_margin_width_dim=\dimen306
+\l__xeCJK_margin_minimum_dim=\dimen307
+\l__xeCJK_kerning_total_width_dim=\dimen308
+\l__xeCJK_same_align_margin_dim=\dimen309
+\l__xeCJK_different_align_margin_dim=\dimen310
+\l__xeCJK_kerning_margin_width_dim=\dimen311
+\l__xeCJK_kerning_margin_minimum_dim=\dimen312
+\l__xeCJK_bound_dim=\dimen313
+\l__xeCJK_reverse_bound_dim=\dimen314
+\l__xeCJK_minimum_bound_dim=\dimen315
+\l__xeCJK_kerning_margin_dim=\dimen316
+\l__xeCJK_original_margin_dim=\dimen317
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \xeCJKDeclarePunctStyle with sig. '>{\TrimSpaces }mm' on
+. line 2379.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \xeCJKEditPunctStyle with sig. '>{\TrimSpaces }mm' on line
+. 2392.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \setCJKfallbackfamilyfont with sig. 'mO{}m' on line 2480.
+.................................................
+\g__xeCJK_family_int=\count276
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \CJKfamily with sig. 't+t-m' on line 2909.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \__xeCJK_gobble_CJKfamily:wn with sig. 't+t-m' on line
+. 2923.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \setCJKmainfont with sig. 'O{}m' on line 2973.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \setCJKsansfont with sig. 'O{}m' on line 2979.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \setCJKmonofont with sig. 'O{}m' on line 2984.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \setCJKfamilyfont with sig. 'mO{}m' on line 2991.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \newCJKfontfamily with sig. 'omO{}m' on line 2997.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \CJKfontspec with sig. 'O{}m' on line 3002.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \defaultCJKfontfeatures with sig. 'm' on line 3025.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \addCJKfontfeatures with sig. 'sO{}m' on line 3031.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \setCJKmathfont with sig. 'O{}m' on line 3199.
+.................................................
+\l__xeCJK_fam_int=\count277
+\g__xeCJK_fam_allocation_int=\count278
+\l__xeCJK_verb_case_int=\count279
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \xeCJKVerbAddon with sig. '' on line 3439.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \xeCJKOffVerbAddon with sig. '' on line 3443.
+.................................................
+\l__xeCJK_verb_exspace_skip=\skip77
+ (/usr/local/texlive/2016/texmf-dist/tex/xelatex/xecjk/xunicode-addon.sty
+Package: xunicode-addon 2016/05/14 v3.4.0 addon file for xunicode
+.................................................
+. LaTeX info: "xparse/redefine-command"
+. 
+. Redefining command \ReloadXunicode with sig. 'm' on line 84.
+.................................................
+.................................................
+. LaTeX info: "xparse/redefine-command"
+. 
+. Redefining command \DeclareUTFmathsymbols with sig. 'm' on line 129.
+.................................................
+.................................................
+. LaTeX info: "xparse/redefine-command"
+. 
+. Redefining command \UseMathAsText with sig. '' on line 138.
+.................................................
+.................................................
+. LaTeX info: "xparse/redefine-command"
+. 
+. Redefining command \UndeclareUTFcharacter with sig. 'O{\UTFencname }mm' on
+. line 173.
+.................................................
+.................................................
+. LaTeX info: "xparse/redefine-command"
+. 
+. Redefining command \UndeclareUTFcomposite with sig. 'O{\UTFencname }mmm' on
+. line 180.
+.................................................
+.................................................
+. LaTeX info: "xparse/redefine-command"
+. 
+. Redefining command \DeclareUTFcharacter with sig. 'O{\UTFencname }mm' on
+. line 207.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \DeclareUTFSymbol with sig. 'mO{\UTFencname }m' on line
+. 233.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \DeclareUTFCommand with sig. 'mO{\UTFencname }m' on line
+. 235.
+.................................................
+.................................................
+. LaTeX info: "xparse/redefine-command"
+. 
+. Redefining command \DeclareUTFcomposite with sig. 'O{\UTFencname }mmm' on
+. line 278.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \DeclareUTFCompositeCommand with sig. 'mO{\UTFencname }mm'
+. on line 291.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \DeclareUTFCompositeSymbol with sig. 'mO{\UTFencname }mm'
+. on line 296.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \DeclareUTFComposite with sig. 'mO{\UTFencname }' on line
+. 298.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \DeclareUTFEncodedAccent with sig. 'mO{\UTFencname }mm' on
+. line 300.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \DeclareUTFEncodedAccents with sig. 'mO{\UTFencname }mm' on
+. line 302.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \DeclareUTFEncodedSymbol with sig. 'mO{\UTFencname }mm' on
+. line 304.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \DeclareUTFEncodedCircle with sig. 'mO{\UTFencname }mm' on
+. line 306.
+.................................................
+.................................................
+. LaTeX info: "xparse/redefine-command"
+. 
+. Redefining command \DeclareEncodedCompositeCharacter with sig. 'mmmm' on
+. line 308.
+.................................................
+.................................................
+. LaTeX info: "xparse/redefine-command"
+. 
+. Redefining command \DeclareEncodedCompositeAccents with sig. 'mmmm' on line
+. 310.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \DeclareUTFDoubleEncodedAccent with sig. 'mO{\UTFencname
+. }mm' on line 312.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \DeclareUTFDoubleEncodedSymbol with sig. 'mO{\UTFencname
+. }mm' on line 314.
+.................................................
+\l__xunadd_tmp_coffin=\box76
+\l__xunadd_circle_coffin=\box77
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \settextcircledratio with sig. 'm' on line 465.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \AtBeginUTFCommand with sig. 'sO{}+m' on line 534.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \AtEndUTFCommand with sig. 'sO{}+m' on line 544.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \DeclareUTFTIPACommand with sig. 'O{\UTFencname }m' on line
+. 576.
+.................................................
+) (/usr/local/texlive/2016/texmf-dist/tex/xelatex/xunicode/xunicode.sty
+File: xunicode.sty 2011/09/09 v0.981 provides access to latin accents and many other characters in Unicode lower plane
+
+*** Reloading Xunicode for encoding 'EU1' ***
+) (/usr/local/texlive/2016/texmf-dist/tex/xelatex/xecjk/xunicode-extra.def
+File: xunicode-extra.def 2016/05/14 v3.4.0 extra definition for xunicode
+)
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \xeCJKsetup with sig. '+m' on line 3744.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \xeCJKsetemboldenfactor with sig. 'm' on line 3746.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \xeCJKsetslantfactor with sig. 'm' on line 3748.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \punctstyle with sig. 'm' on line 3749.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \xeCJKplainchr with sig. '' on line 3750.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \CJKsetecglue with sig. 'm' on line 3751.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \CJKspace with sig. '' on line 3753.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \CJKnospace with sig. '' on line 3754.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \xeCJKallowbreakbetweenpuncts with sig. '' on line 3756.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \xeCJKnobreakbetweenpuncts with sig. '' on line 3758.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \xeCJKenablefallback with sig. '' on line 3760.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \xeCJKdisablefallback with sig. '' on line 3762.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \xeCJKsetcharclass with sig. 'mmm' on line 3767.
+.................................................
+.................................................
+. LaTeX info: "xparse/redefine-command"
+. 
+. Redefining command \nobreakspace with sig. '' on line 3910.
+.................................................
+.................................................
+. LaTeX info: "xparse/redefine-command"
+. 
+. Redefining command \fontfamily with sig. 'm' on line 3956.
+.................................................
+ (/usr/local/texlive/2016/texmf-dist/tex/xelatex/xecjk/xeCJK.cfg
+File: xeCJK.cfg 2016/05/14 v3.4.0 Configuration file for xeCJK package
 )) (/usr/local/texlive/2016/texmf-dist/tex/latex/booktabs/booktabs.sty
 Package: booktabs 2016/04/27 v1.618033 publication quality tables
-\heavyrulewidth=\dimen291
-\lightrulewidth=\dimen292
-\cmidrulewidth=\dimen293
-\belowrulesep=\dimen294
-\belowbottomsep=\dimen295
-\aboverulesep=\dimen296
-\abovetopsep=\dimen297
-\cmidrulesep=\dimen298
-\cmidrulekern=\dimen299
-\defaultaddspace=\dimen300
-\@cmidla=\count269
-\@cmidlb=\count270
-\@aboverulesep=\dimen301
-\@belowrulesep=\dimen302
-\@thisruleclass=\count271
-\@lastruleclass=\count272
-\@thisrulewidth=\dimen303
+\heavyrulewidth=\dimen318
+\lightrulewidth=\dimen319
+\cmidrulewidth=\dimen320
+\belowrulesep=\dimen321
+\belowbottomsep=\dimen322
+\aboverulesep=\dimen323
+\abovetopsep=\dimen324
+\cmidrulesep=\dimen325
+\cmidrulekern=\dimen326
+\defaultaddspace=\dimen327
+\@cmidla=\count280
+\@cmidlb=\count281
+\@aboverulesep=\dimen328
+\@belowrulesep=\dimen329
+\@thisruleclass=\count282
+\@lastruleclass=\count283
+\@thisrulewidth=\dimen330
 ) (/usr/local/texlive/2016/texmf-dist/tex/latex/ccicons/ccicons.sty
 Package: ccicons 2013/04/16 v1.5 LaTeX support for Creative Commons icons
  (/usr/local/texlive/2016/texmf-dist/tex/latex/xkeyval/xkeyval.sty
@@ -970,7 +1419,7 @@ Package: xkeyval 2014/12/03 v2.7a package option processing (HA)
 \XKV@toks=\toks49
 \XKV@tempa@toks=\toks50
 )
-\XKV@depth=\count273
+\XKV@depth=\count284
 File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
 ))) (/usr/local/texlive/2016/texmf-dist/tex/latex/pgfplots/pgfplots.sty (/usr/local/texlive/2016/texmf-dist/tex/generic/pgfplots/pgfplots.revision.tex)
 Package: pgfplots 2016/01/06 v1.13 Data Visualization (1.13)
@@ -978,80 +1427,112 @@ Package: pgfplots 2016/01/06 v1.13 Data Visualization (1.13)
 \t@pgfplots@toka=\toks51
 \t@pgfplots@tokb=\toks52
 \t@pgfplots@tokc=\toks53
-\pgfplots@tmpa=\dimen304
-\c@pgfplots@coordindex=\count274
-\c@pgfplots@scanlineindex=\count275
+\pgfplots@tmpa=\dimen331
+\c@pgfplots@coordindex=\count285
+\c@pgfplots@scanlineindex=\count286
  (/usr/local/texlive/2016/texmf-dist/tex/generic/pgfplots/sys/pgfplotssysgeneric.code.tex)) (/usr/local/texlive/2016/texmf-dist/tex/generic/pgfplots/libs/pgfplotslibrary.code.tex) (/usr/local/texlive/2016/texmf-dist/tex/generic/pgfplots/oldpgfcompatib/pgfplotsoldpgfsupp_loader.code.tex (/usr/local/texlive/2016/texmf-dist/tex/generic/pgf/libraries/pgflibraryfpu.code.tex)
 Package pgfplots: loading complementary arithmetics for your pgf version...
 (/usr/local/texlive/2016/texmf-dist/tex/generic/pgfplots/oldpgfcompatib/pgfplotsoldpgfsupp_pgflibraryfpu.code.tex) (/usr/local/texlive/2016/texmf-dist/tex/generic/pgfplots/oldpgfcompatib/pgfplotsoldpgfsupp_pgfmathfloat.code.tex
-\c@pgfmathroundto@lastzeros=\count276
+\c@pgfmathroundto@lastzeros=\count287
 )) (/usr/local/texlive/2016/texmf-dist/tex/generic/pgfplots/util/pgfplotsutil.code.tex (/usr/local/texlive/2016/texmf-dist/tex/generic/pgfplots/liststructure/pgfplotsliststructure.code.tex) (/usr/local/texlive/2016/texmf-dist/tex/generic/pgfplots/liststructure/pgfplotsliststructureext.code.tex) (/usr/local/texlive/2016/texmf-dist/tex/generic/pgfplots/liststructure/pgfplotsarray.code.tex
-\c@pgfplotsarray@tmp=\count277
+\c@pgfplotsarray@tmp=\count288
 ) (/usr/local/texlive/2016/texmf-dist/tex/generic/pgfplots/liststructure/pgfplotsmatrix.code.tex) (/usr/local/texlive/2016/texmf-dist/tex/generic/pgfplots/numtable/pgfplotstableshared.code.tex
-\c@pgfplotstable@counta=\count278
+\c@pgfplotstable@counta=\count289
 \t@pgfplotstable@a=\toks54
 ) (/usr/local/texlive/2016/texmf-dist/tex/generic/pgfplots/liststructure/pgfplotsdeque.code.tex) (/usr/local/texlive/2016/texmf-dist/tex/generic/pgfplots/util/pgfplotsbinary.code.tex (/usr/local/texlive/2016/texmf-dist/tex/generic/pgfplots/util/pgfplotsbinary.data.code.tex)) (/usr/local/texlive/2016/texmf-dist/tex/generic/pgfplots/util/pgfplotsutil.verb.code.tex) (/usr/local/texlive/2016/texmf-dist/tex/generic/pgfplots/libs/pgflibrarypgfplots.surfshading.code.tex
-\c@pgfplotslibrarysurf@no=\count279
+\c@pgfplotslibrarysurf@no=\count290
  (/usr/local/texlive/2016/texmf-dist/tex/generic/pgfplots/sys/pgflibrarypgfplots.surfshading.pgfsys-xetex.def (/usr/local/texlive/2016/texmf-dist/tex/generic/pgfplots/sys/pgflibrarypgfplots.surfshading.pgfsys-dvipdfmx.def
-\c@pgfplotslibrarysurf@streamlen=\count280
+\c@pgfplotslibrarysurf@streamlen=\count291
 )))) (/usr/local/texlive/2016/texmf-dist/tex/generic/pgfplots/util/pgfplotscolormap.code.tex (/usr/local/texlive/2016/texmf-dist/tex/generic/pgfplots/util/pgfplotscolor.code.tex)) (/usr/local/texlive/2016/texmf-dist/tex/generic/pgfplots/pgfplotsstackedplots.code.tex) (/usr/local/texlive/2016/texmf-dist/tex/generic/pgfplots/pgfplotsplothandlers.code.tex (/usr/local/texlive/2016/texmf-dist/tex/generic/pgfplots/pgfplotsmeshplothandler.code.tex (/usr/local/texlive/2016/texmf-dist/tex/generic/pgfplots/pgfplotsmeshplotimage.code.tex)))
 (/usr/local/texlive/2016/texmf-dist/tex/generic/pgfplots/pgfplots.scaling.code.tex) (/usr/local/texlive/2016/texmf-dist/tex/generic/pgfplots/pgfplotscoordprocessing.code.tex) (/usr/local/texlive/2016/texmf-dist/tex/generic/pgfplots/pgfplots.errorbars.code.tex) (/usr/local/texlive/2016/texmf-dist/tex/generic/pgfplots/pgfplots.markers.code.tex) (/usr/local/texlive/2016/texmf-dist/tex/generic/pgfplots/pgfplotsticks.code.tex) (/usr/local/texlive/2016/texmf-dist/tex/generic/pgfplots/pgfplots.paths.code.tex) (/usr/local/texlive/2016/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarydecorations.code.tex (/usr/local/texlive/2016/texmf-dist/tex/generic/pgf/modules/pgfmoduledecorations.code.tex
-\pgfdecoratedcompleteddistance=\dimen305
-\pgfdecoratedremainingdistance=\dimen306
-\pgfdecoratedinputsegmentcompleteddistance=\dimen307
-\pgfdecoratedinputsegmentremainingdistance=\dimen308
-\pgf@decorate@distancetomove=\dimen309
-\pgf@decorate@repeatstate=\count281
-\pgfdecorationsegmentamplitude=\dimen310
-\pgfdecorationsegmentlength=\dimen311
+\pgfdecoratedcompleteddistance=\dimen332
+\pgfdecoratedremainingdistance=\dimen333
+\pgfdecoratedinputsegmentcompleteddistance=\dimen334
+\pgfdecoratedinputsegmentremainingdistance=\dimen335
+\pgf@decorate@distancetomove=\dimen336
+\pgf@decorate@repeatstate=\count292
+\pgfdecorationsegmentamplitude=\dimen337
+\pgfdecorationsegmentlength=\dimen338
 )
-\tikz@lib@dec@box=\box75
+\tikz@lib@dec@box=\box78
 ) (/usr/local/texlive/2016/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarydecorations.pathmorphing.code.tex (/usr/local/texlive/2016/texmf-dist/tex/generic/pgf/libraries/decorations/pgflibrarydecorations.pathmorphing.code.tex)) (/usr/local/texlive/2016/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarydecorations.pathreplacing.code.tex (/usr/local/texlive/2016/texmf-dist/tex/generic/pgf/libraries/decorations/pgflibrarydecorations.pathreplacing.code.tex))
-\pgfplots@numplots=\count282
-\pgfplots@xmin@reg=\dimen312
-\pgfplots@xmax@reg=\dimen313
-\pgfplots@ymin@reg=\dimen314
-\pgfplots@ymax@reg=\dimen315
-\pgfplots@zmin@reg=\dimen316
-\pgfplots@zmax@reg=\dimen317
+\pgfplots@numplots=\count293
+\pgfplots@xmin@reg=\dimen339
+\pgfplots@xmax@reg=\dimen340
+\pgfplots@ymin@reg=\dimen341
+\pgfplots@ymax@reg=\dimen342
+\pgfplots@zmin@reg=\dimen343
+\pgfplots@zmax@reg=\dimen344
 ) (/usr/local/texlive/2016/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryplotmarks.code.tex
 File: tikzlibraryplotmarks.code.tex 2008/01/09 v3.0.1a (rcs-revision 1.1)
  (/usr/local/texlive/2016/texmf-dist/tex/generic/pgf/libraries/pgflibraryplotmarks.code.tex
 File: pgflibraryplotmarks.code.tex 2015/08/03 v3.0.1a (rcs-revision 1.14)
 ))) (/usr/local/texlive/2016/texmf-dist/tex/generic/pgfplots/libs/tikzlibrarypgfplots.dateplot.code.tex (/usr/local/texlive/2016/texmf-dist/tex/latex/pgf/utilities/pgfcalendar.sty (/usr/local/texlive/2016/texmf-dist/tex/generic/pgf/utilities/pgfcalendar.code.tex
 File: pgfcalendar.code.tex 2007/07/23 v3.0.1a (rcs-revision 1.11)
-\pgfcalendarcurrentjulian=\count283
+\pgfcalendarcurrentjulian=\count294
 ))) (/usr/local/texlive/2016/texmf-dist/tex/latex/tools/xspace.sty
 Package: xspace 2014/10/28 v1.13 Space after command names (DPC,MH)
 ) (./pgfplotsthemetol.sty
 Package: pgfplotsthemetol 2016/03/14 PGFplots colors based on Paul Tol's SRON technical note
-) (/Users/luluwang/Desktop/Github/codes/LaTex/slide-template1/.texpadtmp/demo.aux)
+)
+*************************************************
+* xeCJK warning: "fandol"
+* 
+* Fandol is being set as the default font for CJK text.
+* Please make sure it has been properly installed.
+*************************************************
+*************************************************
+* xeCJK warning: "CJKfamily-Unknown"
+* 
+* Unknown CJK family `\CJKsfdefault' is being ignored.
+* 
+* Try to use `\setCJKsansfont[...]{...}' to define it.
+*************************************************
+*************************************************
+* fontspec warning: "script-not-exist"
+* 
+* Font 'FandolHei-Regular' does not contain script 'CJK'.
+*************************************************
+\g__fontspec_family_FandolHei-Regular_int=\count295
+.................................................
+. fontspec info: "defining-font"
+. 
+. Font family 'FandolHei-Regular(0)' created for font 'FandolHei-Regular' with
+. options [Script={CJK},Extension={.otf},BoldFont={FandolHei-Bold}].
+. 
+. This font family consists of the following NFSS series/shapes:
+. - 'normal' (m/n) with NFSS spec.: <->"[FandolHei-Regular.otf]/OT:"
+. - 'small caps'  (m/sc) with NFSS spec.: - 'bold' (bx/n) with NFSS spec.:
+. <->"[FandolHei-Bold.otf]/OT:"
+. - 'bold small caps'  (bx/sc) with NFSS spec.: 
+.................................................
+(/Users/luluwang/Desktop/slide-template1/.texpadtmp/demo.aux)
 \openout1 = `demo.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for EU1/lmr/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for T3/cmr/m/n on input line 23.
-LaTeX Font Info:    Try loading font information for T3+cmr on input line 23.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for EU1/lmr/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for T3/cmr/m/n on input line 24.
+LaTeX Font Info:    Try loading font information for T3+cmr on input line 24.
  (/usr/local/texlive/2016/texmf-dist/tex/latex/tipa/t3cmr.fd
 File: t3cmr.fd 2001/12/31 TIPA font definitions
 )
-LaTeX Font Info:    ... okay on input line 23.
+LaTeX Font Info:    ... okay on input line 24.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: xetex
@@ -1088,64 +1569,64 @@ LaTeX Font Info:    ... okay on input line 23.
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 ABD: EveryShipout initializing macros
-\AtBeginShipoutBox=\box76
-Package hyperref Info: Link coloring OFF on input line 23.
+\AtBeginShipoutBox=\box79
+Package hyperref Info: Link coloring OFF on input line 24.
  (/usr/local/texlive/2016/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
  (/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
-\c@section@level=\count284
+\c@section@level=\count296
 )
-LaTeX Info: Redefining \ref on input line 23.
-LaTeX Info: Redefining \pageref on input line 23.
-LaTeX Info: Redefining \nameref on input line 23.
- (/Users/luluwang/Desktop/Github/codes/LaTex/slide-template1/.texpadtmp/demo.out) (/Users/luluwang/Desktop/Github/codes/LaTex/slide-template1/.texpadtmp/demo.out)
+LaTeX Info: Redefining \ref on input line 24.
+LaTeX Info: Redefining \pageref on input line 24.
+LaTeX Info: Redefining \nameref on input line 24.
+ (/Users/luluwang/Desktop/slide-template1/.texpadtmp/demo.out) (/Users/luluwang/Desktop/slide-template1/.texpadtmp/demo.out)
 \@outlinefile=\write5
 \openout5 = `demo.out'.
 
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
-(Font)                  OT1/cmr/m/n --> OT1/cmss/m/n on input line 23.
+(Font)                  OT1/cmr/m/n --> OT1/cmss/m/n on input line 24.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  OT1/cmr/bx/n --> OT1/cmss/bx/n on input line 23.
+(Font)                  OT1/cmr/bx/n --> OT1/cmss/bx/n on input line 24.
 \symnumbers=\mathgroup6
 \sympureletters=\mathgroup7
 LaTeX Font Info:    Overwriting math alphabet `\mathrm' in version `normal'
-(Font)                  OT1/cmss/m/n --> EU1/lmr/m/n on input line 23.
-LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 23.
+(Font)                  OT1/cmss/m/n --> EU1/lmr/m/n on input line 24.
+LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 24.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
-(Font)                  OT1/cmr/bx/n --> EU1/lmss/bx/n on input line 23.
+(Font)                  OT1/cmr/bx/n --> EU1/lmss/bx/n on input line 24.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
-(Font)                  OT1/cmr/bx/n --> EU1/lmss/bx/n on input line 23.
-LaTeX Font Info:    Redeclaring math alphabet \mathsf on input line 23.
+(Font)                  OT1/cmr/bx/n --> EU1/lmss/bx/n on input line 24.
+LaTeX Font Info:    Redeclaring math alphabet \mathsf on input line 24.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
-(Font)                  OT1/cmss/m/n --> EU1/lmss/m/n on input line 23.
+(Font)                  OT1/cmss/m/n --> EU1/lmss/m/n on input line 24.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
-(Font)                  OT1/cmss/bx/n --> EU1/lmss/m/n on input line 23.
-LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 23.
+(Font)                  OT1/cmss/bx/n --> EU1/lmss/m/n on input line 24.
+LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 24.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
-(Font)                  OT1/cmr/m/it --> EU1/lmss/m/it on input line 23.
+(Font)                  OT1/cmr/m/it --> EU1/lmss/m/it on input line 24.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
-(Font)                  OT1/cmr/bx/it --> EU1/lmss/m/it on input line 23.
-LaTeX Font Info:    Redeclaring math alphabet \mathtt on input line 23.
+(Font)                  OT1/cmr/bx/it --> EU1/lmss/m/it on input line 24.
+LaTeX Font Info:    Redeclaring math alphabet \mathtt on input line 24.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
-(Font)                  OT1/cmtt/m/n --> EU1/lmtt/m/n on input line 23.
+(Font)                  OT1/cmtt/m/n --> EU1/lmtt/m/n on input line 24.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
-(Font)                  OT1/cmtt/m/n --> EU1/lmtt/m/n on input line 23.
+(Font)                  OT1/cmtt/m/n --> EU1/lmtt/m/n on input line 24.
 LaTeX Font Info:    Overwriting symbol font `numbers' in version `bold'
-(Font)                  EU1/lmss/m/n --> EU1/lmss/bx/n on input line 23.
+(Font)                  EU1/lmss/m/n --> EU1/lmss/bx/n on input line 24.
 LaTeX Font Info:    Overwriting symbol font `pureletters' in version `bold'
-(Font)                  EU1/lmss/m/it --> EU1/lmss/bx/it on input line 23.
+(Font)                  EU1/lmss/m/it --> EU1/lmss/bx/it on input line 24.
 LaTeX Font Info:    Overwriting math alphabet `\mathrm' in version `bold'
-(Font)                  OT1/cmss/bx/n --> EU1/lmr/bx/n on input line 23.
+(Font)                  OT1/cmss/bx/n --> EU1/lmr/bx/n on input line 24.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
-(Font)                  EU1/lmss/bx/n --> EU1/lmss/bx/n on input line 23.
+(Font)                  EU1/lmss/bx/n --> EU1/lmss/bx/n on input line 24.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
-(Font)                  EU1/lmss/m/n --> EU1/lmss/bx/n on input line 23.
+(Font)                  EU1/lmss/m/n --> EU1/lmss/bx/n on input line 24.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
-(Font)                  EU1/lmss/m/it --> EU1/lmss/bx/it on input line 23.
+(Font)                  EU1/lmss/m/it --> EU1/lmss/bx/it on input line 24.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
-(Font)                  EU1/lmtt/m/n --> EU1/lmtt/bx/n on input line 23.
+(Font)                  EU1/lmtt/m/n --> EU1/lmtt/bx/n on input line 24.
  (/usr/local/texlive/2016/texmf-dist/tex/latex/beamer/translator/dicts/translator-basic-dictionary/translator-basic-dictionary-English.dict
 Dictionary: translator-basic-dictionary, Language: English 
 ) (/usr/local/texlive/2016/texmf-dist/tex/latex/beamer/translator/dicts/translator-bibliography-dictionary/translator-bibliography-dictionary-English.dict
@@ -1159,50 +1640,50 @@ Dictionary: translator-numbers-dictionary, Language: English
 ) (/usr/local/texlive/2016/texmf-dist/tex/latex/beamer/translator/dicts/translator-theorem-dictionary/translator-theorem-dictionary-English.dict
 Dictionary: translator-theorem-dictionary, Language: English 
 )
-LaTeX Info: Redefining \includegraphics on input line 23.
+LaTeX Info: Redefining \includegraphics on input line 24.
 
 Package pgfplots notification 'compat/show suggested version=true': you might benefit from \pgfplotsset{compat=1.13} (current compat level: 1.9).
 
-(/Users/luluwang/Desktop/Github/codes/LaTex/slide-template1/.texpadtmp/demo.nav)
+(/Users/luluwang/Desktop/slide-template1/.texpadtmp/demo.nav)
 File: pku.pdf Graphic file (type QTm)
  <use  "pku.pdf" >
-Overfull \vbox (76.9055pt too high) detected at line 24
+Overfull \vbox (76.9055pt too high) detected at line 25
  []
 
 
-Overfull \vbox (13.79993pt too high) detected at line 24
+Overfull \vbox (13.79993pt too high) detected at line 25
  []
 
 [1
 
-] (/Users/luluwang/Desktop/Github/codes/LaTex/slide-template1/.texpadtmp/demo.toc)
-Overfull \hbox (0.4pt too wide) in paragraph at lines 32--32
+] (/Users/luluwang/Desktop/slide-template1/.texpadtmp/demo.toc)
+Overfull \hbox (0.4pt too wide) in paragraph at lines 33--33
 [][]  
  []
 
 [2
 
 ]
-LaTeX Font Info:    Try loading font information for U+msa on input line 37.
+LaTeX Font Info:    Try loading font information for U+msa on input line 38.
  (/usr/local/texlive/2016/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 37.
+LaTeX Font Info:    Try loading font information for U+msb on input line 38.
  (/usr/local/texlive/2016/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    Font shape `EU1/lmss/m/it' in size <10> not available
-(Font)              Font shape `EU1/lmss/m/sl' tried instead on input line 37.
+(Font)              Font shape `EU1/lmss/m/sl' tried instead on input line 38.
 LaTeX Font Info:    Font shape `EU1/lmss/m/it' in size <7> not available
-(Font)              Font shape `EU1/lmss/m/sl' tried instead on input line 37.
+(Font)              Font shape `EU1/lmss/m/sl' tried instead on input line 38.
 LaTeX Font Info:    Font shape `EU1/lmss/m/it' in size <5> not available
-(Font)              Font shape `EU1/lmss/m/sl' tried instead on input line 37.
+(Font)              Font shape `EU1/lmss/m/sl' tried instead on input line 38.
  [3
 
 ]
 \openout4 = `demo.vrb'.
 
- (/Users/luluwang/Desktop/Github/codes/LaTex/slide-template1/.texpadtmp/demo.vrb
+ (/Users/luluwang/Desktop/slide-template1/.texpadtmp/demo.vrb
 
 LaTeX Font Warning: Font shape `EU1/lmss/bx/sc' undefined
 (Font)              using `EU1/lmss/bx/n' instead on input line 3.
@@ -1211,11 +1692,28 @@ LaTeX Font Warning: Font shape `EU1/lmss/bx/sc' undefined
 LaTeX Font Warning: Font shape `EU1/lmss/m/sc' in size <10> not available
 (Font)              Font shape `EU1/lmr/m/sc' tried instead on input line 5.
 
+*************************************************
+* fontspec warning: "script-not-exist"
+* 
+* Font 'FandolFang-Regular' does not contain script 'CJK'.
+*************************************************
+\g__fontspec_family_FandolFang-Regular_int=\count297
 LaTeX Font Info:    Try loading font information for EU1+lmtt on input line 9.
 (/usr/local/texlive/2016/texmf-dist/tex/latex/euenc/eu1lmtt.fd
 File: eu1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
-))
-Overfull \hbox (0.4pt too wide) in paragraph at lines 57--57
+)
+.................................................
+. fontspec info: "defining-font"
+. 
+. Font family 'FandolFang-Regular(0)' created for font 'FandolFang-Regular'
+. with options [Script={CJK},Extension={.otf}].
+. 
+. This font family consists of the following NFSS series/shapes:
+. - 'normal' (m/n) with NFSS spec.: <->"[FandolFang-Regular.otf]/OT:"
+. - 'small caps'  (m/sc) with NFSS spec.: 
+.................................................
+)
+Overfull \hbox (0.4pt too wide) in paragraph at lines 58--58
 [][]  
  []
 
@@ -1226,7 +1724,7 @@ Overfull \hbox (0.4pt too wide) in paragraph at lines 57--57
 ]
 \openout4 = `demo.vrb'.
 
- (/Users/luluwang/Desktop/Github/codes/LaTex/slide-template1/.texpadtmp/demo.vrb
+ (/Users/luluwang/Desktop/slide-template1/.texpadtmp/demo.vrb
 Overfull \hbox (7.71013pt too wide) in paragraph at lines 5--5
 []\EU1/lmtt/m/n/10 ^^I^^IThe theme provides sensible defaults to \emph{emphasize}[] 
  []
@@ -1237,7 +1735,7 @@ Overfull \hbox (12.96013pt too wide) in paragraph at lines 5--5
  []
 
 )
-Overfull \hbox (0.4pt too wide) in paragraph at lines 84--84
+Overfull \hbox (0.4pt too wide) in paragraph at lines 85--85
 [][]  
  []
 
@@ -1245,44 +1743,44 @@ Overfull \hbox (0.4pt too wide) in paragraph at lines 84--84
 
 ]
 LaTeX Font Info:    Font shape `EU1/lmss/bx/it' in size <10> not available
-(Font)              Font shape `EU1/lmss/bx/sl' tried instead on input line 102.
+(Font)              Font shape `EU1/lmss/bx/sl' tried instead on input line 103.
 LaTeX Font Info:    Font shape `EU1/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `EU1/lmtt/b/n' tried instead on input line 102.
+(Font)              Font shape `EU1/lmtt/b/n' tried instead on input line 103.
 
 
 LaTeX Font Warning: Font shape `EU1/lmtt/bx/it' in size <10> not available
-(Font)              Font shape `EU1/lmtt/b/sl' tried instead on input line 102.
+(Font)              Font shape `EU1/lmtt/b/sl' tried instead on input line 103.
 
 
-Overfull \hbox (0.4pt too wide) in paragraph at lines 102--102
+Overfull \hbox (0.4pt too wide) in paragraph at lines 103--103
 [][]  
  []
 
 [7
 
 ]
-Overfull \hbox (0.4pt too wide) in paragraph at lines 134--134
+Overfull \hbox (0.4pt too wide) in paragraph at lines 135--135
 [][]  
  []
 
 [8
 
 ]
-Overfull \hbox (0.4pt too wide) in paragraph at lines 148--148
+Overfull \hbox (0.4pt too wide) in paragraph at lines 149--149
 [][]  
  []
 
 [9
 
 ]
-Overfull \hbox (0.4pt too wide) in paragraph at lines 148--148
+Overfull \hbox (0.4pt too wide) in paragraph at lines 149--149
 [][]  
  []
 
 [10
 
 ]
-Overfull \hbox (0.4pt too wide) in paragraph at lines 148--148
+Overfull \hbox (0.4pt too wide) in paragraph at lines 149--149
 [][]  
  []
 
@@ -1292,33 +1790,33 @@ Overfull \hbox (0.4pt too wide) in paragraph at lines 148--148
 *************************************************
 * fontspec warning: "addfontfeatures-ignored"
 * 
-* \addfontfeature(s) ignored on line 170; it cannot be used with a font that
+* \addfontfeature(s) ignored on line 171; it cannot be used with a font that
 * wasn't selected by a fontspec command.
 * 
 * The current font is "\EU1/lmss/m/n/7 ".
 * The requested feature is "Numbers={Monospaced}".
 *************************************************
 
-Overfull \hbox (40.54622pt too wide) in paragraph at lines 170--170
+Overfull \hbox (40.54622pt too wide) in paragraph at lines 171--171
  [] 
  []
 
 
-Overfull \hbox (0.4pt too wide) in paragraph at lines 170--170
+Overfull \hbox (0.4pt too wide) in paragraph at lines 171--171
 [][]  
  []
 
 [12
 
 ]
-Overfull \hbox (0.4pt too wide) in paragraph at lines 193--193
+Overfull \hbox (0.4pt too wide) in paragraph at lines 194--194
 [][]  
  []
 
 [13
 
 ]
-Overfull \hbox (0.4pt too wide) in paragraph at lines 202--202
+Overfull \hbox (0.4pt too wide) in paragraph at lines 203--203
 [][]  
  []
 
@@ -1327,20 +1825,20 @@ Overfull \hbox (0.4pt too wide) in paragraph at lines 202--202
 ]
 \openout4 = `demo.vrb'.
 
- (/Users/luluwang/Desktop/Github/codes/LaTex/slide-template1/.texpadtmp/demo.vrb
+ (/Users/luluwang/Desktop/slide-template1/.texpadtmp/demo.vrb
 LaTeX Font Info:    Font shape `EU1/lmss/m/it' in size <8> not available
 (Font)              Font shape `EU1/lmss/m/sl' tried instead on input line 2.
 LaTeX Font Info:    Font shape `EU1/lmss/m/it' in size <6> not available
 (Font)              Font shape `EU1/lmss/m/sl' tried instead on input line 2.
 )
-Overfull \hbox (0.4pt too wide) in paragraph at lines 209--209
+Overfull \hbox (0.4pt too wide) in paragraph at lines 210--210
 [][]  
  []
 
 [15
 
 ]
-Overfull \hbox (0.4pt too wide) in paragraph at lines 221--221
+Overfull \hbox (0.4pt too wide) in paragraph at lines 222--222
 [][]  
  []
 
@@ -1355,9 +1853,9 @@ Overfull \hbox (0.4pt too wide) in paragraph at lines 221--221
 ]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\translate ' on input line 242.
+(hyperref)                removing `\translate ' on input line 243.
 
-(/Users/luluwang/Desktop/Github/codes/LaTex/slide-template1/.texpadtmp/demo.bbl
+(/Users/luluwang/Desktop/slide-template1/.texpadtmp/demo.bbl
 File: beamericonarticle.pdf Graphic file (type QTm)
  <use  "beamericonarticle.pdf" >
 File: beamericonarticle.pdf Graphic file (type QTm)
@@ -1376,7 +1874,7 @@ File: beamericonarticle.pdf Graphic file (type QTm)
 
 ]
 LaTeX Font Info:    Font shape `U/ccicons/m/n' will be
-(Font)              scaled to size 20.0pt on input line 272.
+(Font)              scaled to size 20.0pt on input line 273.
  [22
 
 ]
@@ -1389,24 +1887,24 @@ LaTeX Font Info:    Font shape `U/ccicons/m/n' will be
 \tf@snm=\write8
 \openout8 = `demo.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 277.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 277.
- (/Users/luluwang/Desktop/Github/codes/LaTex/slide-template1/.texpadtmp/demo.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 277.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 277.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 278.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 278.
+ (/Users/luluwang/Desktop/slide-template1/.texpadtmp/demo.aux)
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 278.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 278.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 277.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 278.
  ) 
 Here is how much of TeX's memory you used:
- 45516 strings out of 493591
- 1030922 string characters out of 6143546
- 1156501 words of memory out of 5000000
- 48174 multiletter control sequences out of 15000+600000
- 9966 words of font info for 68 fonts, out of 8000000 for 9000
+ 48503 strings out of 493591
+ 1098531 string characters out of 6143546
+ 1229132 words of memory out of 5000000
+ 51125 multiletter control sequences out of 15000+600000
+ 10006 words of font info for 73 fonts, out of 8000000 for 9000
  1347 hyphenation exceptions out of 8191
- 71i,13n,95p,10417b,727s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 71i,13n,95p,10417b,737s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on /Users/luluwang/Desktop/Github/codes/LaTex/slide-template1/.texpadtmp/demo.pdf (22 pages).
+Output written on /Users/luluwang/Desktop/slide-template1/.texpadtmp/demo.pdf (22 pages).
