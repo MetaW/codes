@@ -1,0 +1,512 @@
+\documentclass[10pt]{beamer}
+
+\usetheme[progressbar=frametitle]{metropolis}
+
+\usepackage{xeCJK}
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+\usefonttheme[onlymath]{serif}
+
+\usepackage{pgfplots}
+\usepgfplotslibrary{dateplot}
+
+\usepackage{xspace}
+\newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
+
+
+% Informotion
+%-------------------
+\title{LinearLang}
+\subtitle{A Memory Safety Language Without Garbage Collection.}
+\date{\today}
+\author{王璐璐, 朱思文, 白宗磊}
+\institute{Peking University}
+\titlegraphic{\hfill\includegraphics[height=2cm]{pku}} % "logo" comes from "pku.pdf"
+\begin{document}
+\maketitle
+
+
+% START
+%-------------------
+\begin{frame}{Table of contents}
+  \setbeamertemplate{section in toc}[sections numbered]
+  \tableofcontents[hideallsubsections]
+\end{frame}
+
+
+
+% section 1 -------------------------------------------
+\section{Motivation}
+
+%page 1.1
+\begin{frame}[fragile]{Memory Error}
+    \metroset{block=fill}
+	\begin{block}{Different types of memory errors}
+		\begin{itemize}
+			\item dangling pointer / wild pointer
+			\item memory leak
+			\item double free
+			\item ...
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+
+% page 1.2
+\begin{frame}[fragile]{background}
+  Two main approaches for memory management.
+
+      \metroset{block=fill}
+
+      \begin{exampleblock}{Manual memory management}
+      	\begin{itemize}
+      		\item \textbf{Pros}: high performance. 
+      		\item \textbf{Cons}: not safe, memory leak
+      	\end{itemize}
+      \end{exampleblock}
+
+
+      \begin{exampleblock}{Garbage collection}
+      	\begin{itemize}
+      		\item \textbf{Pros}: (sumi)automatic, safe. 
+      		\item \textbf{Cons}: low performance, memory leak
+      	\end{itemize}
+      \end{exampleblock}
+\end{frame}
+
+
+% page 1.3
+\begin{frame}[fragile]{example1}
+\textbf{dangling pointer}
+\begin{verbatim}
+function writeTwoObjs(obj1, obj2){
+    obj1.f()
+    obj2.f()
+    delete obj1
+    delete obj2   //error!
+}
+
+let obj = new Object()
+writeTwoObjs(obj,obj)
+\end{verbatim}
+\end{frame}
+
+
+%page 1.4
+\begin{frame}[fragile]{example2}
+\textbf{memory leak}
+\begin{verbatim}
+function sendMsg(str, addr){
+    let s = new socket(addr)
+    write(s,str)
+    //close(s)
+}
+
+sendMsg("hello",addr1)
+sendMsg("world",addr2)
+\end{verbatim}
+\end{frame}
+
+
+
+% section 2 -------------------------------------------
+\section{Linear type system}
+
+
+%page 2.1
+\begin{frame}[fragile]{linear type system}
+    \metroset{block=fill}
+	
+	\begin{block}{background}
+	\begin{itemize}
+		\item based on linear logic a substructural logic proposed by Jean-Yves Girard
+	\end{itemize}
+	\end{block}
+	
+	\begin{block}{linear type system}
+	\begin{itemize}
+		\item each linear variable must be used(transfer ownership/delete) exactly once
+		\item no aliasing is possible for linear resource
+	\end{itemize}
+	\end{block}
+
+	\begin{block}{related}
+	\begin{itemize}
+		\item \textbf{C++1x}: smart pointer: unique\_ptr, shared\_ptr
+		\item \textbf{rust}:  ownership, move, borrow
+	\end{itemize}
+	\end{block}
+\end{frame}
+
+
+
+
+% page 2.2
+\begin{frame}[fragile]{Our Work}
+	Based on linear type system we designed a programming language that do not have garbage collection and satisfies:
+	\metroset{block=fill}
+	\begin{block}{A well typed program will never have:}
+		\begin{itemize}
+			\item dangling pointer
+			\item memory leak
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+
+% Section 3 -------------------------------------------
+\section{Language and typing rules}
+
+
+% page 3.1
+\begin{frame}[fragile]{Memory Model}
+	\metroset{block=fill}
+	\begin{block}{Two kinds of value:}
+		\begin{itemize}
+			\item \textbf{basic value:} call by value, stored in stack, released automatically
+			\item \textbf{resource value:} call by reference, stored in heap, released manually
+		\end{itemize}
+	\end{block}
+	
+	\begin{block}{stack and heap}
+		\begin{itemize}
+			\item \textbf{stack:} list of (variable,  basic value | address)
+			\item \textbf{heap:} list of (address, resource) 
+		\end{itemize}	
+	\end{block}
+
+\end{frame}
+
+
+%page3.2
+\begin{frame}[fragile]{Overview}
+	\textbf{judgment}
+		\[
+			\Gamma \vdash term : Ty
+		\]
+		\[
+			\Downarrow
+		\]
+		\[
+			\Gamma_{in} \vdash term : Ty\ ;\Gamma_{out}
+		\]
+\textbf{in practice:}		
+		\[
+			type\_of\ (term,\Gamma_{in}) \rightarrow (T,\Gamma_{out})
+		\]
+\end{frame}
+
+%page 3.3
+\begin{frame}[fragile]{basic terms}
+\begin{verbatim}
+type term =
+    | Num_term       of int
+    | Add_term       of term * term
+    | Bool_term      of bool     
+    | Le_term        of term * term
+    | Eq_term        of term * term
+    | And_term       of term * term
+    | Or_term        of term * term
+    | Not_term       of term
+    | Var_term       of string
+    | If_term        of term * term * term
+    | Lambda_term    of string * ty * term
+    | App_term       of term * term 
+    | Fix_term       of term
+    | Begin_term     of term list
+    ...
+\end{verbatim}
+\end{frame}
+
+
+\begin{frame}[fragile]{types}
+\begin{verbatim}
+type ty =
+    | NumTy
+    | BoolTy
+    
+    | LinResTy
+    | LinListTy
+    
+    | UnitTy
+    | ArrowTy   of ty * ty
+\end{verbatim}
+\end{frame}
+
+
+\begin{frame}[fragile]{basic typing rules}
+\textbf{UnVar:}
+\[
+	\Gamma_1 , x : NumTy, \Gamma_2 \vdash x : NumTy; \Gamma_1 , x : NumTy, \Gamma_2
+\]
+\[
+	\Gamma_1 , x : BoolTy, \Gamma_2 \vdash x : BoolTy; \Gamma_1 , x : BoolTy, \Gamma_2
+\]
+\textbf{LinVar}
+\[
+	\Gamma_1 , x : LinResTy, \Gamma_2 \vdash x : LinResTy; \Gamma_1 , \Gamma_2
+\]
+\[
+	\Gamma_1 , x : LinListTy, \Gamma_2 \vdash x : LinListTy; \Gamma_1 , \Gamma_2
+\]
+\end{frame}
+
+
+\begin{frame}[fragile]{more typing rules}
+\textbf{If}
+\[
+	\frac{
+		\begin{array}{c}
+			\Gamma_1 \vdash tm1 : BoolTy\ ; \Gamma_2 \\
+			\Gamma_2 \vdash tm2: T\ ; \Gamma_3 \\
+			\Gamma_2 \vdash tm3: T\ ; \Gamma_3
+		\end{array}
+	}{
+		\Gamma_1 \vdash if\ tm1\ then\ tm2\ else\ tm3\ : T\ ; \Gamma_3
+	}
+\]
+\textbf{Abs:}
+\[
+	\frac{
+		\begin{array}{c}
+			\Gamma_1, x:T_1 \vdash tm : T_2 ; \Gamma_2 \\
+			\Gamma_1 = \Gamma_2 \div x
+		\end{array}
+	}{
+		\Gamma_1 \vdash fun(x:T_1)\{tm\} : T_1 \rightarrow T_2\ ; \Gamma_2 \div x
+	}
+\]
+\end{frame}
+
+%page 3.4
+\begin{frame}[fragile]{two kinds of let binding}
+\metroset{block=fill}
+\begin{verbatim}
+type term =
+    ...
+    | LetUn_term       of string * term * term
+    | LetLin_term      of string * term * term 
+   
+    | NewLinRes_term   of string
+    ...
+\end{verbatim}
+
+\begin{exampleblock}{example}
+\begin{verbatim}
+letUn x = 123
+letLin y = newRes("aaa")
+\end{verbatim}	
+\end{exampleblock}
+
+\begin{alertblock}{type error!}
+\begin{verbatim}
+letLin x = 123
+letUn y = newRes("aaa")
+\end{verbatim}	
+\end{alertblock}
+
+\end{frame}
+
+
+
+\begin{frame}[fragile]{typing rules of let binding}
+\textbf{letLin:}
+\[
+	\frac
+	{
+		\begin{array}{c}
+			\Gamma_1 \vdash tm_1 : T_1 ; \Gamma_2 \\
+			T_1 = LinResTy\ \vee T_1 = LinListTy \\
+			\Gamma_2, x:T_1 \vdash tm_2 : T_2 ; \Gamma_3			
+		\end{array}
+	}
+	{
+		\Gamma_1 \vdash letUn\ x = tm_1\ in\ tm_2 : T_2 ; \Gamma_3 \div x
+	}
+\]
+
+\textbf{letUn:}
+\[
+	\frac
+	{
+		\begin{array}{c}
+			\Gamma_1 \vdash tm_1 : T_1 ; \Gamma_2 \\
+			\neg (T_1 = LinResTy\ \vee T_1 = LinListTy) \\
+			\Gamma_2, x:T_1 \vdash tm_2 : T_2 ; \Gamma_3			
+		\end{array}
+	}
+	{
+		\Gamma_1 \vdash letLin\ x = tm_1\ in\ tm_2 : T_2 ; \Gamma_3 \div x
+	}
+\]
+\end{frame}
+
+
+
+%page 3.5
+\begin{frame}[fragile]{linear list}
+\metroset{block=fill}
+\begin{verbatim}
+type term =
+    ...
+    | LinCons_term      of term * term
+    | Null_term
+    | Split_term        of term * string * string * term
+    | FreeAtom_term     of term
+    | FreeList_term     of term
+    ...
+\end{verbatim}
+
+\begin{exampleblock}{example}
+\begin{verbatim}
+letLin x = newRes("aaa")
+letLin y = newRes("bbb")
+letLin l = linCons(x,linCons(y,null))
+split l as carx cdrx
+freeAtom(carx)
+freeList(cdrx)
+\end{verbatim}	
+\end{exampleblock}
+\end{frame}
+
+
+\begin{frame}[fragile]{typing rules of linear list}
+\textbf{linCons:}
+\[
+	\frac{
+		\begin{array}{c}
+			 \Gamma_1 \vdash tm1 : T_1 ; \Gamma_2 \\
+			 \Gamma_2 \vdash tm2 : T_2 ; \Gamma_3 \\
+			 T_1 = LinResTy \\bigwedge T_2 = LinListTy			
+		\end{array}
+	}{
+		\Gamma_1 \vdash linCons(tm1,tm2) : LinListTy\ ; \Gamma_3
+	}
+\]
+\textbf{split:}
+\[
+	\frac{
+		\begin{array}{c}
+			\Gamma_1 \vdash tm1 : T_1 ; \Gamma_2 \\
+			T_1 = LinListTy \\
+			\Gamma_2, tcar : LinResTy, tcdr : LinListTy \vdash tm2 : T_2 ; \Gamma_3			
+		\end{array}
+	}{
+		\Gamma_1 \vdash split\ tm1\ as\ tcar\ tcdr\ in\ tm2: T_2 ; (\Gamma_3 \div tcar) \div tcdr
+	}
+\]
+\textbf{freeAtom}
+\[
+	\frac{
+		\begin{array}{c}
+			\Gamma_1 \vdash tm : LinResTy\ ; \Gamma_2
+		\end{array}
+	}{
+		\Gamma_1 \vdash freeAtom(tm) : UnitTy\ ; \Gamma_2
+	}
+\]
+\end{frame}
+
+%page 3.6
+\begin{frame}[fragile]{helpful primitive operations}
+\begin{verbatim}
+type term = 
+    ...
+    | CopyAtom_term     of term * string * string * term
+    | CopyList_term     of term * string * string * term
+    | If_null_term      of string * term * term
+    | AppendList_term   of term * term
+    | Print_term        of term
+\end{verbatim}
+
+\end{frame}
+
+
+
+\begin{frame}[fragile]{example}
+\metroset{block=fill}
+\begin{alertblock}{type error}
+\begin{verbatim}
+letLin x = newRes("aaa")
+letLin y = f(x)
+letLin l = linCons(x,linCons(y,null))   //type error!
+\end{verbatim}	
+\end{alertblock}
+
+\begin{exampleblock}{well typed}
+\begin{verbatim}
+letLin x = newRes("aaa")
+copyAtom x as x1 x2
+letLin y = f(x1)
+letLin l = linCons(x2,linCons(y,null))   //well typed!
+\end{verbatim}	
+\end{exampleblock}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{typing rules}
+\textbf{copyAtom}
+\[
+	\frac{
+		\begin{array}{c}
+			\Gamma_1 \vdash tm1 : LinResTy\ ; \Gamma_2 \\
+			\Gamma_2, v1: LinResTy, v2: LinResTy \vdash tm2 : T\ ; \Gamma_3
+		\end{array}
+	}{
+		\Gamma_1 \vdash copyAtom\ tm1\ as\ v1\ v2\ in\ tm2 : T\ ; (\Gamma_3 \div v1) \div v2
+	}
+\]
+\textbf{IfNull:}
+\[
+	\frac{
+		\begin{array}{c}
+			\Gamma_1 \vdash var : LinListTy\ ; \Gamma_2 \\
+			\Gamma_2, var : LinListTy \vdash tm2: T\ ; \Gamma_3 \\
+			\Gamma_2, var : LinListTy \vdash tm3: T\ ; \Gamma_3
+		\end{array}
+	}{
+		\Gamma_1 \vdash if\_null\ var\ then\ tm2\ else\ tm3\ : T\ ; \Gamma_3
+	}
+\]
+
+\end{frame}
+
+
+
+% Section 4 -------------------------------------------
+\section{Demo}
+
+\begin{frame}{reference}
+	\begin{itemize}
+		\item Pierce B C. Types and Programming Languages. 
+		\item Pierce B C. Advanced Topics in Types and Programming Languages 
+		\item F Pottier. Wandering through linear types, capabilities, and regions
+		\item Harvard University. CS 152: Programming Languages
+		\item Baker H G. A “linear logic” Quicksort[M]. ACM, 1994
+		\item Baker, Henry G. "Lively linear Lisp:“look ma, no garbage!”." Acm Sigplan Notices 27.8(1992):89-98.
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}{小组分工}
+	\begin{itemize}
+		\item 查找资料: 朱思文,白宗磊
+		\item 语言定义: 朱思文,白宗磊,王璐璐
+		\item typing rules: 白宗磊,王璐璐
+		\item operational semantics: 朱思文,白宗磊
+		\item 编程实现: 王璐璐
+		\item 课堂报告: 王璐璐
+		\item 书面报告: 朱思文, 白宗磊 
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[standout]
+	Thank you!
+\end{frame}
+
+% page 4.1
+
+%------------------------------
+
+\end{document}

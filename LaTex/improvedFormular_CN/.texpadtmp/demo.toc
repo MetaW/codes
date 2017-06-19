@@ -1,0 +1,5 @@
+\beamer@endinputifotherversion {3.36pt}
+\beamer@sectionintoc {1}{Motivation}{3}{0}{1}
+\beamer@sectionintoc {2}{Linear type system}{8}{0}{2}
+\beamer@sectionintoc {3}{Language and typing rules}{11}{0}{3}
+\beamer@sectionintoc {4}{Demo}{25}{0}{4}

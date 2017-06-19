@@ -1,0 +1,25 @@
+\frametitle{typing rules}
+\textbf{copyAtom}
+\[
+^^I\frac{
+^^I^^I\begin{array}{c}
+^^I^^I^^I\Gamma_1 \vdash tm1 : LinResTy\ ; \Gamma_2 \\
+^^I^^I^^I\Gamma_2, v1: LinResTy, v2: LinResTy \vdash tm2 : T\ ; \Gamma_3
+^^I^^I\end{array}
+^^I}{
+^^I^^I\Gamma_1 \vdash copyAtom\ tm1\ as\ v1\ v2\ in\ tm2 : T\ ; (\Gamma_3 \div v1) \div v2
+^^I}
+\]
+\textbf{IfNull:}
+\[
+^^I\frac{
+^^I^^I\begin{array}{c}
+^^I^^I^^I\Gamma_1 \vdash var : LinListTy\ ; \Gamma_2 \\
+^^I^^I^^I\Gamma_2, var : LinListTy \vdash tm2: T\ ; \Gamma_3 \\
+^^I^^I^^I\Gamma_2, var : LinListTy \vdash tm3: T\ ; \Gamma_3
+^^I^^I\end{array}
+^^I}{
+^^I^^I\Gamma_1 \vdash if\_null\ var\ then\ tm2\ else\ tm3\ : T\ ; \Gamma_3
+^^I}
+\]
+
