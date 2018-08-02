@@ -1,5 +1,5 @@
 # put this file in: /Users/luluwang/Desktop/Github/codes/Python/language-basic
-# run this file in: /
+# run this file in: <cwd>
 # eg: python3 /Users/luluwang/Desktop/Github/codes/Python/language-basic/path.py
 
 #========================= os.path
@@ -7,21 +7,27 @@
 path for find a file/resource
 '''
 import os
+print("===== os.path")
 #===== get source file abs path
-print(__file__)
-print(os.path.abspath(__file__))
+print("1: ", __file__)
+#=> <cwd>/???/path.py
+
+print("2: ", os.path.abspath(__file__))
 #=> /Users/luluwang/Desktop/Github/codes/Python/language-basic/path.py
 
 #===== get source file abs dir
-print(os.path.dirname(__file__))
+print("3: ", os.path.dirname(__file__))
+#=> <cwd>/???/language_basic
+
+print("4: ", os.path.dirname(os.path.abspath(__file__)))
 #=> /Users/luluwang/Desktop/Github/codes/Python/language-basic
 
 #===== get current dynamic path
-print(os.path.abspath('.')) #=> /
-print(os.getcwd())          #=> /
+print("5: ", os.path.abspath('.')) #=> <cwd>
+print("6: ", os.getcwd())          #=> <cwd>
 
 #===== get home dir
-print(os.path.expanduser('~'))
+print("7: ", os.path.expanduser('~'))
 #=> /Users/luluwang
 
 
@@ -31,7 +37,7 @@ print(os.path.expanduser('~'))
 PYTHONPATH: path for finding python packages
 '''
 import sys
-
+print("===== sys.path")
 print(sys.path)
 #=> ['/Users/luluwang/Desktop/Github/codes/Python/language-basic', 
 #    '/usr/local/Cellar/python/3.6.4_3/Frameworks/Python.framework/Versions/3.6/lib/python36.zip', 
